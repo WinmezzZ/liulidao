@@ -28,5 +28,10 @@
     "eslint-config-next": "15.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "engines": {
+    "node": ">=20",
+    "pnpm": "9.x"
   }
 }
