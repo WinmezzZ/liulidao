@@ -1,11 +1,10 @@
 "use client";
 
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes,  useTransition } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { GithubIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,16 +16,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signIn } from "../../action";
+import { signIn } from "../../actions/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../schema";
+import { FormFooter } from "../../components/form-footer";
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>
 
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -37,29 +37,32 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   });
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    setIsLoading(true);
-
-    const res = await signIn(data);
-    setIsLoading(false);
-    if (!res?.data?.success) {
-      toast.error(res?.data?.error);
-    } else {
-      toast.success("登录成功");
-      router.push("/");
-    }
+    startTransition(async () => {
+      const res = await signIn(data);
+      console.log("res", res);
+      if (!res?.data?.success) {
+        toast.error(res?.data?.error);
+      } else {
+        toast.success("登录成功");
+        router.push("/");
+      }
+    });
   };
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={e => {
+          e.preventDefault();
+          form.handleSubmit(onSubmit)(e);
+        }}>
           <div className='grid gap-2'>
             <FormField
               control={form.control}
               name='email'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>邮箱</FormLabel>
                   <FormControl>
                     <Input placeholder='name@example.com' {...field} />
                   </FormControl>
@@ -67,6 +70,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
               name='password'
@@ -88,7 +92,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
-            <Button className='mt-2' disabled={isLoading}>
+            <Button type="submit" className='mt-2' loading={isPending}>
               Login
             </Button>
 
@@ -103,24 +107,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </div>
             </div>
 
-            <div className='flex items-center gap-2'>
-              <Button
-                variant='outline'
-                className='w-full'
-                type='button'
-                disabled={isLoading}
-              >
-                <GithubIcon className='h-4 w-4' /> GitHub
-              </Button>
-              <Button
-                variant='outline'
-                className='w-full'
-                type='button'
-                disabled={isLoading}
-              >
-                <GithubIcon className='h-4 w-4' /> Facebook
-              </Button>
-            </div>
+            <FormFooter isLoading={isPending} />
           </div>
         </form>
       </Form>

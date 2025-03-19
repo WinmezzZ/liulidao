@@ -2,12 +2,12 @@
 
 import prisma from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
-import { signUpSchema } from "./schema";
+import { signInSchema, signUpSchema } from "../schema";
 import { flattenValidationErrors } from "next-safe-action";
 
 
 export const signIn = actionClient
-  .schema(signUpSchema, {
+  .schema(signInSchema, {
     handleValidationErrorsShape: async ve => flattenValidationErrors(ve).fieldErrors,
   })
   .action(async ({ parsedInput: data }) => {

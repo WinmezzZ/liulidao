@@ -1,10 +1,9 @@
 "use client";
 
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GithubIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,50 +15,96 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { FormFooter } from "../../components/form-footer";
+import { signUpSchema } from "../../schema";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { InputOTP } from "@/components/ui/input-otp";
+import { InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Loader } from "lucide-react";
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
-const formSchema = z
-  .object({
-    email: z
-      .string()
-      .min(1, { message: "Please enter your email" })
-      .email({ message: "Invalid email address" }),
-    password: z
-      .string()
-      .min(1, {
-        message: "Please enter your password",
-      })
-      .min(7, {
-        message: "Password must be at least 7 characters long",
-      }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
-    path: ["confirmPassword"],
-  });
-
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
+  const router = useRouter();
+  const [getOTPLoading, setGetOTPLoading] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const form = useForm({
+    resolver: zodResolver(signUpSchema),
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-     
-    console.log(data);
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    if (countdown > 0) {
+      intervalId = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+
+      return () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      };
+    }
+  }, [countdown]);
+
+  async function onSendOTP() {
+    const data = form.getValues();
+    setGetOTPLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({email: data.email}),
+      });
+
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+      toast.success("验证码已发送!", {
+        description: "请检查你的邮箱",
+      });
+      setCountdown(30);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "服务器异常";
+      toast.error(errorMessage);
+    } finally {
+      setGetOTPLoading(false);
+    }
+  }
+
+  async function onSubmit(data: z.infer<typeof signUpSchema>) {
+      setIsVerifying(true);
+
+    try {
+      const res = await fetch("/api/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+      setCountdown(0);
+      toast.success("验证成功");
+      router.push("/");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "服务器异常";
+      toast.error(errorMessage);
+    } finally {
+      setIsVerifying(false);
+    }
+  }
+
+  async function handleResend() {
+    console.log(form.getValues("email"));
+    if (!form.getValues("email")) return;
+    setCountdown(0);
+    form.setValue("otp", "");
+    await onSendOTP();
   }
 
   return (
@@ -76,6 +121,45 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                   <FormControl>
                     <Input placeholder='name@example.com' {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='otp'
+              render={({ field }) => (
+                <FormItem className='space-y-1'>
+                  <FormLabel>验证码</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center gap-2">
+                     <div className="flex-1">
+                     <InputOTP
+                        maxLength={6}
+                        className="flex justify-between"
+                        {...field}
+                      >
+                        <InputOTPGroup className="flex w-full items-center justify-between [&>div]:rounded-md [&>div]:border">
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                          
+                        </InputOTPGroup>
+                      </InputOTP>
+                     </div>
+                      {countdown > 0 ? (
+                          <span className="text-sm text-muted-foreground">{countdown}秒后重新发送</span>
+                        ) : (
+                            <Button type="button"  onClick={handleResend} loading={getOTPLoading}>
+                            获取验证码
+                          </Button>
+                        )}
+                      </div>
+                      
+                    </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -106,9 +190,10 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 </FormItem>
               )}
             />
-            <Button className='mt-2' disabled={isLoading}>
-              Create Account
-            </Button>
+            <Button type="submit" loading={isVerifying} className="mt-4">
+                {isVerifying && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+                注册
+              </Button>
 
             <div className='relative my-2'>
               <div className='absolute inset-0 flex items-center'>
@@ -121,24 +206,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               </div>
             </div>
 
-            <div className='flex items-center gap-2'>
-              <Button
-                variant='outline'
-                className='w-full'
-                type='button'
-                disabled={isLoading}
-              >
-                <GithubIcon className='h-4 w-4' /> GitHub
-              </Button>
-              <Button
-                variant='outline'
-                className='w-full'
-                type='button'
-                disabled={isLoading}
-              >
-                <GithubIcon className='h-4 w-4' /> Facebook
-              </Button>
-            </div>
+            <FormFooter isLoading={isVerifying} />
           </div>
         </form>
       </Form>

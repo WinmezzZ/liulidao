@@ -20,5 +20,6 @@
   },
   "[typescriptreact]": {
     "editor.formatOnSave": false
-  }
+  },
+  "tailwindCSS.experimental.configFile": "src/app/globals.css"
 }
