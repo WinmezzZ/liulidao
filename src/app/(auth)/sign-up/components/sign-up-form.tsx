@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -68,7 +69,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       });
       setCountdown(30);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "服务器异常";
+      const errorMessage = error instanceof Error ? JSON.parse(error.message).message : "服务器异常";
       toast.error(errorMessage);
     } finally {
       setGetOTPLoading(false);
@@ -103,7 +104,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
     console.log(form.getValues("email"));
     if (!form.getValues("email")) return;
     setCountdown(0);
-    form.setValue("otp", "");
+    form.setValue("code", "");
     await onSendOTP();
   }
 
@@ -127,7 +128,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             />
             <FormField
               control={form.control}
-              name='otp'
+              name='code'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
                   <FormLabel>验证码</FormLabel>
@@ -158,8 +159,10 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                           </Button>
                         )}
                       </div>
-                      
                     </FormControl>
+                    <FormDescription>
+                      我们发送了一个验证码到你的邮箱，请注意查收。
+                    </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -171,7 +174,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 <FormItem className='space-y-1'>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type='password' placeholder='********' {...field} />
+                    <Input type='password' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -182,9 +185,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               name='confirmPassword'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>确认密码</FormLabel>
                   <FormControl>
-                    <Input type='password' placeholder='********' {...field} />
+                    <Input type='password'{...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -201,7 +204,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               </div>
               <div className='relative flex justify-center text-xs uppercase'>
                 <span className='bg-background px-2 text-muted-foreground'>
-                  Or continue with
+                  其他登录方式
                 </span>
               </div>
             </div>

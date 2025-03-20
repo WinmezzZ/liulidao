@@ -4,30 +4,30 @@ import prisma from "@/lib/prisma";
 import { SignInModel } from "@/types/auth";
 
 export const POST = async (req: Request) => {
-  const body = (await req.json()) as SignInModel;
+  try {
+    const body = (await req.json()) as SignInModel;
 
-  const user = await prisma.user.upsert({
-    where: {
-      email: body.email,
-    },
-    update: {},
-    create: {
-      email: body.email,
-      emailVerified: null,
-    },
-  });
+    const user = await prisma.user.upsert({
+      where: {
+        email: body.email,
+      },
+      update: {},
+      create: {
+        email: body.email,
+        emailVerified: null,
+      },
+    });
 
-  const otp = await generateEmailVerificationCode(user.id, body.email);
+    const code = await generateEmailVerificationCode(user.id, body.email);
 
-  const res = await sendOTP({
-    toMail: body.email,
-    code: otp,
-    userName: user.name?.split(" ")[0] || "",
-  });
+    await sendOTP({
+      toMail: body.email,
+      code,
+      userName: user.name?.split(" ")[0] || "",
+    });
 
-  console.log("res", res);
-
-  return new Response(JSON.stringify({ ok: true }), {
-    status: 200,
-  });
+    return Response.json({ ok: true }, { status: 200 });
+  } catch (error: any) {
+    return Response.json({ ok: false, message: error.message }, { status: 500 });
+  }
 };

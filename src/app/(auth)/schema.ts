@@ -7,7 +7,7 @@ export const signInSchema = z.object({
 
 export const signUpSchema = signInSchema.extend({
   confirmPassword: z.string({ required_error: "确认密码不能为空" }),
-  otp: z.string({ required_error: "验证码不能为空" }).length(6, "验证码长度为6位数"),
+  code: z.string({ required_error: "验证码不能为空" }).length(6, "验证码长度为6位数"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match.",
   path: ["confirmPassword"],
