@@ -29,7 +29,7 @@ export const authClient = createAuthClient({
 		oidcClient(),
 		genericOAuthClient(),
 		oneTapClient({
-			clientId: process.env.NEXT_PUBLIC_ONE_TAP_CLIENT_ID!,
+				clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
 		})
 	],
 	fetchOptions: {
@@ -49,6 +49,6 @@ export const {
 	organization,
 	useListOrganizations,
 	useActiveOrganization,
-} = client;
+} = authClient;
 
-client.$store.listen("$sessionSignal", async () => {});
+authClient.$store.listen("$sessionSignal", async () => {});

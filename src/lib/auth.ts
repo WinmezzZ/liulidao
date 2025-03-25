@@ -7,15 +7,19 @@ import { reactInvitationEmail } from "@/emails/invitation";
 import { reactResetPasswordEmail } from "@/emails/reset-password";
 import { nextCookies } from "better-auth/next-js";
 
+console.log("process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+
 const betterAuthUrl = process.env.BETTER_AUTH_URL!;
 const fromEmail = process.env.BETTER_AUTH_EMAIL!;
 
 export const auth = betterAuth({
+  trustedOrigins: [process.env.BASE_HOST!],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
   emailAndPassword: {  
       enabled: true,
+      minPasswordLength: 6,
       async sendResetPassword({ user, url }) {
         const from = process.env.BETTER_AUTH_EMAIL;
         if (!from) {
@@ -121,7 +125,9 @@ export const auth = betterAuth({
     multiSession(),
     oAuthProxy(),
     nextCookies(),
-    oneTap(),
+    oneTap({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+    }),
 		customSession(async (session) => {
 			return {
 				...session,

@@ -43,16 +43,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   });
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    startTransition(async () => {
-      const res = await signIn(data);
+    console.log("data", data);
+    // startTransition(async () => {
+      const res = await authClient.signIn.email(data);
       console.log("res", res);
-      if (!res?.data?.success) {
-        toast.error(res?.data?.error);
-      } else {
-        toast.success("登录成功");
-        router.push("/");
-      }
-    });
+      // if (!res.data) {
+      //   toast.error(res?.data?.error);
+      // } else {
+      //   toast.success("登录成功");
+      //   router.push("/");
+      // }
+    // });
   };
 
   return (
