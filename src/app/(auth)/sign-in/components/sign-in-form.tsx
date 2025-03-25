@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes,  useTransition } from "react";
+import { HTMLAttributes,  useEffect,  useTransition } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,12 +21,18 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../schema";
 import { FormFooter } from "../../components/form-footer";
+import { authClient } from "@/lib/auth-client";
+
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>
 
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+     authClient.oneTap();
+  }, []);
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),

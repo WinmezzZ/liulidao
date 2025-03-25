@@ -16,6 +16,7 @@ const eslintConfig = [
       quotes: ["warn", "double"],
       semi: ["warn", "always"],
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 ];

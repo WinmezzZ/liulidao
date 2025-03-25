@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,15 +18,14 @@ import { Input } from "@/components/ui/input";
 import { FormFooter } from "../../components/form-footer";
 import { signUpSchema } from "../../schema";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { InputOTP } from "@/components/ui/input-otp";
-import { InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signUp } from "@/lib/auth-client";
+
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const router = useRouter();
-  const [getOTPLoading, setGetOTPLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const form = useForm({
@@ -50,69 +48,80 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
     }
   }, [countdown]);
 
-  async function onSendOTP() {
-    const data = form.getValues();
-    setGetOTPLoading(true);
+  // async function onSendOTP() {
+  //   const data = form.getValues();
+  //   setGetOTPLoading(true);
 
-    try {
-      const res = await fetch("/api/auth/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({email: data.email}),
-      });
+  //   try {
+  //     const res = await fetch("/api/auth/send-otp", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({email: data.email}),
+  //     });
 
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
-      toast.success("验证码已发送!", {
-        description: "请检查你的邮箱",
-      });
-      setCountdown(30);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? JSON.parse(error.message).message : "服务器异常";
-      toast.error(errorMessage);
-    } finally {
-      setGetOTPLoading(false);
-    }
-  }
+  //     if (!res.ok) {
+  //       throw new Error(await res.text());
+  //     }
+  //     toast.success("验证码已发送!", {
+  //       description: "请检查你的邮箱",
+  //     });
+  //     setCountdown(30);
+  //   } catch (error) {
+  //     const errorMessage = error instanceof Error ? JSON.parse(error.message).message : "服务器异常";
+  //     toast.error(errorMessage);
+  //   } finally {
+  //     setGetOTPLoading(false);
+  //   }
+  // }
 
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
-      setIsVerifying(true);
-
-    try {
-      const res = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+       await signUp.email({
+        ...data,
+        name: data.username,
+        callbackURL: "/dashboard",
+								fetchOptions: {
+									onResponse: () => {
+										setIsVerifying(false);
+									},
+									onRequest: () => {
+										setIsVerifying(true);
+									},
+									onError: (ctx) => {
+										toast.error(ctx.error.message);
+									},
+									onSuccess: async () => {
+										router.push("/");
+									},
+								},
       });
-
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
-      setCountdown(0);
-      toast.success("验证成功");
-      router.push("/");
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "服务器异常";
-      toast.error(errorMessage);
-    } finally {
-      setIsVerifying(false);
-    }
   }
 
-  async function handleResend() {
-    console.log(form.getValues("email"));
-    if (!form.getValues("email")) return;
-    setCountdown(0);
-    form.setValue("code", "");
-    await onSendOTP();
-  }
+  // async function handleResend() {
+  //   console.log(form.getValues("email"));
+  //   if (!form.getValues("email")) return;
+  //   setCountdown(0);
+  //   form.setValue("code", "");
+  //   await onSendOTP();
+  // }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className='grid gap-2'>
+          <FormField
+              control={form.control}
+              name='username'
+              render={({ field }) => (
+                <FormItem className='space-y-1'>
+                  <FormLabel>用户名</FormLabel>
+                  <FormControl>
+                    <Input  {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name='email'
@@ -120,13 +129,13 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 <FormItem className='space-y-1'>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder='name@example.com' {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name='code'
               render={({ field }) => (
@@ -166,7 +175,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name='password'
