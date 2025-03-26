@@ -29,7 +29,7 @@ export const authClient = createAuthClient({
 		oidcClient(),
 		genericOAuthClient(),
 		oneTapClient({
-				clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+			clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
 		})
 	],
 	fetchOptions: {

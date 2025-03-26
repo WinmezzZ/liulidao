@@ -6,17 +6,24 @@ import { resend } from "@/lib/resend";
 import { reactInvitationEmail } from "@/emails/invitation";
 import { reactResetPasswordEmail } from "@/emails/reset-password";
 import { nextCookies } from "better-auth/next-js";
-
+import { redis } from "./redis";
 console.log("process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL!;
 const fromEmail = process.env.BETTER_AUTH_EMAIL!;
 
 export const auth = betterAuth({
-  trustedOrigins: [process.env.BASE_HOST!],
+  trustedOrigins: [process.env.BASE_URL!],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  account: {
+    accountLinking: {
+        enabled: true,
+        trustedProviders: ["google", "github"]
+    }
+  },
   emailAndPassword: {  
       enabled: true,
       minPasswordLength: 6,
@@ -37,7 +44,10 @@ export const auth = betterAuth({
       },
   },
   emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
 		async sendVerificationEmail({ user, url }) {
+      console.log("url", url);
       const fromEmail = process.env.BETTER_AUTH_EMAIL;
       if (!fromEmail) {
         throw new Error("请配置 BETTER_AUTH_EMAIL 发送人信息");
@@ -46,7 +56,7 @@ export const auth = betterAuth({
 				from: fromEmail,
 				to:user.email,
 				subject: "邮箱验证",
-				html: `<a href="${url}">点击此链接以验证你的邮箱</a>`,
+				html: `<a href="${url}">Hi： ${user.name}，点击此链接以验证你的邮箱</a>`,
 			});
 			console.log(res, user.email);
 		},
@@ -160,4 +170,18 @@ export const auth = betterAuth({
     }),
     username(),
   ],
+
+  secondaryStorage: {
+		get: async (key) => {
+			const value = await redis.get(key);
+			return value ? value : null;
+		},
+		set: async (key, value, ttl) => {
+			if (ttl) await redis.set(key, value, "EX", ttl);
+			else await redis.set(key, value);
+		},
+		delete: async (key) => {
+			await redis.del(key);
+		}
+	}
 });
