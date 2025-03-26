@@ -203,7 +203,6 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               )}
             />
             <Button type="submit" loading={isVerifying} className="mt-4">
-                {isVerifying && <Loader className="mr-2 h-4 w-4 animate-spin" />}
                 注册
               </Button>
 
