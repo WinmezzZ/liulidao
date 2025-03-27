@@ -20,7 +20,7 @@ import { signUpSchema } from "../../schema";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+import { getErrorMessage, signUp } from "@/lib/auth-client";
 
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
@@ -75,25 +75,18 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   // }
 
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
-       await signUp.email({
+    setIsVerifying(false);
+      const res = await signUp.email({
         ...data,
         name: data.username,
-        callbackURL: "/dashboard",
-								fetchOptions: {
-									onResponse: () => {
-										setIsVerifying(false);
-									},
-									onRequest: () => {
-										setIsVerifying(true);
-									},
-									onError: (ctx) => {
-										toast.error(ctx.error.message);
-									},
-									onSuccess: async () => {
-										router.push("/");
-									},
-								},
       });
+      
+      setIsVerifying(true);
+      if (res.error) {
+        toast.error(getErrorMessage(res.error.code));
+      } else {
+        router.push("/");
+      }
   }
 
   // async function handleResend() {

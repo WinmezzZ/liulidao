@@ -1,6 +1,6 @@
 "use client";
 import { Form } from "@/components/ui/form";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   DefaultValues,
   FormState,
@@ -20,24 +20,19 @@ import {
   getObjectFormSchema,
   ZodObjectOrWrapped,
 } from "./utils";
-import { useFormStatus } from "react-dom";
 
 export function AutoFormSubmit({
   children,
   className,
-  disabled,
+  loading,
 }: {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  loading?: boolean;
 }) {
-  const { pending } = useFormStatus();
-
-  useEffect(() => {
-    console.log("pending", pending);
-  }, [pending]);
   return (
-    <Button type="submit" loading={pending} className={className}>
+    <Button type="submit" loading={loading} className={className}>
       {children ?? "Submit"}
     </Button>
   );

@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { META_THEME_COLORS } from "@/constants/site";
 import { Toaster } from "@/components/ui/sonner";
+import { ConfirmDialogProvider } from "@/components/confirm-dialog";
 
 export const metadata: Metadata = {
   title: "琉璃岛",
@@ -34,16 +35,18 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          enableColorScheme
-          disableTransitionOnChange
+        <ConfirmDialogProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            enableColorScheme
+            disableTransitionOnChange
         >
-          <Toaster />
+          <Toaster position="top-center" />
           {children}
-        </ThemeProvider>
+          </ThemeProvider>
+        </ConfirmDialogProvider>
       </body>
     </html>
   );

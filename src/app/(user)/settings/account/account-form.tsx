@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UpdatePassword } from "./update-password";
+import { UpdatePassword } from "./components/update-password";
+import { TwoFactory } from "./components/two-factory";
 
 const languages = [
   { label: "English", value: "en" },
@@ -61,13 +62,21 @@ export function AccountForm() {
   }
 
   return (
-    <div className="pt-4">
+    <div className="pt-4 space-y-8">
       <Card>
         <CardHeader>
           <CardTitle>密码</CardTitle>
         </CardHeader>
         <CardContent>
           <UpdatePassword />
+         </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>两步验证（2FA）</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TwoFactory />
          </CardContent>
       </Card>
     </div>

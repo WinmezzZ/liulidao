@@ -159,6 +159,7 @@ const errorCodes = {
 } satisfies ErrorTypes;
  
 export const getErrorMessage = (code?: string, lang: "en" | "zh" = "zh") => {
+	console.log("code", code);
 	if (!code) {
 		return "";
 	}

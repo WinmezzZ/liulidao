@@ -117,6 +117,7 @@ export const auth = betterAuth({
 			},
 		}),
     twoFactor({
+      issuer: process.env.APP_NAME!,
 			otpOptions: {
 				async sendOTP({ user, otp }) {
 					await resend.emails.send({

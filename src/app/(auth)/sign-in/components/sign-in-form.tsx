@@ -16,12 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signIn } from "../../actions/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "../../schema";
 import { FormFooter } from "../../components/form-footer";
-import { authClient } from "@/lib/auth-client";
+import { authClient, getErrorMessage, signIn, signUp } from "@/lib/auth-client";
 
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>
 
@@ -31,7 +30,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-     authClient.oneTap();
+    authClient.oneTap();
   }, []);
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -43,17 +42,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   });
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    console.log("data", data);
-    // startTransition(async () => {
-      const res = await authClient.signIn.email(data);
-      console.log("res", res);
-      // if (!res.data) {
-      //   toast.error(res?.data?.error);
-      // } else {
-      //   toast.success("登录成功");
-      //   router.push("/");
-      // }
-    // });
+    startTransition(async () => {
+      const res = await signIn.email({
+        ...data,
+      });
+      
+      if (res.error) {
+        toast.error(getErrorMessage(res.error.code));
+      } else {
+        router.push("/");
+      }
+    });
   };
 
   return (
