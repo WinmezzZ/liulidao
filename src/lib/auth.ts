@@ -7,8 +7,6 @@ import { reactInvitationEmail } from "@/emails/invitation";
 import { reactResetPasswordEmail } from "@/emails/reset-password";
 import { nextCookies } from "better-auth/next-js";
 import { redis } from "./redis";
-console.log("process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
-
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL!;
 const fromEmail = process.env.BETTER_AUTH_EMAIL!;
