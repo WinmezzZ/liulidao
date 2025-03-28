@@ -33,11 +33,8 @@ export function UpdatePassword() {
   const handleSubmit = async (data: z.infer<typeof updatePasswordSchema>) => {
     startTransition(async () => {
       const res = await authClient.changePassword(data);
-      if (res.error) {
-        toast.error(getErrorMessage(res.error.code));
-      } else {
+      if (res.data) {
         toast.success("密码修改成功");
-        setOpen(false);
       }
     });
   };
