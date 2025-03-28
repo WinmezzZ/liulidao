@@ -21,14 +21,13 @@ export default function Component() {
 	const [message, setMessage] = useState("");
 	const [isError, setIsError] = useState(false);
 	const [isValidated, setIsValidated] = useState(false);
+	const { data: session } = authClient.useSession();
 
-	// In a real app, this email would come from your authentication context
-	const userEmail = "user@example.com";
+	const userEmail = session?.user?.email;
 
 	const requestOTP = async () => {
 		const res = await authClient.twoFactor.sendOtp();
-		// In a real app, this would call your backend API to send the OTP
-		setMessage("OTP sent to your email");
+		setMessage("验证码已发送至邮箱");
 		setIsError(false);
 		setIsOtpSent(true);
 	};
@@ -39,40 +38,40 @@ export default function Component() {
 			code: otp,
 		});
 		if (res.data) {
-			setMessage("OTP validated successfully");
+			setMessage("验证码验证成功");
 			setIsError(false);
 			setIsValidated(true);
 			router.push("/");
 		} else {
 			setIsError(true);
-			setMessage("Invalid OTP");
+			setMessage("验证码错误");
 		}
 	};
 	return (
 		<main className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
 			<Card className="w-[350px]">
 				<CardHeader>
-					<CardTitle>Two-Factor Authentication</CardTitle>
+					<CardTitle>两步验证</CardTitle>
 					<CardDescription>
-						Verify your identity with a one-time password
+						请输入邮箱收到的6位验证码
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="grid w-full items-center gap-4">
 						{!isOtpSent ? (
 							<Button onClick={requestOTP} className="w-full">
-								<Mail className="mr-2 h-4 w-4" /> Send OTP to Email
+								<Mail className="mr-2 h-4 w-4" /> 发送验证码到邮箱
 							</Button>
 						) : (
 							<>
 								<div className="flex flex-col space-y-1.5">
-									<Label htmlFor="otp">One-Time Password</Label>
+									<Label htmlFor="otp">验证码</Label>
 									<Label className="py-2">
-										Check your email at {userEmail} for the OTP
+										请检查邮箱{userEmail}收到的6位验证码
 									</Label>
 									<Input
 										id="otp"
-										placeholder="Enter 6-digit OTP"
+										placeholder="请输入6位验证码"
 										value={otp}
 										onChange={(e) => setOtp(e.target.value)}
 										maxLength={6}
@@ -82,7 +81,7 @@ export default function Component() {
 									onClick={validateOTP}
 									disabled={otp.length !== 6 || isValidated}
 								>
-									Validate OTP
+									验证
 								</Button>
 							</>
 						)}

@@ -30,7 +30,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    authClient.oneTap();
+    //  authClient.oneTap();
   }, []);
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -43,15 +43,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     startTransition(async () => {
-      const res = await signIn.email({
+      signIn.email({
         ...data,
+      }, {
+        onSuccess(context) {
+          console.log("context", context);
+          if (context.data.twoFactorRedirect) {
+            router.push("/two-factor");
+          } else {
+            router.push("/");
+          }
+        }
       });
-      
-      if (res.error) {
-        toast.error(getErrorMessage(res.error.code));
-      } else {
-        router.push("/");
-      }
     });
   };
 

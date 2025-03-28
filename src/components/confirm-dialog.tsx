@@ -13,14 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, createContext, useContext, useCallback, useRef, ComponentProps } from "react";
 
-interface OpenDialogResult {
-  inputText: string;
-  closeDialog: () => void;
+interface ConfirmDialogContextProps {
+  confirm: (options: ConfirmDialogOptions) => void;
 }
-
-type ConfirmDialogContextProps = {
-  openDialog: (options: ConfirmDialogOptions) => Promise<OpenDialogResult>;
-};
 
 const ConfirmDialogContext = createContext<ConfirmDialogContextProps | null>(null);
 
@@ -31,6 +26,8 @@ type ConfirmDialogOptions = {
   confirmText?: string;
   cancelText?: string;
   inputProps?: ComponentProps<"input">;
+  onConfirm?: (close: () => void, inputText: string) => void | boolean | Promise<boolean | void>;
+  onCancel?: () => void;
 };
 
 export function ConfirmDialogProvider({
@@ -42,48 +39,28 @@ export function ConfirmDialogProvider({
   const [options, setOptions] = useState<ConfirmDialogOptions>({});
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [resolvePromise, setResolvePromise] = useState<
-    ((value: OpenDialogResult) => void) | null
-  >(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
-  const openDialog = useCallback(
-    (dialogOptions: ConfirmDialogOptions = {}) => {
-      setOptions(dialogOptions);
-      setInputValue("");
-      setOpen(true);
-
-      return new Promise<OpenDialogResult>((resolve) => {
-        setResolvePromise(() => resolve);
-      });
-    },
-    []
-  );
-
-  const closeDialog = () => {
-    setOpen(false);
+  const handleOpen = async (options: ConfirmDialogOptions) => {
+    setOptions(options);
+    setOpen(true);
   };
 
-  const handleConfirm = () => {
-    const value = inputRef.current?.value;
-    if (!value) {
-      inputRef.current?.focus();
-      return;
+  const handleConfirm = async () => {
+    if (options.onConfirm) {
+      setSubmitLoading(true);
+      const confirmRes = await options.onConfirm(() => setOpen(false), inputValue);
+      setSubmitLoading(false);
+      if (confirmRes === true) {
+        setOpen(false);
+      }
     }
-    if (resolvePromise) {
-      resolvePromise({ inputText: value, closeDialog });
-    }
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-    setInputValue("");
-    setResolvePromise(null);
   };
 
   return (
-    <ConfirmDialogContext.Provider value={{ openDialog }}>
+    <ConfirmDialogContext.Provider value={{ confirm: handleOpen }}>
       {children}
-      <Dialog open={open} onOpenChange={(open) => !open && handleCancel()}>
+      <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{options.title}</DialogTitle>
@@ -113,10 +90,10 @@ export function ConfirmDialogProvider({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleCancel}>
+            <Button variant="outline" onClick={() => options.onCancel?.()}>
               {options.cancelText || "取消"}
             </Button>
-            <Button onClick={handleConfirm}>
+            <Button onClick={handleConfirm} loading={submitLoading}>
               {options.confirmText || "确定"}
             </Button>
           </DialogFooter>
@@ -133,5 +110,5 @@ export function useConfirmDialog() {
       "useConfirmDialog must be used within a ConfirmDialogProvider"
     );
   }
-  return context.openDialog;
+  return context.confirm;
 }

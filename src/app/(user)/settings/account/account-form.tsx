@@ -7,60 +7,16 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UpdatePassword } from "./components/update-password";
 import { TwoFactory } from "./components/two-factory";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
-
-const accountFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  dob: z.date({
-    required_error: "A date of birth is required.",
-  }),
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
-});
-
-type AccountFormValues = z.infer<typeof accountFormSchema>;
-
-// This can come from your database or API.
-const defaultValues: Partial<AccountFormValues> = {
-  // name: "Your name",
-  // dob: new Date("2023-01-23"),
-};
 
 export function AccountForm() {
-  const form = useForm<AccountFormValues>({
-    resolver: zodResolver(accountFormSchema),
-    defaultValues,
-  });
-
-  function onSubmit(data: AccountFormValues) {
-    toast("You submitted the following values:",{
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  const linkAccount = async () => {
+    const res = await authClient.signIn.social({
+      provider: "linkedin"
     });
-  }
-
+  };
   return (
     <div className="pt-4 space-y-8">
       <Card>
@@ -69,6 +25,15 @@ export function AccountForm() {
         </CardHeader>
         <CardContent>
           <UpdatePassword />
+         </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>绑定第三方账号</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button>绑定 Github</Button>
+          <Button>绑定 Google</Button>
          </CardContent>
       </Card>
       <Card>

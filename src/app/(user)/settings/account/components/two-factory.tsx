@@ -7,9 +7,10 @@ import {  useState } from "react";
 import QRCode from "react-qr-code";
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function TwoFactory() {
-  const openConfirm = useConfirmDialog();
+  const confirm = useConfirmDialog();
   const { data: session } = authClient.useSession();
   const [totpUri, setTotpUri] = useState("");
   const [pinCode, setPinCode] = useState("");
@@ -18,21 +19,21 @@ export function TwoFactory() {
   const twoFactorEnabled = session?.user.twoFactorEnabled;
 
   const viewBackupCodes = async () => {
-    const { inputText, closeDialog } = await openConfirm({
+    confirm({
       title: "生成备份码",
       description: "开启之前，需要验证你的登录密码",
       inputProps: {
         placeholder: "请输入登录密码",
         type: "password",
+      },
+      onConfirm: async (close, inputText) => {
+        const res = await authClient.twoFactor.generateBackupCodes({ password: inputText });
+        if (res.data) {
+          setBackupCodes(res.data.backupCodes);
+          close();
+        }
       }
     });
-    const res = await authClient.twoFactor.generateBackupCodes({ password: inputText });
-    if (res.error) {
-      toast.error(getErrorMessage(res.error.code));
-    } else {
-      setBackupCodes(res.data.backupCodes);
-      closeDialog();
-    }
   };
 
   const handlePinCodeChange = async (value: string) => {
@@ -41,9 +42,7 @@ export function TwoFactory() {
       const res = await authClient.twoFactor.verifyTotp({
         code: value
       });
-      if (res.error) {
-        toast.error(getErrorMessage(res.error.code));
-      } else {
+      if (res.data) {
         toast.success("验证成功");
         setPinCode("");
       }
@@ -51,30 +50,30 @@ export function TwoFactory() {
   };
 
   const handleEnable = async () => {
-    const { inputText, closeDialog } = await openConfirm({
+    confirm({
       title: "启用两步验证（2FA）",
       description: "开启之前，需要验证你的登录密码",
       inputProps: {
         placeholder: "请输入登录密码",
         type: "password",
+      },
+      onConfirm: async (close, inputText) => {
+        const res = await authClient.twoFactor.enable({
+          password: inputText
+        });
+        if (res.data) {
+          // const res = await authClient.twoFactor.getTotpUri({ password: inputText });
+          setTotpUri(res.data.totpURI);
+          setPinCode("");
+          close();
+          // if (res.error) {
+          //   toast.error(getErrorMessage(res.error.code));
+          // } else {
+          //   setTotpUri(res.data.totpURI);
+          // }
+        }
       }
     });
-    const res = await authClient.twoFactor.enable({
-        password: inputText
-    });
-    if (res.error) {
-        toast.error(getErrorMessage(res.error.code));
-    } else {
-      // const res = await authClient.twoFactor.getTotpUri({ password: inputText });
-      setTotpUri(res.data.totpURI);
-      setPinCode("");
-      closeDialog();
-      // if (res.error) {
-      //   toast.error(getErrorMessage(res.error.code));
-      // } else {
-      //   setTotpUri(res.data.totpURI);
-      // }
-    }
   };
   return <div >
     <div className="flex flex-col items-center justify-center gap-4">
@@ -88,11 +87,26 @@ export function TwoFactory() {
       }
     </div>
     {
-      totpUri && <div>
+      totpUri && <div className="flex flex-col gap-8 mb-4">
         <p>请使用身份验证器应用或浏览器扩展程序进行扫描。</p>
         <QRCode value={totpUri} />
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-      <Label htmlFor="email">请输入验证码</Label>
+        <div className="grid w-full items-center gap-1.5">
+        <div className="items-top flex space-x-2">
+          <Checkbox id="trustDevice" />
+          <div className="grid gap-1.5 leading-none">
+            <label
+              htmlFor="trustDevice"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              信任此设备
+            </label>
+            <p className="text-sm text-muted-foreground w-full mt-2">
+              勾选后，当前设备将被记住 60 天。在此期间，用户从此设备后续登录时将不会被提示进行 2FA。每次用户成功登录时，信任期限都会刷新。
+            </p>
+          </div>
+      </div>
+
+      <Label htmlFor="email" className="mt-4">请输入验证码</Label>
       <InputOTP maxLength={6} value={pinCode} onChange={handlePinCodeChange}>
           <InputOTPGroup>
             <InputOTPSlot index={0} />

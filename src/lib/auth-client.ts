@@ -16,11 +16,7 @@ import { toast } from "sonner";
 export const authClient = createAuthClient({
 	plugins: [
 		organizationClient(),
-		twoFactorClient({
-			onTwoFactorRedirect() {
-				window.location.href = "/two-factor";
-			},
-		}),
+		twoFactorClient(),
 		adminClient(),
 		multiSessionClient(),
 		magicLinkClient(),

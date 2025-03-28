@@ -82,9 +82,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       });
       
       setIsVerifying(true);
-      if (res.error) {
-        toast.error(getErrorMessage(res.error.code));
-      } else {
+      if (res.data) {
         router.push("/");
       }
   }

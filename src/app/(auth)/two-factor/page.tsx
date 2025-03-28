@@ -24,7 +24,7 @@ export default function Component() {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (totpCode.length !== 6 || !/^\d+$/.test(totpCode)) {
-			setError("TOTP code must be 6 digits");
+			setError("验证码必须是6位数字");
 			return;
 		}
 		authClient.twoFactor
@@ -36,7 +36,7 @@ export default function Component() {
 					setSuccess(true);
 					setError("");
 				} else {
-					setError("Invalid TOTP code");
+					setError("验证码错误");
 				}
 			});
 	};
@@ -45,16 +45,16 @@ export default function Component() {
 		<main className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
 			<Card className="w-[350px]">
 				<CardHeader>
-					<CardTitle>TOTP Verification</CardTitle>
+					<CardTitle>TOTP 验证</CardTitle>
 					<CardDescription>
-						Enter your 6-digit TOTP code to authenticate
+						输入你的6位TOTP验证码
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					{!success ? (
 						<form onSubmit={handleSubmit}>
 							<div className="space-y-2">
-								<Label htmlFor="totp">TOTP Code</Label>
+								<Label htmlFor="totp">TOTP 验证码</Label>
 								<Input
 									id="totp"
 									type="text"
@@ -63,7 +63,7 @@ export default function Component() {
 									maxLength={6}
 									value={totpCode}
 									onChange={(e) => setTotpCode(e.target.value)}
-									placeholder="Enter 6-digit code"
+									placeholder="请输入6位验证码"
 									required
 								/>
 							</div>
@@ -74,20 +74,20 @@ export default function Component() {
 								</div>
 							)}
 							<Button type="submit" className="w-full mt-4">
-								Verify
+								验证
 							</Button>
 						</form>
 					) : (
 						<div className="flex flex-col items-center justify-center space-y-2">
 							<CheckCircle2 className="w-12 h-12 text-green-500" />
-							<p className="text-lg font-semibold">Verification Successful</p>
+							<p className="text-lg font-semibold">验证成功</p>
 						</div>
 					)}
 				</CardContent>
 				<CardFooter className="text-sm text-muted-foreground gap-2">
 					<Link href="/two-factor/otp">
 						<Button variant="link" size="sm">
-							Switch to Email Verification
+							切换到邮箱验证
 						</Button>
 					</Link>
 				</CardFooter>
