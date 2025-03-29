@@ -43,11 +43,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     startTransition(async () => {
-      signIn.email({
+      await signIn.email({
         ...data,
       }, {
         onSuccess(context) {
-          console.log("context", context);
           if (context.data.twoFactorRedirect) {
             router.push("/two-factor");
           } else {
