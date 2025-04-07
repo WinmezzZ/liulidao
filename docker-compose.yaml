@@ -10,7 +10,7 @@ services:
       - "${DATABASE_PORT}:5432"
     volumes:
       # - ./db:/docker-entrypoint-initdb.d/
-      - $HOME/docker-data/liulidao-postgres:/var/lib/postgresql/data
+      - ${HOST_HOME}/docker-data/liulidao-postgres:/var/lib/postgresql/data
 
   redis:
     image: redis
@@ -18,7 +18,7 @@ services:
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     volumes:
-      - $HOME/docker-data/liulidao-redis:/data
+      - ${HOST_HOME}/docker-data/liulidao-redis:/data
 
 volumes:
   postgres:
