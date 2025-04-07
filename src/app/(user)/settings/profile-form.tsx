@@ -73,7 +73,7 @@ export function ProfileForm() {
   }
 
   if (!user) {
-    return <div>Error...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -144,7 +144,6 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        {JSON.stringify(user)}
         <FormField
           control={form.control}
           name="email"

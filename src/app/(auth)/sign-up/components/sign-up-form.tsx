@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes, useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useState, useTransition } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,16 +17,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { FormFooter } from "../../components/form-footer";
 import { signUpSchema } from "../../schema";
-import { toast } from "sonner";
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getErrorMessage, signUp } from "@/lib/auth-client";
+import { signUp } from "@/lib/auth-client";
 
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const router = useRouter();
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [countdown, setCountdown] = useState(0);
   const form = useForm({
     resolver: zodResolver(signUpSchema),
@@ -75,16 +73,18 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   // }
 
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
-    setIsVerifying(false);
-      const res = await signUp.email({
+    startTransition(async () => {
+      await signUp.email({
         ...data,
         name: data.username,
+      }, {
+        onSuccess(res) {
+          if (res.data) {
+            router.push("/");
+          }
+        }
       });
-      
-      setIsVerifying(true);
-      if (res.data) {
-        router.push("/");
-      }
+    });
   }
 
   // async function handleResend() {
@@ -193,7 +193,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 </FormItem>
               )}
             />
-            <Button type="submit" loading={isVerifying} className="mt-4">
+            <Button type="submit" loading={isPending} className="mt-4">
                 注册
               </Button>
 
@@ -208,7 +208,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               </div>
             </div>
 
-            <FormFooter isLoading={isVerifying} />
+            <FormFooter isLoading={isPending} />
           </div>
         </form>
       </Form>

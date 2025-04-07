@@ -1,22 +1,102 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UpdatePassword } from "./components/update-password";
 import { TwoFactory } from "./components/two-factory";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import { getUserAccounts } from "./action";
+import { useSession } from "@/lib/auth-client";
+import google from "@/assets/svg/logo/google.svg";
+import github from "@/assets/svg/logo/github.svg";
+import Image from "next/image";
+import { Account } from "@prisma/client";
+import { useConfirmDialog } from "@/components/confirm-dialog";
+import { setPassword } from "@/app/actions/account";
 
+const providers = [
+  {
+    name: "github",
+    icon: github,
+  },
+  {
+    name: "google",
+    icon: google,
+  },
+] as const;
 
 export function AccountForm() {
-  const linkAccount = async () => {
-    const res = await authClient.signIn.social({
-      provider: "linkedin"
+  const { data: session } = useSession();
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [isPending, startTransition] = useTransition();
+
+  const listAccounts = useCallback(async () => {
+    if (!session) return;
+    const res = await getUserAccounts(session.user.id);
+    setAccounts(res);
+  }, [session]);
+
+  useEffect(() => {
+    listAccounts();
+  }, [listAccounts]);
+  
+  const linkAccount = async (provider: "github" | "google") => {
+    startTransition(async () => {
+      const res = await authClient.linkSocial({
+        provider,
+        callbackURL: location.href,
+        fetchOptions: {
+          timeout: 200000
+        }
+      });
+      console.log(res);
+      if (res.data) {
+        listAccounts();
+      }
     });
   };
+
+  const confirm = useConfirmDialog();
+
+  const unlinkAccount = async (providerId: "github" | "google") => {
+    const submit = async() => {
+      const res = await authClient.unlinkAccount({
+        providerId,
+      });
+      console.log(res);
+      if (res.data) {
+        listAccounts();
+      }
+    };
+    startTransition(async () => {
+      const account = accounts.find(account => account.providerId === providerId);
+      if (!account?.password) {
+        confirm({
+          title: "解除绑定",
+          description: `由于该绑定账号未设置密码，解绑 ${providerId} 需要初始化一个登录密码`,
+          inputProps: {
+            placeholder: "请设置登录密码",
+            type: "password",
+          },
+          onConfirm: async (close, inputText) => {
+            const res = await setPassword(inputText);
+            if (res) {
+              await submit();
+              close();
+            }
+          }
+        });
+      } else {
+        await submit();
+      }
+    });
+  };
+
+  const hasLinked = (provider: "github" | "google") => {
+    return accounts.some(account => account.providerId === provider);
+  };
+
   return (
     <div className="pt-4 space-y-8">
       <Card>
@@ -32,8 +112,22 @@ export function AccountForm() {
           <CardTitle>绑定第三方账号</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button>绑定 Github</Button>
-          <Button>绑定 Google</Button>
+          <ul className="flex flex-col gap-2">
+            {
+              providers.map(provider => (
+                <li key={provider.name} className="flex items-center justify-between">
+                  <span className="flex items-center gap-2 text-sm"><Image src={provider.icon} alt={provider.name} className="size-5" /> {provider.name} {hasLinked(provider.name) && "（已绑定）" }</span>
+                  {
+                    hasLinked(provider.name) ? (
+                      <Button className="w-20" variant="secondary" onClick={() => unlinkAccount(provider.name)} loading={isPending}>解除绑定</Button>
+                    ) : (
+                      <Button className="w-20" variant="default" onClick={() => linkAccount(provider.name)} loading={isPending}>绑定</Button>
+                    )
+                  }
+                </li>
+              ))
+            }
+          </ul>
          </CardContent>
       </Card>
       <Card>

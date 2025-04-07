@@ -19,7 +19,9 @@ export const auth = betterAuth({
   account: {
     accountLinking: {
         enabled: true,
-        trustedProviders: ["google", "github"]
+        trustedProviders: ["google", "github"],
+        allowDifferentEmails: true,
+        allowUnlinkingAll: true
     }
   },
   emailAndPassword: {  
@@ -47,7 +49,6 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
 		async sendVerificationEmail({ user, url }) {
-      console.log("url", url);
       const fromEmail = process.env.BETTER_AUTH_EMAIL;
       if (!fromEmail) {
         throw new Error("请配置 BETTER_AUTH_EMAIL 发送人信息");

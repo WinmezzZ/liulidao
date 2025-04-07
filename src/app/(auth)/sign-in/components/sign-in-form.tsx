@@ -45,14 +45,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     startTransition(async () => {
       await signIn.email({
         ...data,
-      }, {
-        onSuccess(context) {
-          if (context.data.twoFactorRedirect) {
-            router.push("/two-factor");
-          } else {
-            router.push("/");
-          }
-        }
+        callbackURL: "/",
       });
     });
   };

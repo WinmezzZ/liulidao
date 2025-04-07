@@ -3,13 +3,8 @@ import { Separator } from "@/components/ui/separator";
 
 import SettingsLayout from "./components/settings-layout";
 import { ProfileForm } from "./profile-form";
-import { authClient } from "@/lib/auth-client";
 
 export default function SettingsProfilePage() {
-
-  const { data: session } =  authClient.useSession();
-
-  console.log(session);
 
   return (
     <SettingsLayout>

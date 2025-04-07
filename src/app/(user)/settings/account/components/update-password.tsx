@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { updatePasswordSchema } from "../schema";
 import * as z from "zod";
-import { authClient, getErrorMessage } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import {  useTransition } from "react";
 import { FieldConfigItem } from "@/components/ui/auto-form/types";

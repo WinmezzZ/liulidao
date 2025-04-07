@@ -57,6 +57,11 @@ export function ConfirmDialogProvider({
     }
   };
 
+  const handleCancel = () => {
+    options.onCancel?.();
+    setOpen(false);
+  };
+
   return (
     <ConfirmDialogContext.Provider value={{ confirm: handleOpen }}>
       {children}
@@ -90,7 +95,7 @@ export function ConfirmDialogProvider({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => options.onCancel?.()}>
+            <Button variant="outline" onClick={handleCancel}>
               {options.cancelText || "取消"}
             </Button>
             <Button onClick={handleConfirm} loading={submitLoading}>

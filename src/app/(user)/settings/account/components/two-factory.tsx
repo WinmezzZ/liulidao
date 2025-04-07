@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Lock } from "lucide-react";
 import { useConfirmDialog } from "@/components/confirm-dialog";
-import { authClient, getErrorMessage } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import {  useState } from "react";
 import QRCode from "react-qr-code";

@@ -1,6 +1,12 @@
 "use server";
 
-import { auth } from "@/lib/auth";
-import { authClient } from "@/lib/auth-client";
-import { updatePasswordSchema } from "./schema";
-import { z } from "zod";
+import prisma from "@/lib/prisma";
+
+export const getUserAccounts = async (id: string ) => {
+  const accounts = await prisma.account.findMany({
+    where: {
+      userId: id
+    }
+  });
+  return accounts;
+};

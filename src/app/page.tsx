@@ -1,7 +1,11 @@
 import { CreateSpaceDrawer } from "./components/create-space-drawer";
+import { VerifyTip } from "./components/verify-tip";
  
-export default function Page() {
+export default async function Page() {
   return (
-    <CreateSpaceDrawer />
+    <div>
+      <VerifyTip />
+      <CreateSpaceDrawer />
+    </div>
   );
 }

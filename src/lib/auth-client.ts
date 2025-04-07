@@ -30,8 +30,9 @@ export const authClient = createAuthClient({
 	],
 	fetchOptions: {
 		onError(e) {
+			console.log("e", e);
 			if (e.error.code in errorCodes) {
-				toast.error(getErrorMessage(e.error.code));
+				toast.error(getErrorMessage(e.error));
 			}
 		},
 	},
@@ -151,15 +152,21 @@ const errorCodes = {
 		en: "Account not found",
 		zh: "账号不存在",
 	},
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	USERNAME_IS_ALREADY_TAKEN_PLEASE_TRY_ANOTHER: {
+		en: "username is already taken. please try another.",
+		zh: "用户名已被使用"
+	}
 	
 } satisfies ErrorTypes;
  
-export const getErrorMessage = (code?: string, lang: "en" | "zh" = "zh") => {
-	if (!code) {
-		return "";
+export const getErrorMessage = (error: Record<string, string>, lang: "en" | "zh" = "zh") => {
+	if (!error.code) {
+		return "System Error";
 	}
-	if (code in errorCodes) {
-		return errorCodes[code as keyof typeof errorCodes][lang];
+	if (error.code in errorCodes) {
+		return errorCodes[error.code as keyof typeof errorCodes][lang];
 	}
-	return "";
+	return error.message;
 };
