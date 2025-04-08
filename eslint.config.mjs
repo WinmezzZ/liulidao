@@ -1,24 +1,35 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import importPlugin from 'eslint-plugin-import';
+import next from '@next/eslint-plugin-next';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  {
-    rules: {
-      quotes: ["warn", "double"],
-      semi: ["warn", "always"],
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-    },
-  },
-];
-
-export default eslintConfig;
+export default tseslint
+  .config(
+    { ignores: ['dist'] },
+    {
+      extends: [js.configs.recommended, ...tseslint.configs.recommended],
+      files: ['**/*.{ts,tsx}'],
+      languageOptions: {
+        ecmaVersion: 2020,
+        globals: globals.browser,
+      },
+      plugins: {
+        'react-hooks': reactHooks,
+        'react-refresh': reactRefresh,
+        import: importPlugin.flatConfigs.recommended,
+        next: next,
+      },
+      rules: {
+        ...reactHooks.configs.recommended.rules,
+        'react-refresh/only-export-components': [
+          'warn',
+          { allowConstantExport: true },
+        ],
+      },
+    }
+  )
+  .concat(eslintPluginPrettier);

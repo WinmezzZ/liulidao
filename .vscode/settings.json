@@ -1,18 +1,10 @@
 {
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "editor.formatOnSave": true,
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
-  "[javascriptreact]": {
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": false,
+  "[css]": {
     "editor.formatOnSave": false
   },
   "[typescript]": {
@@ -21,5 +13,13 @@
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "typescriptreact"
+  ],
   "tailwindCSS.experimental.configFile": "src/app/globals.css"
 }

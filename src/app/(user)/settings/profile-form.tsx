@@ -1,31 +1,35 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { type ChangeEvent, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-
-import { authClient } from "@/lib/auth-client";
+import { type ChangeEvent, useEffect, useRef } from 'react';
+import * as z from 'zod';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { authClient } from '@/lib/auth-client';
+import { useForm } from 'react-hook-form';
 
 const profileFormSchema = z.object({
   nickname: z
     .string()
     .min(2, {
-      message: "昵称最少2个字符",
+      message: '昵称最少2个字符',
     })
     .max(30, {
-      message: "昵称最多20个字符",
+      message: '昵称最多20个字符',
     }),
   email: z
     .string({
-      required_error: "请输入邮箱地址",
+      required_error: '请输入邮箱地址',
     })
-    .email({ message: "请输入有效的邮箱" }),
+    .email({ message: '请输入有效的邮箱' }),
   bio: z.string().optional(),
   avatar: z.string(),
 });
@@ -37,7 +41,9 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
   const dataTransfer = new DataTransfer();
 
   // Add newly uploaded images
-  Array.from(event.target.files!).forEach(image => dataTransfer.items.add(image));
+  Array.from(event.target.files!).forEach((image) =>
+    dataTransfer.items.add(image)
+  );
 
   const files = dataTransfer.files;
   const displayUrl = URL.createObjectURL(event.target.files![0]);
@@ -46,7 +52,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 }
 
 export function ProfileForm() {
-  const { data: session } =  authClient.useSession();
+  const { data: session } = authClient.useSession();
   const user = session?.user;
   const avatarRef = useRef<HTMLInputElement | null>(null);
 
@@ -55,7 +61,7 @@ export function ProfileForm() {
     defaultValues: {
       ...user,
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   useEffect(() => {
@@ -64,9 +70,7 @@ export function ProfileForm() {
 
   async function onSubmit(data: ProfileFormValues) {
     // const res = await apiUpDateSelfInfo(data);
-
     // toast[res.ok ? 'success' : 'error'](res.message);
-
     // if (res.ok) {
     //   useUserInfoStore.setState(res.result);
     // }
@@ -79,16 +83,14 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      
-            <FormItem>
-              <FormLabel>用户名</FormLabel>
-              <FormControl>
-                <Input value={user.name} disabled />
-              </FormControl>
-              <FormDescription>用户名不可修改</FormDescription>
-              <FormMessage />
-            </FormItem>
-
+        <FormItem>
+          <FormLabel>用户名</FormLabel>
+          <FormControl>
+            <Input value={user.name} disabled />
+          </FormControl>
+          <FormDescription>用户名不可修改</FormDescription>
+          <FormMessage />
+        </FormItem>
 
         <FormField
           control={form.control}
@@ -125,14 +127,11 @@ export function ProfileForm() {
                     type="file"
                     {...rest}
                     ref={avatarRef}
-                    onChange={async event => {
+                    onChange={async (event) => {
                       // const { files } = getImageData(event);
                       // const formData = new FormData();
-
                       // formData.append("file", files[0]);
-
                       // const imageData = await apiUploadFile(formData);
-
                       // if (imageData.ok) {
                       //   onChange(imageData.result);
                       // }
@@ -154,7 +153,8 @@ export function ProfileForm() {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                你可以管理验证的邮箱 <Link href="/examples/forms">邮箱设置</Link>.
+                你可以管理验证的邮箱{' '}
+                <Link href="/examples/forms">邮箱设置</Link>.
               </FormDescription>
               <FormMessage />
             </FormItem>

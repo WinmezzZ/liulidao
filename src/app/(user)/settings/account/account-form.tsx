@@ -59,10 +59,13 @@ export function AccountForm() {
 
   const confirm = useConfirmDialog();
 
-  const unlinkAccount = async (providerId: "github" | "google") => {
+  const unlinkAccount = async (providerId: string) => {
+    const account = accounts.find(account => account.providerId === providerId);
+    if (!account) return;
     const submit = async() => {
       const res = await authClient.unlinkAccount({
-        providerId,
+        providerId: account.providerId,
+        accountId: account.id,
       });
       console.log(res);
       if (res.data) {
