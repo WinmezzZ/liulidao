@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main>
+      <main className="flex overflow-hidden flex-col flex-1">
         <SidebarTrigger />
         {children}
       </main>
