@@ -1,7 +1,11 @@
-"use client";
+'use client';
 
-import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
-import { Button } from "@/components/ui/button";
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import type * as z from 'zod';
+import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
+import { type FieldConfigItem } from '@/components/ui/auto-form/types';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -11,18 +15,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { updatePasswordSchema } from "../schema";
-import * as z from "zod";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
-import {  useTransition } from "react";
-import { FieldConfigItem } from "@/components/ui/auto-form/types";
-import { useState } from "react";
+} from '@/components/ui/dialog';
+import { authClient } from '@/lib/auth-client';
+import { updatePasswordSchema } from '../schema';
 
-const passwordConfig: FieldConfigItem  = {
+const passwordConfig: FieldConfigItem = {
   inputProps: {
-    type: "password",
+    type: 'password',
   },
 };
 
@@ -34,7 +33,7 @@ export function UpdatePassword() {
     startTransition(async () => {
       const res = await authClient.changePassword(data);
       if (res.data) {
-        toast.success("密码修改成功");
+        toast.success('密码修改成功');
       }
     });
   };
@@ -46,15 +45,17 @@ export function UpdatePassword() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>修改密码</DialogTitle>
-          <DialogDescription>
-            修改密码
-          </DialogDescription>
+          <DialogDescription>修改密码</DialogDescription>
         </DialogHeader>
-        <AutoForm formSchema={updatePasswordSchema} fieldConfig={{
-          currentPassword:passwordConfig,
-          newPassword: passwordConfig,
-          confirmNewPassword: passwordConfig,
-        }} onSubmit={handleSubmit}>
+        <AutoForm
+          formSchema={updatePasswordSchema}
+          fieldConfig={{
+            currentPassword: passwordConfig,
+            newPassword: passwordConfig,
+            confirmNewPassword: passwordConfig,
+          }}
+          onSubmit={handleSubmit}
+        >
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">取消</Button>

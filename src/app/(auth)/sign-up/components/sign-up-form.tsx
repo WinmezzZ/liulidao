@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { HTMLAttributes, useEffect, useState, useTransition } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { type HTMLAttributes, useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { type z } from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,14 +13,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { FormFooter } from "../../components/form-footer";
-import { signUpSchema } from "../../schema";
-import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { signUp } from '@/lib/auth-client';
+import { cn } from '@/lib/utils';
+import { FormFooter } from '../../components/form-footer';
+import { signUpSchema } from '../../schema';
 
-type SignUpFormProps = HTMLAttributes<HTMLDivElement>
+type SignUpFormProps = HTMLAttributes<HTMLDivElement>;
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const router = useRouter();
@@ -35,7 +35,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
     if (countdown > 0) {
       intervalId = setInterval(() => {
-        setCountdown(prev => prev - 1);
+        setCountdown((prev) => prev - 1);
       }, 1000);
 
       return () => {
@@ -74,16 +74,19 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
 
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
     startTransition(async () => {
-      await signUp.email({
-        ...data,
-        name: data.username,
-      }, {
-        onSuccess(res) {
-          if (res.data) {
-            router.push("/");
-          }
+      await signUp.email(
+        {
+          ...data,
+          name: data.username,
+        },
+        {
+          onSuccess(res) {
+            if (res.data) {
+              router.push('/');
+            }
+          },
         }
-      });
+      );
     });
   }
 
@@ -96,18 +99,18 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
   // }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn('grid gap-6', className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className='grid gap-2'>
-          <FormField
+          <div className="grid gap-2">
+            <FormField
               control={form.control}
-              name='username'
+              name="username"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
                   <FormLabel>用户名</FormLabel>
                   <FormControl>
-                    <Input  {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,9 +118,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             />
             <FormField
               control={form.control}
-              name='email'
+              name="email"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -169,12 +172,12 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             /> */}
             <FormField
               control={form.control}
-              name='password'
+              name="password"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type='password' {...field} />
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -182,27 +185,27 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             />
             <FormField
               control={form.control}
-              name='confirmPassword'
+              name="confirmPassword"
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem className="space-y-1">
                   <FormLabel>确认密码</FormLabel>
                   <FormControl>
-                    <Input type='password'{...field} />
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit" loading={isPending} className="mt-4">
-                注册
-              </Button>
+              注册
+            </Button>
 
-            <div className='relative my-2'>
-              <div className='absolute inset-0 flex items-center'>
-                <span className='w-full border-t' />
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
               </div>
-              <div className='relative flex justify-center text-xs uppercase'>
-                <span className='bg-background px-2 text-muted-foreground'>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background text-muted-foreground px-2">
                   其他登录方式
                 </span>
               </div>

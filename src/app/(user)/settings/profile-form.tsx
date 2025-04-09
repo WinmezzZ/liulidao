@@ -1,4 +1,7 @@
-import { type ChangeEvent, useEffect, useRef } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -14,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { authClient } from '@/lib/auth-client';
-import { useForm } from 'react-hook-form';
 
 const profileFormSchema = z.object({
   nickname: z
@@ -36,20 +38,20 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-function getImageData(event: ChangeEvent<HTMLInputElement>) {
-  // FileList is immutable, so we need to create a new one
-  const dataTransfer = new DataTransfer();
+// function getImageData(event: ChangeEvent<HTMLInputElement>) {
+//   // FileList is immutable, so we need to create a new one
+//   const dataTransfer = new DataTransfer();
 
-  // Add newly uploaded images
-  Array.from(event.target.files!).forEach((image) =>
-    dataTransfer.items.add(image)
-  );
+//   // Add newly uploaded images
+//   Array.from(event.target.files!).forEach((image) =>
+//     dataTransfer.items.add(image)
+//   );
 
-  const files = dataTransfer.files;
-  const displayUrl = URL.createObjectURL(event.target.files![0]);
+//   const files = dataTransfer.files;
+//   const displayUrl = URL.createObjectURL(event.target.files![0]);
 
-  return { files, displayUrl };
-}
+//   return { files, displayUrl };
+// }
 
 export function ProfileForm() {
   const { data: session } = authClient.useSession();
@@ -66,7 +68,7 @@ export function ProfileForm() {
 
   useEffect(() => {
     form.reset(user);
-  }, [user]);
+  }, [user, form]);
 
   async function onSubmit(data: ProfileFormValues) {
     // const res = await apiUpDateSelfInfo(data);
@@ -116,7 +118,7 @@ export function ProfileForm() {
               <FormControl>
                 <div>
                   <Avatar
-                    className="cursor-pointer w-[100px] h-[100px] rounded-full"
+                    className="h-[100px] w-[100px] cursor-pointer rounded-full"
                     onClick={() => avatarRef.current?.click()}
                   >
                     <AvatarImage src={value} />

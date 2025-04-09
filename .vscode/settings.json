@@ -16,10 +16,5 @@
   "[javascript]": {
     "editor.formatOnSave": false
   },
-  "eslint.validate": [
-    "javascript",
-    "typescript",
-    "typescriptreact"
-  ],
   "tailwindCSS.experimental.configFile": "src/app/globals.css"
 }

@@ -1,8 +1,8 @@
-"use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { authClient, useSession } from "@/lib/auth-client";
-import { useEffect, useRef, useState, useTransition } from "react";
+'use client';
+import { useEffect, useRef, useState, useTransition } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { authClient, useSession } from '@/lib/auth-client';
 
 export function VerifyTip() {
   const session = useSession();
@@ -13,7 +13,7 @@ export function VerifyTip() {
 
   const startTimer = () => {
     timer.current = setInterval(() => {
-      setSeconds(seconds => seconds - 1);
+      setSeconds((seconds) => seconds - 1);
     }, 1000);
   };
 
@@ -23,7 +23,7 @@ export function VerifyTip() {
       timer.current = null;
       setHasSended(false);
     }
-  }, [seconds]);  
+  }, [seconds]);
 
   if (!session?.data?.user?.email) return null;
 
@@ -33,7 +33,7 @@ export function VerifyTip() {
     startTransition(async () => {
       const res = await authClient.sendVerificationEmail({
         email: session.data!.user.email,
-        callbackURL: "/"
+        callbackURL: '/',
       });
       if (res.data) {
         setHasSended(true);
@@ -41,11 +41,26 @@ export function VerifyTip() {
       }
     });
   };
-  
-  return <Alert className="py-1  bg-gray-100">
-    <AlertDescription className="flex items-center gap-4">
-      { hasSended ? <p>验证邮件已发送至{session.data!.user.email}，请查收邮箱</p> : <p>你的邮箱还未验证，请先验证邮箱</p> }
-      <Button className="h-6" variant="outline" onClick={sendVerificationEmail} size="sm" disabled={hasSended || isPending} loading={isPending}>{hasSended ? `${seconds}秒后重新发送` : "发送验证邮件"}</Button>
-    </AlertDescription>
-</Alert>; 
+
+  return (
+    <Alert className="bg-gray-100 py-1">
+      <AlertDescription className="flex items-center gap-4">
+        {hasSended ? (
+          <p>验证邮件已发送至{session.data!.user.email}，请查收邮箱</p>
+        ) : (
+          <p>你的邮箱还未验证，请先验证邮箱</p>
+        )}
+        <Button
+          className="h-6"
+          variant="outline"
+          onClick={sendVerificationEmail}
+          size="sm"
+          disabled={hasSended || isPending}
+          loading={isPending}
+        >
+          {hasSended ? `${seconds}秒后重新发送` : '发送验证邮件'}
+        </Button>
+      </AlertDescription>
+    </Alert>
+  );
 }

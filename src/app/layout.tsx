@@ -1,13 +1,13 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
-import { ThemeProvider } from "next-themes";
-import { META_THEME_COLORS } from "@/constants/site";
-import { Toaster } from "@/components/ui/sonner";
-import { ConfirmDialogProvider } from "@/components/confirm-dialog";
+import type { Metadata, Viewport } from 'next';
+import './globals.css';
+import { ThemeProvider } from 'next-themes';
+import { ConfirmDialogProvider } from '@/components/confirm-dialog';
+import { Toaster } from '@/components/ui/sonner';
+import { META_THEME_COLORS } from '@/constants/site';
 
 export const metadata: Metadata = {
-  title: "琉璃岛",
-  description: "琉璃岛",
+  title: '琉璃岛',
+  description: '琉璃岛',
 };
 
 export const viewport: Viewport = {
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-      <script
+        <script
           dangerouslySetInnerHTML={{
             __html: `
             try {
@@ -36,16 +36,16 @@ export default function RootLayout({
       </head>
       <body>
         <ConfirmDialogProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              enableColorScheme
-              disableTransitionOnChange
-        >
-              <Toaster position="top-center" />
-              {children}
-            </ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            enableColorScheme
+            disableTransitionOnChange
+          >
+            <Toaster position="top-center" />
+            {children}
+          </ThemeProvider>
         </ConfirmDialogProvider>
       </body>
     </html>

@@ -1,12 +1,25 @@
-import { betterAuth } from "better-auth";
-import { admin, bearer, customSession, emailOTP, magicLink, multiSession, oAuthProxy, oneTap, openAPI, organization, twoFactor, username } from "better-auth/plugins";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import prisma from "./prisma";
-import { resend } from "@/lib/resend";
-import { reactInvitationEmail } from "@/emails/invitation";
-import { reactResetPasswordEmail } from "@/emails/reset-password";
-import { nextCookies } from "better-auth/next-js";
-import { redis } from "./redis";
+import { betterAuth } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { nextCookies } from 'better-auth/next-js';
+import {
+  admin,
+  bearer,
+  customSession,
+  emailOTP,
+  magicLink,
+  multiSession,
+  oAuthProxy,
+  oneTap,
+  openAPI,
+  organization,
+  twoFactor,
+  username,
+} from 'better-auth/plugins';
+import { reactInvitationEmail } from '@/emails/invitation';
+import { reactResetPasswordEmail } from '@/emails/reset-password';
+import { resend } from '@/lib/resend';
+import prisma from './prisma';
+import { redis } from './redis';
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL!;
 const fromEmail = process.env.BETTER_AUTH_EMAIL!;
@@ -14,124 +27,124 @@ const fromEmail = process.env.BETTER_AUTH_EMAIL!;
 export const auth = betterAuth({
   trustedOrigins: [process.env.BASE_URL!],
   database: prismaAdapter(prisma, {
-    provider: "postgresql",
+    provider: 'postgresql',
   }),
   account: {
     accountLinking: {
-        enabled: true,
-        trustedProviders: ["google", "github"],
-        allowDifferentEmails: true,
-        allowUnlinkingAll: true
-    }
-  },
-  emailAndPassword: {  
       enabled: true,
-      minPasswordLength: 6,
-      async sendResetPassword({ user, url, token }) {
-        const from = process.env.BETTER_AUTH_EMAIL;
-        if (!from) {
-          throw new Error("请配置 BETTER_AUTH_EMAIL 发送人信息");
-        }
-        console.log("url", url);
-        console.log("token", token);
-        await resend.emails.send({
-          from,
-          to: user.email,
-          subject: "重置密码",
-          react: reactResetPasswordEmail({
-            username: user.email,
-            resetLink: url,
-          }),
-        });
-      },
+      trustedProviders: ['google', 'github'],
+      allowDifferentEmails: true,
+      allowUnlinkingAll: true,
+    },
+  },
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 6,
+    async sendResetPassword({ user, url, token }) {
+      const from = process.env.BETTER_AUTH_EMAIL;
+      if (!from) {
+        throw new Error('请配置 BETTER_AUTH_EMAIL 发送人信息');
+      }
+      console.log('url', url);
+      console.log('token', token);
+      await resend.emails.send({
+        from,
+        to: user.email,
+        subject: '重置密码',
+        react: reactResetPasswordEmail({
+          username: user.email,
+          resetLink: url,
+        }),
+      });
+    },
   },
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-		async sendVerificationEmail({ user, url }) {
+    async sendVerificationEmail({ user, url }) {
       const fromEmail = process.env.BETTER_AUTH_EMAIL;
       if (!fromEmail) {
-        throw new Error("请配置 BETTER_AUTH_EMAIL 发送人信息");
+        throw new Error('请配置 BETTER_AUTH_EMAIL 发送人信息');
       }
-			const res = await resend.emails.send({
-				from: fromEmail,
-				to:user.email,
-				subject: "邮箱验证",
-				html: `<a href="${url}">Hi： ${user.name}，点击此链接以验证你的邮箱</a>`,
-			});
-			console.log(res, user.email);
-		},
-	},
+      const res = await resend.emails.send({
+        from: fromEmail,
+        to: user.email,
+        subject: '邮箱验证',
+        html: `<a href="${url}">Hi： ${user.name}，点击此链接以验证你的邮箱</a>`,
+      });
+      console.log(res, user.email);
+    },
+  },
   socialProviders: {
-		github: {
-			clientId: process.env.GITHUB_CLIENT_ID || "",
-			clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-		},
-		google: {
-			clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-		}
-	},
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID || '',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+    },
+    google: {
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    },
+  },
 
   plugins: [
     organization({
       schema: {
         organization: {
-          modelName: "space"
+          modelName: 'space',
         },
         invitation: {
-          modelName: "invitation",
+          modelName: 'invitation',
           fields: {
-            organizationId: "spaceId",
-            organization: "space"
-          }
+            organizationId: 'spaceId',
+            organization: 'space',
+          },
         },
         member: {
-          modelName: "member",
+          modelName: 'member',
           fields: {
-            organizationId: "spaceId",
-            organization: "space"
-          }
+            organizationId: 'spaceId',
+            organization: 'space',
+          },
         },
         session: {
-          modelName: "session",
+          modelName: 'session',
           fields: {
-            activeOrganizationId: "activeSpaceId",
-          }
-        }
+            activeOrganizationId: 'activeSpaceId',
+          },
+        },
       },
-			async sendInvitationEmail(data) {
+      async sendInvitationEmail(data) {
         const from = process.env.BETTER_AUTH_EMAIL;
         if (!from) {
-          throw new Error("请配置 BETTER_AUTH_EMAIL 发送人信息");
+          throw new Error('请配置 BETTER_AUTH_EMAIL 发送人信息');
         }
-				await resend.emails.send({
-					from,
-					to: data.email,
-					subject: "你被邀请加入一个空间",
-					react: reactInvitationEmail({
-						username: data.email,
-						invitedByUsername: data.inviter.user.name,
-						invitedByEmail: data.inviter.user.email,
-						teamName: data.organization.name,
-						inviteLink: `${betterAuthUrl}/accept-invitation/${data.id}`,
-					}),
-				});
-			},
-		}),
+        await resend.emails.send({
+          from,
+          to: data.email,
+          subject: '你被邀请加入一个空间',
+          react: reactInvitationEmail({
+            username: data.email,
+            invitedByUsername: data.inviter.user.name,
+            invitedByEmail: data.inviter.user.email,
+            teamName: data.organization.name,
+            inviteLink: `${betterAuthUrl}/accept-invitation/${data.id}`,
+          }),
+        });
+      },
+    }),
     twoFactor({
       issuer: process.env.APP_NAME!,
-			otpOptions: {
-				async sendOTP({ user, otp }) {
-					await resend.emails.send({
-						from: fromEmail,
-						to: user.email,
-						subject: "两步验证",
-						html: `你的两步验证 OTP 是 ${otp}`,
-					});
-				},
-			},
-		}),
+      otpOptions: {
+        async sendOTP({ user, otp }) {
+          await resend.emails.send({
+            from: fromEmail,
+            to: user.email,
+            subject: '两步验证',
+            html: `你的两步验证 OTP 是 ${otp}`,
+          });
+        },
+      },
+    }),
     openAPI(),
     bearer(),
     multiSession(),
@@ -140,50 +153,50 @@ export const auth = betterAuth({
     oneTap({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
     }),
-		customSession(async (session) => {
-			return {
-				...session,
-				user: {
-					...session.user,
-					dd: "test",
-				},
-			};
-		}),
+    customSession(async (session) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          dd: 'test',
+        },
+      };
+    }),
     admin(),
     emailOTP({
-      async sendVerificationOTP({ email, otp, type}) { 
+      async sendVerificationOTP({ email, otp, type }) {
         await resend.emails.send({
           from: fromEmail,
           to: email,
-          subject: "OTP 登录",
+          subject: 'OTP 登录',
           html: `你的登录 OTP 是 ${otp}`,
         });
-      }, 
+      },
     }),
     magicLink({
       sendMagicLink: async ({ email, token, url }, request) => {
         await resend.emails.send({
           from: fromEmail,
           to: email,
-          subject: "url 登录",
+          subject: 'url 登录',
           html: `你的 登录url 是 ${url}`,
         });
-      }
+      },
     }),
     username(),
   ],
 
   secondaryStorage: {
-		get: async (key) => {
-			const value = await redis.get(key);
-			return value ? value : null;
-		},
-		set: async (key, value, ttl) => {
-			if (ttl) await redis.set(key, value, "EX", ttl);
-			else await redis.set(key, value);
-		},
-		delete: async (key) => {
-			await redis.del(key);
-		}
-	}
+    get: async (key) => {
+      const value = await redis.get(key);
+      return value ? value : null;
+    },
+    set: async (key, value, ttl) => {
+      if (ttl) await redis.set(key, value, 'EX', ttl);
+      else await redis.set(key, value);
+    },
+    delete: async (key) => {
+      await redis.del(key);
+    },
+  },
 });

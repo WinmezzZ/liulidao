@@ -1,12 +1,12 @@
-"use server";
+'use server';
 
-import prisma from "@/lib/prisma";
+import prisma from '@/lib/prisma';
 
-export const getUserAccounts = async (id: string ) => {
+export const getUserAccounts = async (id: string) => {
   const accounts = await prisma.account.findMany({
     where: {
-      userId: id
-    }
+      userId: id,
+    },
   });
   return accounts;
 };
