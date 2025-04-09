@@ -36,16 +36,16 @@ export default function RootLayout({
       </head>
       <body>
         <ConfirmDialogProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            enableColorScheme
-            disableTransitionOnChange
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              enableColorScheme
+              disableTransitionOnChange
         >
-          <Toaster position="top-center" />
-          {children}
-          </ThemeProvider>
+              <Toaster position="top-center" />
+              {children}
+            </ThemeProvider>
         </ConfirmDialogProvider>
       </body>
     </html>

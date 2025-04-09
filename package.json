@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack --port 3002",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:db:push": "prisma db push"
   },
   "dependencies": {
     "@autoform/react": "^3.0.0",
@@ -46,15 +50,15 @@
     "react": "^19.0.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.45.2",
+    "react-hook-form": "^7.55.0",
     "react-qr-code": "^2.0.15",
     "resend": "^4.1.2",
-    "sonner": "^2.0.1",
+    "sonner": "^2.0.3",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.5.2",
+    "uploadthing": "^7.2.0",
     "vaul": "^1.1.2",
-    "zod": "^3.23.8"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -83,6 +87,6 @@
   "packageManager": "pnpm@9.14.2",
   "engines": {
     "node": ">=20",
-    "pnpm": "9.x"
+    "pnpm": "8.x"
   }
 }

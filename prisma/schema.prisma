@@ -2,7 +2,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -27,6 +27,7 @@ model User {
   members          Member[]
   invitations      Invitation[]
   twofactors       TwoFactor[]
+  articles         Article[]
 
   @@unique([email])
   @@unique([username])
@@ -51,7 +52,8 @@ model Session {
 }
 
 model Account {
-  id                    String    @id
+  id String @id
+
   accountId             String
   providerId            String
   userId                String
@@ -81,14 +83,16 @@ model Verification {
 }
 
 model Space {
-  id         String       @id
-  name       String
-  slug       String?
-  logo       String?
-  createdAt  DateTime
-  metadata   String?
-  Member     Member[]
-  Invitation Invitation[]
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  slug        String?
+  logo        String?
+  createdAt   DateTime     @default(now())
+  metadata    String?
+  Member      Member[]
+  Invitation  Invitation[]
+  Article     Article[]
 
   @@unique([slug])
   @@map("space")
@@ -128,4 +132,18 @@ model TwoFactor {
   user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("twoFactor")
+}
+
+model Article {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  spaceId   String
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@map("article")
 }

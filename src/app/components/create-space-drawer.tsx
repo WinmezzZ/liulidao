@@ -1,22 +1,27 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import AutoForm, { AutoFormSubmit } from "@/components/ui/auto-form";
 import { z } from "zod";
 import { useState } from "react";
- 
-const createSpaceSchema = z.object({
-   name: z.string({
-    required_error: "空间名称不能为空"
-   }).min(3, {
-    message: "空间名称不能少于3个字符"
-   }),
-   description: z.string().optional(),
-});
+import { createSpace } from "../actions/space";
+import { toast } from "sonner";
+import { createSpaceSchema } from "../schemas/space";
 
 export function CreateSpaceDrawer() {
    const [open, setOpen] = useState(false);
+
+   const handleSubmit = async (data: z.infer<typeof createSpaceSchema>) => {
+    const res = await createSpace(data);
+    console.log(res);
+    if (res.success) {
+        setOpen(false);
+    } else {
+        toast.error(res.error);
+    }
+    // authClient.organization
+   };
   return <>
     <Drawer direction="right" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
@@ -29,9 +34,15 @@ export function CreateSpaceDrawer() {
             <AutoForm
                 className="px-4"
                 formSchema={createSpaceSchema}
-                onSubmit={(data, form) => {
-                    console.log(data);
+                fieldConfig={{
+                    slug: {
+                        description: <>
+                            <div>设置路径后，空间的url地址将从默认的id改为此路径</div>
+                            <div>{process.env.BASE_URL}/slug</div>
+                        </>,
+                    }
                 }}
+                onSubmit={handleSubmit}
             >
                 <DrawerFooter>
                     <AutoFormSubmit>保存</AutoFormSubmit>
