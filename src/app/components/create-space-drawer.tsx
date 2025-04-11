@@ -14,20 +14,20 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { createSpace } from '../(space)/data';
 import { createSpaceSchema } from '../schemas/space';
+import { createSpace } from '../actions/space';
 
 export function CreateSpaceDrawer() {
   const [open, setOpen] = useState(false);
 
   const handleSubmit = async (data: z.infer<typeof createSpaceSchema>) => {
     const res = await createSpace(data);
-    // console.log(res);
-    // if (res.success) {
-    //   setOpen(false);
-    // } else {
-    //   toast.error(res.error);
-    // }
+    console.log(res);
+    if (res.success) {
+      setOpen(false);
+    } else {
+      toast.error(res.error);
+    }
     // authClient.organization
   };
   return (
