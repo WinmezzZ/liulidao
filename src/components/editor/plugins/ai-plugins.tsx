@@ -4,7 +4,7 @@ import React from 'react';
 
 import { AIChatPlugin, AIPlugin } from '@udecode/plate-ai/react';
 
-import { markdownPlugin } from '@/components/editor/plugins/markdown-plugin';
+import { MarkdownPlugin } from '@udecode/plate-markdown';
 import { AIMenu } from '@/components/plate-ui/ai-menu';
 
 import { cursorOverlayPlugin } from './cursor-overlay-plugin';
@@ -91,7 +91,7 @@ export const PROMPT_TEMPLATES = {
 
 export const aiPlugins = [
   cursorOverlayPlugin,
-  markdownPlugin,
+  MarkdownPlugin,
   AIPlugin,
   AIChatPlugin.configure({
     options: {
