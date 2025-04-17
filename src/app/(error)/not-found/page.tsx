@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
-import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import {  useRouter } from 'next/navigation'
 
 export default function NotFoundError() {
-    const router = useRouter()
-    const pathname = usePathname()
+  const router = useRouter()
   return (
     <div className='h-svh'>
       <div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>
@@ -16,7 +16,9 @@ export default function NotFoundError() {
          <Button variant='outline' onClick={() => router.back()}>
             返回
           </Button>
-          <Button onClick={() => router.push(pathname)}>去首页</Button>
+          <Link href='/' replace>
+            <Button>去首页</Button>
+          </Link>
         </div>
       </div>
     </div>

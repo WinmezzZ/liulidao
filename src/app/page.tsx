@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
-import { EmptySpace } from './components/empty-spacae';
+import { EmptySpace } from './components/empty-space';
 import { VerifyTip } from './components/verify-tip';
 
 export default async function Page() {

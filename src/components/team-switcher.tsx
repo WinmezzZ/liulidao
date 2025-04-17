@@ -16,17 +16,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Space } from '@prisma/client';
+import { CreateSpaceDrawer } from '@/app/components/create-space-drawer';
 
 export function TeamSwitcher({
-  teams,
+  spaces,
 }: {
-  teams: {
-    name: string;
-    plan: string;
-  }[];
+  spaces: Space[];
 }) {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = useState(teams[0]);
+  const [activeTeam, setActiveTeam] = useState(spaces[0]);
 
   return (
     <SidebarMenu>
@@ -43,7 +42,6 @@ export function TeamSwitcher({
                 <span className="truncate font-semibold">
                   {activeTeam.name}
                 </span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -57,25 +55,32 @@ export function TeamSwitcher({
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Teams
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
+            {spaces.map((space, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={space.name}
+                onClick={() => setActiveTeam(space)}
                 className="gap-2 p-2"
               >
                 {/* <div className='flex size-6 items-center justify-center rounded-sm border'>
                   <team.logo className='size-4 shrink-0' />
                 </div> */}
-                {team.name}
+                {space.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
+            <DropdownMenuItem
+              className="gap-2 p-2" 
+              onSelect={(event) => {
+                  event.preventDefault();
+              }}
+            >
               <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                 <Plus className="size-4" />
               </div>
-              <div className="text-muted-foreground font-medium">Add team</div>
+              <CreateSpaceDrawer>
+                <div className="text-muted-foreground font-medium">添加空间</div>
+              </CreateSpaceDrawer>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

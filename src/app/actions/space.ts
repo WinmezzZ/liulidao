@@ -2,7 +2,7 @@
 
 import { type z } from 'zod';
 import prisma from '@/lib/prisma';
-import { createSpaceSchema } from '../schemas/space';
+import { createSpaceSchema } from '../../schema/space';
 
 export async function createSpace(data: z.infer<typeof createSpaceSchema>) {
   try {

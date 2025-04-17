@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { toast } from 'sonner';
-import { type z } from 'zod';
 import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,27 +12,26 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { createSpaceSchema } from '../schemas/space';
-import { createSpace } from '../actions/space';
+import { createSpaceSchema } from '../../schema/space';
+import { api } from '@/trpc/react';
 
-export function CreateSpaceDrawer() {
+export function CreateSpaceDrawer({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const utils = api.useUtils();
 
-  const handleSubmit = async (data: z.infer<typeof createSpaceSchema>) => {
-    const res = await createSpace(data);
-    console.log(res);
-    if (res.success) {
+  const { mutate: createSpace, isPending } = api.space.create.useMutation({
+    onSuccess: async () => {
+      console.log('createSpace success')
+      await utils.space.invalidate();
       setOpen(false);
-    } else {
-      toast.error(res.error);
-    }
-    // authClient.organization
-  };
+    },
+  });
+
   return (
     <>
       <Drawer direction="right" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button>创建空间</Button>
+          {children || <Button>创建空间</Button>}
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
@@ -53,10 +50,10 @@ export function CreateSpaceDrawer() {
                 ),
               },
             }}
-            onSubmit={handleSubmit}
+            onSubmit={v => createSpace(v)}
           >
             <DrawerFooter>
-              <AutoFormSubmit>保存</AutoFormSubmit>
+              <AutoFormSubmit loading={isPending}>保存</AutoFormSubmit>
               <DrawerClose asChild>
                 <Button variant="outline">取消</Button>
               </DrawerClose>

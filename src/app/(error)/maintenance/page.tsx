@@ -1,3 +1,7 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+
 export default function MaintenanceError() {
   return (
     <div className='h-svh'>
@@ -8,7 +12,7 @@ export default function MaintenanceError() {
           网站暂时无法访问，请稍后再试。
         </p>
         <div className='mt-6 flex gap-4'>
-          <p className='text-muted-foreground text-center'>如有疑问，请联系管理员。</p>
+          <Button onClick={() => location.reload()}>刷新</Button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import { ConfirmDialogProvider } from '@/components/confirm-dialog';
 import { Toaster } from '@/components/ui/sonner';
 import { META_THEME_COLORS } from '@/constants/site';
+import { TRPCReactProvider } from '@/trpc/react';
 
 export const metadata: Metadata = {
   title: '琉璃岛',
@@ -35,18 +36,20 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ConfirmDialogProvider>
-          <ThemeProvider
-            attribute="class"
+        <TRPCReactProvider>
+          <ConfirmDialogProvider>
+            <ThemeProvider
+              attribute="class"
             defaultTheme="system"
             enableSystem
             enableColorScheme
             disableTransitionOnChange
           >
-            <Toaster position="top-center" />
-            {children}
-          </ThemeProvider>
-        </ConfirmDialogProvider>
+              <Toaster position="top-center" richColors  />
+              {children}
+            </ThemeProvider>
+          </ConfirmDialogProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

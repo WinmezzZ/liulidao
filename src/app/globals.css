@@ -148,9 +148,5 @@
 }
 
 html, body {
-  @apply h-full;
-}
-
-body {
-  @apply flex;
+  @apply h-full w-full;
 }

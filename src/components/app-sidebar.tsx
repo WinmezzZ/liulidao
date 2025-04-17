@@ -10,12 +10,14 @@ import { NavUser } from './nav-user';
 import { sidebarData, treeData } from './sidebar-data';
 import { TeamSwitcher } from './team-switcher';
 import { TreeView } from './ui/tree-view';
+import { api } from '@/trpc/server';
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const spaces = await api.space.list()
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={sidebarData.teams} />
+        <TeamSwitcher spaces={spaces} />
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (

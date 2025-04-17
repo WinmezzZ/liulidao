@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 export default function UnauthorisedError() {
   const router = useRouter()
@@ -18,7 +19,9 @@ export default function UnauthorisedError() {
           <Button variant='outline' onClick={() => router.back()}>
             返回
           </Button>
-          <Button onClick={() => router.push(pathname)}>去登录</Button>
+          <Link href='/sign-in' replace>
+            <Button>去登录</Button>
+          </Link>
         </div>
       </div>
     </div>
