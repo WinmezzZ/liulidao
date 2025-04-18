@@ -332,6 +332,9 @@ dependencies:
   react-hook-form:
     specifier: ^7.55.0
     version: 7.55.0(react@19.1.0)
+  react-image-crop:
+    specifier: ^11.0.10
+    version: 11.0.10(react@19.1.0)
   react-lite-youtube-embed:
     specifier: ^2.4.0
     version: 2.4.0(react-dom@19.1.0)(react@19.1.0)
@@ -7649,6 +7652,14 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+    dependencies:
+      react: 19.1.0
+    dev: false
+
+  /react-image-crop@11.0.10(react@19.1.0):
+    resolution: {integrity: sha512-+5FfDXUgYLLqBh1Y/uQhIycpHCbXkI50a+nbfkB1C0xXXUTwkisHDo2QCB1SQJyHCqIuia4FeyReqXuMDKWQTQ==}
+    peerDependencies:
+      react: '>=16.13.1'
     dependencies:
       react: 19.1.0
     dev: false
