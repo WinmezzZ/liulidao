@@ -13,7 +13,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { createSpaceSchema } from '../../schema/space';
-import { api } from '@/trpc/react';
+import { api } from '@/trpc/client';
 
 export function CreateSpaceDrawer({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);

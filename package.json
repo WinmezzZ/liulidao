@@ -53,7 +53,6 @@
     "@trpc/next": "^11.0.4",
     "@trpc/react-query": "^11.1.0",
     "@trpc/server": "^11.0.4",
-    "@trpc/tanstack-react-query": "^11.0.4",
     "@udecode/cmdk": "^0.2.0",
     "@udecode/cn": "^46.0.9",
     "@udecode/plate": "^46.0.10",
@@ -115,16 +114,16 @@
     "lowlight": "^3.3.0",
     "lucide-react": "^0.477.0",
     "nanoid": "^5.1.5",
-    "next": "15.2.3",
+    "next": "15.3.1",
     "next-safe-action": "^7.10.4",
     "next-themes": "^0.4.4",
     "nodemailer": "^6.10.0",
     "pdf-lib": "^1.17.1",
-    "react": "^19.0.0",
+    "react": "19.1.0",
     "react-day-picker": "8.10.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^19.0.0",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.55.0",
     "react-image-crop": "^11.0.10",
     "react-lite-youtube-embed": "^2.4.0",
@@ -146,16 +145,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
-    "@next/eslint-plugin-next": "^15.2.4",
+    "@next/eslint-plugin-next": "15.3.1",
     "@tailwindcss/postcss": "^4",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/pg": "^8.11.11",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
     "@typescript-eslint/eslint-plugin": "^8.29.1",
     "better-auth": "^1.2.5",
     "eslint": "^9.24.0",
-    "eslint-config-next": "15.2.1",
+    "eslint-config-next": "15.3.1",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.5",
@@ -169,9 +168,15 @@
     "typescript": "^5",
     "typescript-eslint": "^8.29.1"
   },
-  "packageManager": "pnpm@9.14.2",
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20",
-    "pnpm": "8.x"
+    "pnpm": "9.x"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.1.2",
+      "@types/react-dom": "19.1.2"
+    }
   }
 }

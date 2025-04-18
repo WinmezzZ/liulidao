@@ -4,7 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import { ConfirmDialogProvider } from '@/components/confirm-dialog';
 import { Toaster } from '@/components/ui/sonner';
 import { META_THEME_COLORS } from '@/constants/site';
-import { TRPCReactProvider } from '@/trpc/react';
+import { TRPCReactProvider } from '@/trpc/client';
 
 export const metadata: Metadata = {
   title: '琉璃岛',

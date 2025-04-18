@@ -1,12 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 export default function UnauthorisedError() {
   const router = useRouter()
-  const pathname = usePathname()
   return (
     <div className='h-svh'>
       <div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>
