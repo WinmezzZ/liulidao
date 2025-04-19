@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { unstable_cache } from 'next/cache';
 import { z } from 'zod';
 
 import { createSpaceSchema } from '@/schema/space';
@@ -28,6 +27,7 @@ export const spaceRouter = createTRPCRouter({
             slug: input.slug,
           },
         }));
+      console.log('existSlug', existSlug);
       if (existSlug) {
         throw new TRPCError({ code: 'CONFLICT', message: '路径标识已存在' });
       }
@@ -43,17 +43,11 @@ export const spaceRouter = createTRPCRouter({
     }),
 
   list: protectedProcedure.query(async ({ ctx, input }) => {
-    const getSpaces = unstable_cache(
-      async () => {
-        return ctx.db.space.findMany({
-          orderBy: { createdAt: 'desc' },
-        });
-      },
-      ['spaces-all'],
-      { tags: ['spaces'] }
-    );
+    const post = await ctx.db.space.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
 
-    return getSpaces();
+    return post ?? null;
   }),
 
   getSecretMessage: protectedProcedure.query(() => {

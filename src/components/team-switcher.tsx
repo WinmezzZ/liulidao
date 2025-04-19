@@ -1,6 +1,11 @@
 'use client';
+import { type Space } from '@prisma/client';
 import { ChevronsUpDown, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import {
+  CreateSpaceDrawer,
+  type SpaceDrawerRef,
+} from '@/app/components/create-space-drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,16 +21,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Space } from '@prisma/client';
-import { CreateSpaceDrawer } from '@/app/components/create-space-drawer';
 
-export function TeamSwitcher({
-  spaces,
-}: {
-  spaces: Space[];
-}) {
+export function TeamSwitcher({ spaces }: { spaces: Space[] }) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = useState(spaces[0]);
+  const spaceDrawerRef = useRef<SpaceDrawerRef>(null);
 
   return (
     <SidebarMenu>
@@ -57,7 +57,7 @@ export function TeamSwitcher({
             </DropdownMenuLabel>
             {spaces.map((space, index) => (
               <DropdownMenuItem
-                key={space.name}
+                key={space.id}
                 onClick={() => setActiveTeam(space)}
                 className="gap-2 p-2"
               >
@@ -70,19 +70,18 @@ export function TeamSwitcher({
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="gap-2 p-2" 
+              className="gap-2 p-2"
               onSelect={(event) => {
-                  event.preventDefault();
+                spaceDrawerRef.current?.setOpen(true);
               }}
             >
               <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                 <Plus className="size-4" />
               </div>
-              <CreateSpaceDrawer>
-                <div className="text-muted-foreground font-medium">添加空间</div>
-              </CreateSpaceDrawer>
+              <div className="text-muted-foreground font-medium">添加空间</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
+          <CreateSpaceDrawer ref={spaceDrawerRef} />
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

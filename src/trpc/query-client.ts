@@ -2,16 +2,16 @@ import {
   defaultShouldDehydrateQuery,
   MutationCache,
   QueryClient,
-} from "@tanstack/react-query";
-import { toast } from "sonner";
-import SuperJSON from "superjson";
+} from '@tanstack/react-query';
+import { toast } from 'sonner';
+import SuperJSON from 'superjson';
 
 export const createQueryClient = () =>
   new QueryClient({
     mutationCache: new MutationCache({
       onError: (error) => {
-        console.log('Something went wrong:', error)
-        toast.error(error.message)
+        console.log('Something went wrong:', error);
+        toast.error(error.message);
       },
     }),
     defaultOptions: {
@@ -24,7 +24,7 @@ export const createQueryClient = () =>
         serializeData: SuperJSON.serialize,
         shouldDehydrateQuery: (query) =>
           defaultShouldDehydrateQuery(query) ||
-          query.state.status === "pending",
+          query.state.status === 'pending',
       },
       hydrate: {
         deserializeData: SuperJSON.deserialize,

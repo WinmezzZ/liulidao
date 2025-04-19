@@ -1,11 +1,9 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   shared: {
-    NODE_ENV: z
-      .enum(["development", "production"])
-      .default("development"),
+    NODE_ENV: z.enum(['development', 'production']).default('development'),
     APP_NAME: z.string(),
     BASE_HOST: z.string(),
     BASE_PORT: z.string(),
@@ -50,5 +48,5 @@ export const env = createEnv({
    */
   experimental__runtimeEnv: process.env as Record<string, string>,
   skipValidation:
-    !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+    !!process.env.CI || process.env.npm_lifecycle_event === 'lint',
 });

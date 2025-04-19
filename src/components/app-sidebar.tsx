@@ -5,15 +5,19 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { api } from '@/trpc/server';
 import { NavGroup } from './nav-group';
 import { NavUser } from './nav-user';
 import { sidebarData, treeData } from './sidebar-data';
 import { TeamSwitcher } from './team-switcher';
 import { TreeView } from './ui/tree-view';
-import { api } from '@/trpc/server';
 
-export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const spaces = await api.space.list()
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const spaces = await api.space.list();
+  const user = await api.user.info();
+
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
@@ -27,9 +31,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
       <SidebarContent>
         <TreeView data={treeData} expandAll />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={sidebarData.user} />
-      </SidebarFooter>
+      <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

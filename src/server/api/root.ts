@@ -1,5 +1,6 @@
-import { spaceRouter } from "@/server/api/routers/space";
-import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
+import { spaceRouter } from '@/server/api/routers/space';
+import { userRouter } from '@/server/api/routers/user';
+import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   space: spaceRouter,
+  user: userRouter,
 });
 
 // export type definition of API

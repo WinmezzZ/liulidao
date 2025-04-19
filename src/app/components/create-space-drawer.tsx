@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type ReactNode, type Ref, useImperativeHandle, useState } from 'react';
 import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,20 +12,32 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { createSpaceSchema } from '../../schema/space';
 import { api } from '@/trpc/client';
+import { createSpaceSchema } from '../../schema/space';
+import { clearPath, clearTag } from '../actions/revalidate';
 
-export function CreateSpaceDrawer({ children }: { children?: React.ReactNode }) {
+export interface SpaceDrawerRef {
+  setOpen: (open: boolean) => void;
+}
+
+interface SpaceDrawerProps {
+  ref?: Ref<SpaceDrawerRef>;
+  children?: ReactNode;
+}
+
+export function CreateSpaceDrawer({ children, ref }: SpaceDrawerProps) {
   const [open, setOpen] = useState(false);
-  const utils = api.useUtils();
 
   const { mutate: createSpace, isPending } = api.space.create.useMutation({
-    onSuccess: async () => {
-      console.log('createSpace success')
-      await utils.space.invalidate();
+    onSuccess: () => {
       setOpen(false);
+      clearTag('spaces');
     },
   });
+
+  useImperativeHandle(ref, () => ({
+    setOpen,
+  }));
 
   return (
     <>
@@ -44,13 +56,14 @@ export function CreateSpaceDrawer({ children }: { children?: React.ReactNode }) 
               slug: {
                 description: (
                   <>
-                    <div>设置路径后，空间的url地址将从默认的id改为此路径</div>
-                    <div>{process.env.BASE_URL}/slug</div>
+                    <span>设置路径后，空间的url地址将从默认的id改为此路径</span>
+                    <br />
+                    <span>{process.env.BASE_URL + '/slug'}</span>
                   </>
                 ),
               },
             }}
-            onSubmit={v => createSpace(v)}
+            onSubmit={(v) => createSpace(v)}
           >
             <DrawerFooter>
               <AutoFormSubmit loading={isPending}>保存</AutoFormSubmit>
