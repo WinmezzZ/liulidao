@@ -1,6 +1,7 @@
 'use client';
 import { type Space } from '@prisma/client';
 import { ChevronsUpDown, Plus } from 'lucide-react';
+import Link from 'next/link';
 import { useRef, useState } from 'react';
 import {
   CreateSpaceDrawer,
@@ -47,28 +48,14 @@ export function TeamSwitcher({ spaces }: { spaces: Space[] }) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="max-h-[300px] w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             align="start"
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
+              全部空间
             </DropdownMenuLabel>
-            {spaces.map((space, index) => (
-              <DropdownMenuItem
-                key={space.id}
-                onClick={() => setActiveTeam(space)}
-                className="gap-2 p-2"
-              >
-                {/* <div className='flex size-6 items-center justify-center rounded-sm border'>
-                  <team.logo className='size-4 shrink-0' />
-                </div> */}
-                {space.name}
-                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
             <DropdownMenuItem
               className="gap-2 p-2"
               onSelect={(event) => {
@@ -80,6 +67,23 @@ export function TeamSwitcher({ spaces }: { spaces: Space[] }) {
               </div>
               <div className="text-muted-foreground font-medium">添加空间</div>
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            {spaces.map((space, index) => (
+              <DropdownMenuItem
+                asChild
+                key={space.id}
+                onClick={() => setActiveTeam(space)}
+                className="gap-2 p-2"
+              >
+                {/* <div className='flex size-6 items-center justify-center rounded-sm border'>
+                  <team.logo className='size-4 shrink-0' />
+                </div> */}
+                <Link href={`/${space.slug || space.id}`}>
+                  {space.name}
+                  <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+                </Link>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
           <CreateSpaceDrawer ref={spaceDrawerRef} />
         </DropdownMenu>

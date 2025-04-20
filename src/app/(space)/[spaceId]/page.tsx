@@ -1,3 +1,5 @@
-export default function Page() {
+import { api } from '@/trpc/server';
+
+export default async function Page() {
   return <div>Hello</div>;
 }
