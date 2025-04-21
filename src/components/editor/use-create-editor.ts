@@ -1,8 +1,14 @@
 'use client';
 
+import { withProps } from '@udecode/cn';
 import type { Value } from '@udecode/plate';
 
-import { withProps } from '@udecode/cn';
+import {
+  type CreatePlateEditorOptions,
+  ParagraphPlugin,
+  PlateLeaf,
+  usePlateEditor,
+} from '@udecode/plate/react';
 import { AIPlugin } from '@udecode/plate-ai/react';
 import {
   BoldPlugin,
@@ -55,12 +61,6 @@ import {
   TableRowPlugin,
 } from '@udecode/plate-table/react';
 import { TogglePlugin } from '@udecode/plate-toggle/react';
-import {
-  type CreatePlateEditorOptions,
-  ParagraphPlugin,
-  PlateLeaf,
-  usePlateEditor,
-} from '@udecode/plate/react';
 
 import { copilotPlugins } from '@/components/editor/plugins/copilot-plugins';
 import { editorPlugins } from '@/components/editor/plugins/editor-plugins';
@@ -188,22 +188,7 @@ export const useCreateEditor = (
         FixedToolbarPlugin,
         FloatingToolbarPlugin,
       ],
-      value: [
-        {
-          children: [{ text: 'Playground' }],
-          type: 'h1',
-        },
-        {
-          children: [
-            { text: 'A rich-text editor with AI capabilities. Try the ' },
-            { bold: true, text: 'AI commands' },
-            { text: ' or use ' },
-            { kbd: true, text: 'Cmd+J' },
-            { text: ' to open the AI menu.' },
-          ],
-          type: ParagraphPlugin.key,
-        },
-      ],
+      value: [],
       ...options,
     },
     deps

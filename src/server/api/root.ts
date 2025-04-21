@@ -1,3 +1,4 @@
+import { articleRouter } from '@/server/api/routers/article';
 import { spaceRouter } from '@/server/api/routers/space';
 import { userRouter } from '@/server/api/routers/user';
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
@@ -9,6 +10,7 @@ import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
  */
 export const appRouter = createTRPCRouter({
   space: spaceRouter,
+  article: articleRouter,
   user: userRouter,
 });
 
