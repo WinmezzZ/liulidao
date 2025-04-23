@@ -1,11 +1,8 @@
 'use client';
 
-import { isHotkey, type NodeEntry } from '@udecode/plate';
-import {
-  useEditorPlugin,
-  useHotkeys,
-  usePluginOption,
-} from '@udecode/plate/react';
+import * as React from 'react';
+
+import { type NodeEntry, isHotkey } from '@udecode/plate';
 import {
   AIChatPlugin,
   useEditorChat,
@@ -15,8 +12,12 @@ import {
   BlockSelectionPlugin,
   useIsSelecting,
 } from '@udecode/plate-selection/react';
+import {
+  useEditorPlugin,
+  useHotkeys,
+  usePluginOption,
+} from '@udecode/plate/react';
 import { Loader2Icon } from 'lucide-react';
-import * as React from 'react';
 
 import { useChat } from '@/components/editor/use-chat';
 
@@ -29,18 +30,30 @@ export function AIMenu() {
   const { api, editor } = useEditorPlugin(AIChatPlugin);
   const open = usePluginOption(AIChatPlugin, 'open');
   const mode = usePluginOption(AIChatPlugin, 'mode');
+  const streaming = usePluginOption(AIChatPlugin, 'streaming');
   const isSelecting = useIsSelecting();
 
   const [value, setValue] = React.useState('');
 
   const chat = useChat();
 
-  const { input, isLoading, messages, setInput } = chat;
+  const { input, messages, setInput, status } = chat;
   const [anchorElement, setAnchorElement] = React.useState<HTMLElement | null>(
     null
   );
 
   const content = useLastAssistantMessage()?.content;
+
+  React.useEffect(() => {
+    if (streaming) {
+      const anchor = api.aiChat.node({ anchor: true });
+      setTimeout(() => {
+        const anchorDom = editor.api.toDOMNode(anchor![0])!;
+        setAnchorElement(anchorDom);
+      }, 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streaming]);
 
   const setOpen = (open: boolean) => {
     if (open) {
@@ -90,6 +103,13 @@ export function AIMenu() {
     { enableOnContentEditable: true, enableOnFormTags: true }
   );
 
+  const isLoading =
+    (status === 'streaming' && streaming) || status === 'submitted';
+
+  if (isLoading && mode === 'insert') {
+    return null;
+  }
+
   return (
     <Popover open={open} onOpenChange={setOpen} modal={false}>
       <PopoverAnchor virtualRef={{ current: anchorElement! }} />
@@ -102,14 +122,9 @@ export function AIMenu() {
         onEscapeKeyDown={(e) => {
           e.preventDefault();
 
-          if (isLoading) {
-            api.aiChat.stop();
-          } else {
-            api.aiChat.hide();
-          }
+          api.aiChat.hide();
         }}
         align="center"
-        // avoidCollisions={false}
         side="bottom"
       >
         <Command
@@ -122,14 +137,14 @@ export function AIMenu() {
           )}
 
           {isLoading ? (
-            <div className="text-muted-foreground flex grow items-center gap-2 p-2 text-sm select-none">
+            <div className="flex grow items-center gap-2 p-2 text-sm text-muted-foreground select-none">
               <Loader2Icon className="size-4 animate-spin" />
               {messages.length > 1 ? 'Editing...' : 'Thinking...'}
             </div>
           ) : (
             <InputCommand
               variant="ghost"
-              className="border-border rounded-none border-b border-solid [&_svg]:hidden"
+              className="rounded-none border-b border-solid border-border [&_svg]:hidden"
               value={input}
               onKeyDown={(e) => {
                 if (isHotkey('backspace')(e) && input.length === 0) {

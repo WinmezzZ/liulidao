@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
-import { EmptySpace } from './components/empty-space';
-import { VerifyTip } from './components/verify-tip';
+import { EmptySpace } from './_components/empty-space';
+import { VerifyTip } from './_components/verify-tip';
 
 export default async function Page() {
   const spaces = await prisma.space.findMany();

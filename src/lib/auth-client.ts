@@ -12,7 +12,6 @@ import {
 } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 import { toast } from 'sonner';
-import { createIframeError } from './iframe-error';
 
 export const authClient = createAuthClient({
   plugins: [
@@ -34,8 +33,8 @@ export const authClient = createAuthClient({
       console.log('e', e);
       if (e.error.code in errorCodes) {
         toast.error(getErrorMessage(e.error));
-      } else if ('responseText' in  e) {
-        console.log(e.responseText)
+      } else if ('responseText' in e) {
+        console.log(e.responseText);
       }
     },
   },

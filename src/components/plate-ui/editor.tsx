@@ -1,16 +1,13 @@
 'use client';
 
-import { cn } from '@udecode/cn';
+import React from 'react';
+
 import type { PlateContentProps } from '@udecode/plate/react';
-import {
-  PlateContent,
-  useEditorContainerRef,
-  useEditorRef,
-} from '@udecode/plate/react';
 import type { VariantProps } from 'class-variance-authority';
 
+import { cn } from '@udecode/cn';
+import { PlateContainer, PlateContent } from '@udecode/plate/react';
 import { cva } from 'class-variance-authority';
-import React from 'react';
 
 const editorContainerVariants = cva(
   'relative w-full cursor-text overflow-y-auto caret-primary select-text selection:bg-brand/25 focus-visible:outline-none [&_.slate-selection-area]:z-50 [&_.slate-selection-area]:border [&_.slate-selection-area]:border-brand/25 [&_.slate-selection-area]:bg-brand/15',
@@ -43,13 +40,8 @@ export const EditorContainer = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> &
   VariantProps<typeof editorContainerVariants>) => {
-  const editor = useEditorRef();
-  const containerRef = useEditorContainerRef();
-
   return (
-    <div
-      id={editor.uid}
-      ref={containerRef}
+    <PlateContainer
       className={cn(
         'ignore-click-outside/toolbar',
         editorContainerVariants({ variant }),

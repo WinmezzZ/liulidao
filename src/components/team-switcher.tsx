@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import {
   CreateSpaceDrawer,
   type SpaceDrawerRef,
-} from '@/app/components/create-space-drawer';
+} from '@/app/_components/create-space-drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
