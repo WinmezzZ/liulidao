@@ -9,7 +9,6 @@ generator client {
 
 generator zod {
   provider = "zod-prisma-types"
-  useMultipleFiles = true
 }
 
 model User {
@@ -147,7 +146,7 @@ model TwoFactor {
 model Article {
   id        String   @id @default(cuid())
   title     String
-  content   String
+  content   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   authorId  String
