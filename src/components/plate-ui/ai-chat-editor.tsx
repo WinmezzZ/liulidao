@@ -24,7 +24,8 @@ import { BaseIndentPlugin } from '@udecode/plate-indent';
 import { BaseIndentListPlugin } from '@udecode/plate-indent-list';
 import { BaseLinkPlugin } from '@udecode/plate-link';
 import { usePlateEditor } from '@udecode/plate/react';
-import { MarkdownPlugin } from '@udecode/plate-markdown';
+
+import { markdownPlugin } from '@/components/editor/plugins/markdown-plugin';
 import {
   TodoLiStatic,
   TodoMarkerStatic,
@@ -92,7 +93,7 @@ const plugins = [
       },
     },
   }),
-  MarkdownPlugin,
+  markdownPlugin,
 ];
 
 export const AIChatEditor = memo(({ content }: { content: string }) => {

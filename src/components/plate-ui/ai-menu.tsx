@@ -1,8 +1,11 @@
 'use client';
 
-import * as React from 'react';
-
-import { type NodeEntry, isHotkey } from '@udecode/plate';
+import { isHotkey, type NodeEntry } from '@udecode/plate';
+import {
+  useEditorPlugin,
+  useHotkeys,
+  usePluginOption,
+} from '@udecode/plate/react';
 import {
   AIChatPlugin,
   useEditorChat,
@@ -12,12 +15,8 @@ import {
   BlockSelectionPlugin,
   useIsSelecting,
 } from '@udecode/plate-selection/react';
-import {
-  useEditorPlugin,
-  useHotkeys,
-  usePluginOption,
-} from '@udecode/plate/react';
 import { Loader2Icon } from 'lucide-react';
+import * as React from 'react';
 
 import { useChat } from '@/components/editor/use-chat';
 
@@ -123,14 +122,14 @@ export function AIMenu() {
           )}
 
           {isLoading ? (
-            <div className="flex grow items-center gap-2 p-2 text-sm text-muted-foreground select-none">
+            <div className="text-muted-foreground flex grow items-center gap-2 p-2 text-sm select-none">
               <Loader2Icon className="size-4 animate-spin" />
               {messages.length > 1 ? 'Editing...' : 'Thinking...'}
             </div>
           ) : (
             <InputCommand
               variant="ghost"
-              className="rounded-none border-b border-solid border-border [&_svg]:hidden"
+              className="border-border rounded-none border-b border-solid [&_svg]:hidden"
               value={input}
               onKeyDown={(e) => {
                 if (isHotkey('backspace')(e) && input.length === 0) {
