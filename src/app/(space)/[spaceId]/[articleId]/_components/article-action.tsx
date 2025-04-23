@@ -3,10 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { useSpace } from '../../_lib/useSpace';
 
-export function ArticleAction() {
+interface ArticleActionProps {
+  content: string;
+}
+
+export function ArticleAction({ content }: ArticleActionProps) {
   const spaceData = useSpace();
+
   const handlePublish = () => {
-    console.log(spaceData);
+    console.log(content);
   };
 
   return (

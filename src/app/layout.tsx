@@ -40,12 +40,12 @@ export default function RootLayout({
           <ConfirmDialogProvider>
             <ThemeProvider
               attribute="class"
-            defaultTheme="system"
-            enableSystem
-            enableColorScheme
-            disableTransitionOnChange
-          >
-              <Toaster position="top-center" richColors  />
+              defaultTheme="system"
+              enableSystem
+              enableColorScheme
+              disableTransitionOnChange
+            >
+              <Toaster position="top-center" richColors />
               {children}
             </ThemeProvider>
           </ConfirmDialogProvider>

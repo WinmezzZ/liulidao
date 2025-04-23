@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
-
 import { cn } from '@udecode/cn';
-import { HEADING_KEYS } from '@udecode/plate-heading';
 import { ParagraphPlugin } from '@udecode/plate/react';
 import {
-  type PlaceholderProps,
   createNodeHOC,
   createNodesHOC,
+  type PlaceholderProps,
   usePlaceholderState,
 } from '@udecode/plate/react';
+import { HEADING_KEYS } from '@udecode/plate-heading';
+import React from 'react';
 
 export const Placeholder = (props: PlaceholderProps) => {
   const { children, nodeProps, placeholder } = props;
@@ -41,7 +40,7 @@ export const withPlaceholders = (components: any) =>
     {
       key: ParagraphPlugin.key,
       hideOnBlur: true,
-      placeholder: 'Type a paragraph',
+      placeholder: '请输入...',
       query: {
         maxLevel: 1,
       },
@@ -49,6 +48,6 @@ export const withPlaceholders = (components: any) =>
     {
       key: HEADING_KEYS.h1,
       hideOnBlur: false,
-      placeholder: 'Untitled',
+      placeholder: '无标题',
     },
   ]);

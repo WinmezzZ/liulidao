@@ -1,4 +1,3 @@
-import { Input } from '@/components/ui/input';
 import { api } from '@/trpc/server';
 import Editor from '../_components/editor';
 
@@ -15,8 +14,7 @@ export default async function Page({
   }
   return (
     <div>
-      <Input className="h-30! text-3xl!" defaultValue={article.title} />
-      <Editor />
+      <Editor {...article} />
     </div>
   );
 }

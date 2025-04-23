@@ -1,4 +1,4 @@
-import { VerifyTip } from '@/app/components/verify-tip';
+import { VerifyTip } from '@/app/_components/verify-tip';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
