@@ -18,10 +18,8 @@ const eslintIgnore = [
   '*.min.js',
   'src/components/ui/**/*.ts',
   'src/components/ui/**/*.tsx',
-  'src/components/edtor/**/*.ts',
-  'src/components/edtor/**/*.tsx',
-  'src/components/plate-ui/**/*.ts',
-  'src/components/plate-ui/**/*.tsx',
+  'src/components/editor/**/*.tsx?',
+  'src/components/plate-ui/**/*.tsx?',
 ];
 
 export default typescriptEslint.config(

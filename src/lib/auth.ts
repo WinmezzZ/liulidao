@@ -45,8 +45,6 @@ export const auth = betterAuth({
       if (!from) {
         throw new Error('请配置 BETTER_AUTH_EMAIL 发送人信息');
       }
-      console.log('url', url);
-      console.log('token', token);
       await resend.emails.send({
         from,
         to: user.email,

@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { type HTMLAttributes, useEffect, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
@@ -24,6 +25,7 @@ type UserAuthFormProps = HTMLAttributes<HTMLDivElement>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   useEffect(() => {
     //  authClient.oneTap();
@@ -39,10 +41,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     startTransition(async () => {
-      await signIn.email({
-        ...data,
-        callbackURL: '/',
-      });
+      const res = await signIn.email(data);
+      console.log(res);
+      if (res.data && 'twoFactorRedirect' in res.data) {
+        router.push('/two-factor');
+      } else {
+        router.push('/');
+      }
     });
   };
 
