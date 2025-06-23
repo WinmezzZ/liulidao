@@ -1,18 +1,26 @@
-import { getSessionCookie } from 'better-auth/cookies';
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { type NextRequest } from 'next/server';
+import { middleware as authorize } from './middlewares/authorize';
+import { middleware as rateLimit } from './middlewares/rate-limit';
 
-export async function middleware(request: NextRequest) {
-  const sessionCookie = getSessionCookie(request);
+export async function middleware(req: NextRequest) {
+  const middlewares = [rateLimit, authorize];
 
-  if (!sessionCookie) {
-    return NextResponse.redirect(new URL('/unauthorised', request.url));
+  for (const mw of middlewares) {
+    const result = await mw(req);
+    if (
+      result &&
+      result instanceof NextResponse &&
+      result !== NextResponse.next()
+    ) {
+      return result;
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|sign-in|sign-up|unauthorised|server-error|bad-request|not-found|forbidden|two-factor|reset-password|forgot-password|favicon.ico|robots.txt|images|$).*)',
-  ],
+  matcher: ['/:path*'],
+  runtime: 'nodejs',
 };

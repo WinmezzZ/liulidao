@@ -73,6 +73,7 @@ export default function Component() {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     maxLength={6}
+                    autoFocus
                   />
                 </div>
                 <Button

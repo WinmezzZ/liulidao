@@ -18,8 +18,10 @@ const eslintIgnore = [
   '*.min.js',
   'src/components/ui/**/*.ts',
   'src/components/ui/**/*.tsx',
-  'src/components/editor/**/*.tsx?',
-  'src/components/plate-ui/**/*.tsx?',
+  'src/components/editor/**/*.ts',
+  'src/components/editor/**/*.tsx',
+  'src/components/plate-ui/**/*.ts',
+  'src/components/plate-ui/**/*.tsx',
 ];
 
 export default typescriptEslint.config(
@@ -136,6 +138,8 @@ function getDirectoriesToSort() {
     '.next',
     '.vscode',
     'node_modules',
+    'src/components/ui',
+    'src/components/plate-ui',
   ];
   return fs
     .readdirSync(process.cwd())
