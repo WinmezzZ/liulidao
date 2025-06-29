@@ -12,6 +12,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import { env } from '@/env';
 import { api } from '@/trpc/client';
 import { createSpaceSchema } from '../../schema/space';
 import { clearPath, clearTag } from '../actions/revalidate';
@@ -58,7 +59,7 @@ export function CreateSpaceDrawer({ children, ref }: SpaceDrawerProps) {
                   <>
                     <span>设置路径后，空间的url地址将从默认的id改为此路径</span>
                     <br />
-                    <span>{process.env.BASE_URL + '/slug'}</span>
+                    {/* <span>{env.NEXT_PUBLIC_BASE_URL + '/slug'}</span> */}
                   </>
                 ),
               },

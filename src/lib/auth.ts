@@ -18,8 +18,8 @@ import {
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
 import { resend } from '@/lib/resend';
+import { redis } from '@/server/redis';
 import prisma from './prisma';
-import { redis } from './redis';
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL!;
 const fromEmail = process.env.BETTER_AUTH_EMAIL!;

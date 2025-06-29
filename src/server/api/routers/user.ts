@@ -1,9 +1,14 @@
 import { z } from 'zod';
 
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+import {
+  createRateLimitMiddleware,
+  createTRPCRouter,
+  protectedProcedure,
+} from '@/server/api/trpc';
 
 export const userRouter = createTRPCRouter({
   info: protectedProcedure
+    .use(createRateLimitMiddleware('user.info', 10, '1 m'))
     .input(z.object({ id: z.string().optional() }).optional())
     .query(async ({ ctx, input }) => {
       const currentUser = ctx.session.user.id;

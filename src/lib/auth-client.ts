@@ -34,7 +34,7 @@ export const authClient = createAuthClient({
       if (e.error.code in errorCodes) {
         toast.error(getErrorMessage(e.error));
       } else if ('responseText' in e) {
-        console.log(e.responseText);
+        toast.error(e.responseText as string);
       }
     },
   },

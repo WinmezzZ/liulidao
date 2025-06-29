@@ -25,6 +25,7 @@ export default function CreateArticle() {
       title: '无标题',
       authorId: userId,
       spaceId: spaceFlag,
+      content: '',
     });
   };
   return <Button onClick={handleCreate}>写文章</Button>;

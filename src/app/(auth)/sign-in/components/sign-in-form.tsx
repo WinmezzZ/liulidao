@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { type HTMLAttributes, useEffect, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { type z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -42,7 +43,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     startTransition(async () => {
       const res = await signIn.email(data);
-      console.log(res);
+      if (res.error) {
+        return;
+      }
       if (res.data && 'twoFactorRedirect' in res.data) {
         router.push('/two-factor');
       } else {

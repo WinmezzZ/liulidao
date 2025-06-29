@@ -1,15 +1,9 @@
-import { redirect, unauthorized } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import { EmptySpace } from './_components/empty-space';
 import { VerifyTip } from './_components/verify-tip';
 
 export default async function Page() {
-  const session = await authClient.getSession();
-  console.log('session', session);
-  if (!session?.data) {
-    unauthorized();
-  }
   const spaces = await prisma.space.findMany();
 
   if (spaces.length) {

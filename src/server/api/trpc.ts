@@ -8,11 +8,13 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
+import { type StringValue } from 'ms';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/prisma';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 /**
  * 1. CONTEXT
@@ -136,3 +138,46 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+export const createRateLimitMiddleware = (
+  name: string,
+  requests: number,
+  duration: StringValue
+) => {
+  return t.middleware(async ({ ctx, next }) => {
+    if (!process.env.KV_REST_API_URL) {
+      return next();
+    }
+
+    if (!ctx.session) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: '请登录',
+      });
+    }
+
+    const cacheKey = ctx.userId || ctx.headers.get('x-forwarded-for') || '';
+
+    if (!cacheKey) {
+      return next();
+    }
+
+    const pathname = ctx.headers.get('x-pathname') || '';
+
+    console.log('pathname', pathname);
+
+    const { allowed, reset } = await checkRateLimit(`${pathname}:${cacheKey}`, {
+      limit: requests,
+      duration,
+    });
+
+    if (!allowed) {
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+        message: `访问太频繁，请${reset}秒后重试`,
+      });
+    }
+
+    return next();
+  });
+};

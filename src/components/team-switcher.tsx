@@ -3,10 +3,7 @@ import { type Space } from '@prisma/client';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
-import {
-  CreateSpaceDrawer,
-  type SpaceDrawerRef,
-} from '@/app/_components/create-space-drawer';
+import { type SpaceDrawerRef } from '@/app/_components/create-space-drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -85,7 +82,6 @@ export function TeamSwitcher({ spaces }: { spaces: Space[] }) {
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
-          <CreateSpaceDrawer ref={spaceDrawerRef} />
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

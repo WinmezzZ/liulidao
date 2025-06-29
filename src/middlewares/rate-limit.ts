@@ -1,14 +1,16 @@
 import { ipAddress } from '@vercel/functions';
 import { type NextRequest, NextResponse } from 'next/server';
+import { getUserId } from '@/app/actions/account';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { pathMatcher } from './util';
 
 export async function middleware(request: NextRequest) {
   const match = pathMatcher('/api', request.nextUrl.pathname);
   if (!match) return NextResponse.next();
+  const userId = await getUserId();
   const ip = ipAddress(request) || '127.0.0.1';
   const { allowed, reset } = await checkRateLimit(
-    `${request.nextUrl.pathname}:${ip}`
+    `${request.nextUrl.pathname}:${userId || ip}`
   );
 
   if (!allowed) {
