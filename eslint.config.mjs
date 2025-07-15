@@ -22,6 +22,7 @@ const eslintIgnore = [
   'src/components/editor/**/*.tsx',
   'src/components/plate-ui/**/*.ts',
   'src/components/plate-ui/**/*.tsx',
+  'prisma/generated/zod',
 ];
 
 export default typescriptEslint.config(

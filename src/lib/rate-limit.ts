@@ -1,8 +1,8 @@
-import ms, { type StringValue } from 'ms';
-import { redis } from '@/server/redis';
+import { type Duration, Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 
-const DEFAULT_LIMIT = 5;
-const DEFAULT_DURATION: StringValue = '1 m';
+const DEFAULT_LIMIT = 60;
+const DEFAULT_DURATION: Duration = '1 m';
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -11,27 +11,21 @@ export interface RateLimitResult {
   reset: number;
 }
 
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
+
 export async function checkRateLimit(
   key: string,
-  options?: { limit?: number; duration?: StringValue }
-): Promise<RateLimitResult> {
-  const limit = options?.limit ?? DEFAULT_LIMIT;
-  const duration = options?.duration ?? DEFAULT_DURATION;
-
-  console.log(ms(duration));
-
-  const redisKey = `rate-limit:${key}`;
-
-  const current = await redis.incr(redisKey);
-  if (current === 1) {
-    await redis.expire(redisKey, ms(duration) / 1000);
-  }
-
-  const ttl = await redis.ttl(redisKey);
-  return {
-    allowed: current <= limit,
-    current,
-    remaining: Math.max(limit - current, 0),
-    reset: ttl,
-  };
+  options?: { limit?: number; duration?: Duration }
+) {
+  const ratelimit = new Ratelimit({
+    redis: redis,
+    limiter: Ratelimit.slidingWindow(
+      options?.limit ?? DEFAULT_LIMIT,
+      options?.duration ?? DEFAULT_DURATION
+    ),
+  });
+  return await ratelimit.limit(key);
 }

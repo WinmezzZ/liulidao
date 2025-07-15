@@ -1,38 +1,27 @@
 'use client';
 
-import { type ValueOf } from '@udecode/plate';
-import {
-  Plate,
-  type PlateEditor,
-  type WithPlateOptions,
-} from '@udecode/plate/react';
-import React from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import * as React from 'react';
 
-import { SettingsDialog } from '@/components/editor/settings';
-import { useCreateEditor } from '@/components/editor/use-create-editor';
-import { Editor, EditorContainer } from '@/components/plate-ui/editor';
+import { Plate, usePlateEditor } from 'platejs/react';
 
-interface PlateEditorProps {
-  value: WithPlateOptions['value'] | null;
-  onChange: (value: ValueOf<PlateEditor>, editor: PlateEditor) => void;
-}
+import { EditorKit } from '@/components/editor/editor-kit';
+import { SettingsDialog } from '@/components/editor/settings-dialog';
+import { Editor, EditorContainer } from '@/components/ui/editor';
+import { TElement } from 'platejs';
 
-export function PlateEditor({ value, onChange }: PlateEditorProps) {
-  const editor = useCreateEditor({
-    value: value || [],
+export function PlateEditor(props: { value: TElement[], onChange: (value: TElement[]) => void }) {
+  const editor = usePlateEditor({
+    plugins: EditorKit,
+    value: props.value,
   });
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Plate editor={editor}>
-        <EditorContainer>
-          <Editor variant="demo" />
-        </EditorContainer>
+    <Plate editor={editor} onValueChange={({ value }) => props.onChange(value)}>
+      <EditorContainer>
+        <Editor variant="demo" />
+      </EditorContainer>
 
-        <SettingsDialog />
-      </Plate>
-    </DndProvider>
+      <SettingsDialog />
+    </Plate>
   );
 }

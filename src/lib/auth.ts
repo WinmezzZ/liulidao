@@ -13,7 +13,6 @@ import {
   openAPI,
   organization,
   twoFactor,
-  username,
 } from 'better-auth/plugins';
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
@@ -181,7 +180,6 @@ export const auth = betterAuth({
         });
       },
     }),
-    username(),
   ],
 
   secondaryStorage: {

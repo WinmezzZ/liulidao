@@ -1,5 +1,6 @@
 'use client';
 
+import { ArticleType } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,9 @@ export default function CreateArticle() {
       router.push(`/${spaceFlag}/${data.id}`);
     },
   });
+  const { data: space } = api.space.findOne.useQuery(spaceFlag, {
+    enabled: !!spaceFlag,
+  });
   const handleCreate = () => {
     if (!userId) return;
     if (!spaceFlag) {
@@ -22,10 +26,10 @@ export default function CreateArticle() {
       return;
     }
     createArticle.mutate({
-      title: '无标题',
       authorId: userId,
       spaceId: spaceFlag,
-      content: '',
+      type: ArticleType.PAGE,
+      title: '未命名',
     });
   };
   return <Button onClick={handleCreate}>写文章</Button>;

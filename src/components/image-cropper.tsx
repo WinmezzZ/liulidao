@@ -20,8 +20,12 @@ import {
 } from '@/components/ui/dialog';
 
 import 'react-image-crop/dist/ReactCrop.css';
-import { type FileWithPreview } from '@/app/page';
 import { CropIcon, Trash2Icon } from 'lucide-react';
+
+type FileWithPreview = {
+  preview: string;
+  file: File;
+};
 
 interface ImageCropperProps {
   dialogOpen: boolean;

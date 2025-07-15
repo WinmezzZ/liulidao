@@ -5,11 +5,15 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres", "driverAdapters"]
 }
 
 generator zod {
   provider = "zod-prisma-types"
   useMultipleFiles                 = true
+  createRelationValuesTypes        = true
+  createInputTypes = false
+  createPartialTypes                 = true
 }
 
 model User {
@@ -35,8 +39,10 @@ model User {
   articles         Article[]
   createdSpaces    Space[] @relation("CreatedSpaces")
   ownedSpaces      Space[] @relation("OwnedSpaces")
+  articleActions ArticleUserAction[]
+  articleVersions ArticleVersion[]
 
-  @@unique([username])
+  @@unique([email])
   @@map("user")
 }
 
@@ -89,7 +95,7 @@ model Verification {
 }
 
 model Space {
-  id          String       @id @default(cuid())
+  id          String       @id @default(uuid())
   name        String
   description String?
   slug        String?
@@ -145,15 +151,85 @@ model TwoFactor {
 }
 
 model Article {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
+  id        String   @id @default(nanoid())
+  title     String?
+  content   Json?
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   spaceId   String
   space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  articleVersions ArticleVersion[]
+
+  parentId String?
+  parent   Article?  @relation("ParentChild", fields: [parentId], references: [id])
+  children         Article[] @relation("ParentChild")
+
+  coverImage  String?
+  icon        String?
+  status      ArticleStatusType @default(DRAFT)
+  type        ArticleType
+  permissionType ArticlePermissionType @default(ALL_CAN_VIEW_AND_EDIT)
+  userActions ArticleUserAction[]
 
   @@map("article")
+}
+
+
+model ArticleVersion {
+  id         String   @id @default(nanoid())
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorId     String
+  author       User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  title       String?
+  content Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("article-version")
+}
+
+enum ArticleStatusType {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ArticleType {
+  HOME
+  PAGE
+  BLOG
+}
+
+enum ArticlePermissionType {
+  /** 所有人都能查看和编辑 */
+  ALL_CAN_VIEW_AND_EDIT
+  /** 所有人都能查看，部分人可以编辑 */
+  ALL_CAN_VIEW_SOME_CAN_EDIT
+  /** 特定人才能查看和编辑 */
+  SOME_CAN_VIEW_AND_EDIT
+}
+
+enum ArticleAction {
+  MANAGE
+  VIEW
+  EDIT
+}
+
+model ArticleUserAction {
+  id         String                @id @default(nanoid())
+  userId     String
+  user       User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId  String
+  article    Article               @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  action ArticleAction
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, articleId]) // 每个用户对每篇文章只有一个权限
+  @@map("article_user_action")
 }

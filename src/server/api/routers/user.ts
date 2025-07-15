@@ -8,7 +8,7 @@ import {
 
 export const userRouter = createTRPCRouter({
   info: protectedProcedure
-    .use(createRateLimitMiddleware('user.info', 10, '1 m'))
+    .use(createRateLimitMiddleware)
     .input(z.object({ id: z.string().optional() }).optional())
     .query(async ({ ctx, input }) => {
       const currentUser = ctx.session.user.id;

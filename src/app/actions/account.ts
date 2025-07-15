@@ -13,6 +13,13 @@ export const setPassword = async (password: string) => {
   return res.status;
 };
 
+export const getSession = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  return session;
+};
+
 export const getUserId = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),

@@ -3,14 +3,13 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-interface GeneralErrorProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ServerErrorProps extends React.HTMLAttributes<HTMLDivElement> {
   minimal?: boolean;
+  error: Error;
 }
 
-export default function GeneralError({
-  className,
-  minimal = false,
-}: GeneralErrorProps) {
+export default function ServerError(props: ServerErrorProps) {
+  const { className, minimal = false, error } = props;
   const router = useRouter();
   return (
     <div className={cn('h-svh w-full', className)}>
@@ -20,7 +19,7 @@ export default function GeneralError({
         )}
         <span className="font-medium">服务器错误</span>
         <p className="text-muted-foreground text-center">
-          服务器错误，请稍后再试。
+          {error.message || '服务器错误，请稍后再试。'}
         </p>
         {!minimal && (
           <div className="mt-6 flex gap-4">

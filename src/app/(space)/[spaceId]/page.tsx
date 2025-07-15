@@ -7,6 +7,7 @@ export default async function Page({
   params: Promise<{ spaceId: string }>;
 }) {
   const { spaceId } = await params;
+  await api.space.findOne.prefetch(spaceId);
   const articles = await api.article.spaceArticleList({ spaceId });
   return (
     <div>

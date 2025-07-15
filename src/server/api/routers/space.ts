@@ -2,7 +2,6 @@ import { TRPCError } from '@trpc/server';
 import { unstable_cache } from 'next/cache';
 import { z } from 'zod';
 
-import { db } from '@/lib/prisma';
 import { createSpaceSchema } from '@/schema/space';
 import {
   createTRPCRouter,
@@ -21,6 +20,21 @@ export const spaceRouter = createTRPCRouter({
       });
 
       return space;
+    }),
+  spaces: protectedProcedure
+    .input(z.object({ spaceId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const spaceList = await ctx.db.space.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+        select: {},
+        where: {
+          OR: [{ id: input.spaceId }, { slug: input.spaceId }],
+        },
+      });
+
+      return spaceList;
     }),
   hello: publicProcedure
     .input(z.object({ text: z.string() }))

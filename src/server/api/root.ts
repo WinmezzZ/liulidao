@@ -1,6 +1,8 @@
 import { articleRouter } from '@/server/api/routers/article';
+import { layoutRouter } from '@/server/api/routers/layout';
 import { spaceRouter } from '@/server/api/routers/space';
 import { userRouter } from '@/server/api/routers/user';
+import { versionRouter } from '@/server/api/routers/version';
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
 
 /**
@@ -12,6 +14,8 @@ export const appRouter = createTRPCRouter({
   space: spaceRouter,
   article: articleRouter,
   user: userRouter,
+  version: versionRouter,
+  layout: layoutRouter,
 });
 
 // export type definition of API

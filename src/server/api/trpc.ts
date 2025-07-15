@@ -8,7 +8,6 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
-import { type StringValue } from 'ms';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
@@ -50,7 +49,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-const t = initTRPC.context<typeof createTRPCContext>().create({
+export const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
@@ -139,39 +138,16 @@ export const protectedProcedure = t.procedure
     });
   });
 
-export const createRateLimitMiddleware = (
-  name: string,
-  requests: number,
-  duration: StringValue
-) => {
-  return t.middleware(async ({ ctx, next }) => {
-    if (!process.env.KV_REST_API_URL) {
-      return next();
-    }
+export const createRateLimitMiddleware = t.middleware(
+  async ({ ctx, next, path }) => {
+    const cacheKey =
+      ctx.userId || ctx.headers.get('x-forwarded-for') || '127.0.0.1';
 
-    if (!ctx.session) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: '请登录',
-      });
-    }
+    const pathname = path || ctx.headers.get('x-pathname') || '';
 
-    const cacheKey = ctx.userId || ctx.headers.get('x-forwarded-for') || '';
+    const { success, reset } = await checkRateLimit(`${pathname}:${cacheKey}`);
 
-    if (!cacheKey) {
-      return next();
-    }
-
-    const pathname = ctx.headers.get('x-pathname') || '';
-
-    console.log('pathname', pathname);
-
-    const { allowed, reset } = await checkRateLimit(`${pathname}:${cacheKey}`, {
-      limit: requests,
-      duration,
-    });
-
-    if (!allowed) {
+    if (!success) {
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
         message: `访问太频繁，请${reset}秒后重试`,
@@ -179,5 +155,5 @@ export const createRateLimitMiddleware = (
     }
 
     return next();
-  });
-};
+  }
+);
