@@ -56,6 +56,7 @@ export function TeamSwitcher({ spaces }: { spaces: Space[] }) {
             <DropdownMenuItem
               className="gap-2 p-2"
               onSelect={(event) => {
+                console.log(spaceDrawerRef.current);
                 spaceDrawerRef.current?.setOpen(true);
               }}
             >

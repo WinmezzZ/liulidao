@@ -10,7 +10,11 @@ import {
   createTRPCRouter,
   protectedProcedure,
 } from '@/server/api/trpc';
-import { ArticlePartialSchema, ArticleSchema } from '@prisma-generated/zod';
+import {
+  ArticleOptionalDefaultsSchema,
+  ArticlePartialSchema,
+  ArticleSchema,
+} from '@prisma-generated/zod';
 import { spaceRouter } from './space';
 
 const MAX_TITLE_LENGTH = 256;
@@ -58,7 +62,7 @@ export const articleRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .use(createRateLimitMiddleware)
-    .input(ArticleSchema)
+    .input(ArticleOptionalDefaultsSchema)
     .mutation(async ({ ctx, input }) => {
       const { spaceId: spaceFlag, ...rest } = input;
       const space = await spaceRouter.createCaller(ctx).findOne(spaceFlag);
@@ -69,7 +73,7 @@ export const articleRouter = createTRPCRouter({
         });
       }
 
-      const content = input.content as any;
+      const content = input.content;
 
       const finalContent = content
         ? NodeApi.string({

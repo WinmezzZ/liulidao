@@ -16,9 +16,6 @@ export default function CreateArticle() {
       router.push(`/${spaceFlag}/${data.id}`);
     },
   });
-  const { data: space } = api.space.findOne.useQuery(spaceFlag, {
-    enabled: !!spaceFlag,
-  });
   const handleCreate = () => {
     if (!userId) return;
     if (!spaceFlag) {
