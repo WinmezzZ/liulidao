@@ -1,9 +1,8 @@
 import { cookies } from 'next/headers';
 
-import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { api } from '@/trpc/server';
-import { SpaceProvider } from './_components/space-provider';
+import { getSpace } from './actions/get-space';
+import { SpaceSidebar } from './components/space-sidebar';
 
 export default async function Layout({
   children,
@@ -13,18 +12,25 @@ export default async function Layout({
   params: Promise<{ spaceId: string }>;
 }) {
   const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true';
-  const space = await api.space.findOne((await params).spaceId);
+  const defaultCollapsed = cookieStore.get('sidebar_state')?.value !== 'true';
+  const { spaceId } = await params;
+  const space = await getSpace(spaceId);
+
+  if (!space) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <p className="text-muted-foreground text-sm">空间不存在</p>
+      </div>
+    );
+  }
 
   return (
-    <SpaceProvider value={{ space }}>
-      <SidebarProvider defaultOpen={defaultOpen}>
-        <AppSidebar />
-        <main className="flex flex-1 flex-col overflow-hidden">
-          <SidebarTrigger />
-          {children}
-        </main>
-      </SidebarProvider>
-    </SpaceProvider>
+    <SidebarProvider defaultOpen={!defaultCollapsed}>
+      <SpaceSidebar spaceId={space!.id} />
+      <main className="flex flex-1 flex-col overflow-hidden">
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
   );
 }

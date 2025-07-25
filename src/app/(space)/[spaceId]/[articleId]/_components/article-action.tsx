@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { type Value } from 'platejs';
 import { Button } from '@/components/ui/button';
 import { api, useTRPC } from '@/trpc/client';
-import { useSpace } from '../../_lib/useSpace';
+import { useSpace } from '../../lib/useSpace';
 
 interface ArticleActionProps {
   content: Value;

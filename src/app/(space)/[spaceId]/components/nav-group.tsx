@@ -34,7 +34,7 @@ import {
   type NavGroup,
   type NavItem,
   type NavLink,
-} from './types';
+} from './space-data';
 
 export function NavGroup({ title, items }: NavGroup) {
   const { state } = useSidebar();

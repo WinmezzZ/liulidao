@@ -14,8 +14,8 @@ import {
 } from '@/components/ui/drawer';
 import { env } from '@/env';
 import { api } from '@/trpc/client';
-import { createSpaceSchema } from '../../schema/space';
-import { clearPath, clearTag } from '../actions/revalidate';
+import { createSpaceSchema } from '../../../schema/space';
+import { clearPath, clearTag } from '../../actions/revalidate';
 
 export interface SpaceDrawerRef {
   setOpen: (open: boolean) => void;

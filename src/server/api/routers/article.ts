@@ -14,8 +14,16 @@ import {
   ArticleOptionalDefaultsSchema,
   ArticlePartialSchema,
   ArticleSchema,
+  ArticleStatusTypeSchema,
+  ArticleTypeSchema,
 } from '@prisma-generated/zod';
 import { spaceRouter } from './space';
+
+export const ArticleCreateSchema = ArticleOptionalDefaultsSchema.merge(
+  z.object({
+    authorId: z.string().optional(),
+  })
+);
 
 const MAX_TITLE_LENGTH = 256;
 const MAX_CONTENT_LENGTH = 1_000_000; // 1MB of text
@@ -62,7 +70,7 @@ export const articleRouter = createTRPCRouter({
     }),
   create: protectedProcedure
     .use(createRateLimitMiddleware)
-    .input(ArticleOptionalDefaultsSchema)
+    .input(ArticleCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const { spaceId: spaceFlag, ...rest } = input;
       const space = await spaceRouter.createCaller(ctx).findOne(spaceFlag);
@@ -93,6 +101,7 @@ export const articleRouter = createTRPCRouter({
           ...rest,
           content: rest.content as any,
           spaceId: space.id,
+          authorId: ctx.userId,
         },
       });
     }),
@@ -154,12 +163,14 @@ export const articleRouter = createTRPCRouter({
       z.object({
         cursor: z.string().optional(),
         limit: z.number().min(1).max(100).optional(),
-        parentDocumentId: z.string().optional(),
+        parentId: z.string().optional(),
         search: z.string().optional(),
+        spaceId: z.string().optional(),
+        type: ArticleTypeSchema.optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { cursor, limit, parentDocumentId, search } = input;
+      const { cursor, limit = 10, parentId, search } = input;
 
       const articles = await ctx.db.article.findMany({
         cursor: cursor ? { id: cursor } : undefined,
@@ -173,12 +184,13 @@ export const articleRouter = createTRPCRouter({
           title: true,
           updatedAt: true,
           spaceId: true,
+          parentId: true,
         },
         take: limit ? limit + 1 : undefined,
         where: {
-          status: ArticleStatusType.PUBLISHED,
-          parentId: parentDocumentId ?? null,
-          authorId: ctx.userId,
+          spaceId: input.spaceId,
+          // status: ArticleStatusType.PUBLISHED,
+          parentId: parentId,
           ...(search
             ? {
                 title: {
@@ -198,7 +210,7 @@ export const articleRouter = createTRPCRouter({
       }
 
       return {
-        articles: articles,
+        list: articles,
         nextCursor,
       };
     }),

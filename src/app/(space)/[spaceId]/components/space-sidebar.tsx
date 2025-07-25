@@ -8,20 +8,22 @@ import {
 import { api } from '@/trpc/server';
 import { NavGroup } from './nav-group';
 import { NavUser } from './nav-user';
-import { sidebarData, treeData } from './sidebar-data';
-import { TeamSwitcher } from './team-switcher';
-import { TreeView } from './ui/tree-view';
+import { sidebarData } from './space-data';
+import { SpacePageTree } from './space-page-tree';
+import { SpaceSwitcher } from './space-switcher';
 
-export async function AppSidebar({
+export async function SpaceSidebar({
+  spaceId,
   ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: React.ComponentProps<typeof Sidebar> & { spaceId: string }) {
+  console.log('SpaceSidebar');
   const spaces = await api.space.list();
   const user = await api.user.info();
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
-        <TeamSwitcher spaces={spaces} />
+        <SpaceSwitcher spaces={spaces} />
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (
@@ -29,7 +31,7 @@ export async function AppSidebar({
         ))}
       </SidebarContent>
       <SidebarContent>
-        <TreeView data={treeData} expandAll />
+        <SpacePageTree />
       </SidebarContent>
       <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
       <SidebarRail />

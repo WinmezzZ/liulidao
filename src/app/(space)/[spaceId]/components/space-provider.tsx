@@ -1,7 +1,7 @@
 'use client';
 
 import { type ProviderProps, useContext, useState } from 'react';
-import { SpaceContext, type SpaceData } from '../_lib/useSpace';
+import { SpaceContext, type SpaceData } from '../lib/useSpace';
 
 export function SpaceProvider({ children, value }: ProviderProps<SpaceData>) {
   const context = useContext(SpaceContext); // 获取父级Provider的值

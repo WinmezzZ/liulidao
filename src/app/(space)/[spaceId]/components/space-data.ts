@@ -1,26 +1,46 @@
-// import {
-//   IconBarrierBlock,
-//   IconBrowserCheck,
-//   IconBug,
-//   IconChecklist,
-//   IconError404,
-//   IconHelp,
-//   IconLayoutDashboard,
-//   IconLock,
-//   IconLockAccess,
-//   IconMessages,
-//   IconNotification,
-//   IconPackages,
-//   IconPalette,
-//   IconServerOff,
-//   IconSettings,
-//   IconTool,
-//   IconUserCog,
-//   IconUserOff,
-//   IconUsers,
-// } from "@tabler/icons-react";
-import { type SidebarData } from './types';
-import { type TreeDataItem } from './ui/tree-view';
+import { type TreeDataItem } from '@/components/tree-view';
+
+interface User {
+  name: string;
+  email: string;
+  avatar: string;
+}
+
+interface Team {
+  name: string;
+  plan: string;
+}
+
+interface BaseNavItem {
+  title: string;
+  badge?: string;
+  icon?: React.ElementType;
+}
+
+type NavLink = BaseNavItem & {
+  url: string;
+  items?: never;
+};
+
+type NavCollapsible = BaseNavItem & {
+  items: (BaseNavItem & { url: string })[];
+  url?: never;
+};
+
+type NavItem = NavCollapsible | NavLink;
+
+interface NavGroup {
+  title: string;
+  items: NavItem[];
+}
+
+interface SidebarData {
+  user: User;
+  teams: Team[];
+  navGroups: NavGroup[];
+}
+
+export type { SidebarData, NavGroup, NavItem, NavCollapsible, NavLink };
 
 export const sidebarData: SidebarData = {
   user: {

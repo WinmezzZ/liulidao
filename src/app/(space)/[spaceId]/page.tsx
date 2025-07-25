@@ -1,5 +1,5 @@
 import { api } from '@/trpc/server';
-import CreateArticle from './_components/create-article';
+import CreateArticle from './components/create-article';
 
 export default async function Page({
   params,

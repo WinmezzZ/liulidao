@@ -3,7 +3,7 @@ import { type Space } from '@prisma/client';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
-import { type SpaceDrawerRef } from '@/app/_components/create-space-drawer';
+import { type SpaceDrawerRef } from '@/app/(home)/components/create-space-drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 
-export function TeamSwitcher({ spaces }: { spaces: Space[] }) {
+export function SpaceSwitcher({ spaces }: { spaces: Space[] }) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = useState(spaces[0]);
   const spaceDrawerRef = useRef<SpaceDrawerRef>(null);
