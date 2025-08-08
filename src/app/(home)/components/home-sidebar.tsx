@@ -1,4 +1,4 @@
-'use client';
+'use server';
 
 import { type Space } from '@prisma/client';
 import {
@@ -10,15 +10,18 @@ import {
   TrendingUpIcon,
 } from 'lucide-react';
 import Image from 'next/image';
+import { NavUser } from '@/app/(space)/[spaceId]/components/nav-user';
+import { SidebarFooter } from '@/components/ui/home-sidebar';
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { api } from '@/trpc/server';
 import { NavGroup } from '../../(space)/[spaceId]/components/nav-group';
 
-export function HomeSidebar({
+export async function HomeSidebar({
   spaceId,
   spaces,
   ...props
@@ -26,19 +29,20 @@ export function HomeSidebar({
   spaceId: string;
   spaces: Space[];
 }) {
+  const user = await api.user.info();
   const navGroups = [
     {
       title: '发现',
       items: [
         {
           title: '所有更新',
-          url: '/all-updates',
-          icon: CompassIcon,
+          url: '/',
+          icon: <CompassIcon />,
         },
         {
           title: '热门',
           url: '/hot',
-          icon: TrendingUpIcon,
+          icon: <TrendingUpIcon />,
         },
       ],
     },
@@ -48,17 +52,17 @@ export function HomeSidebar({
         {
           title: '最近处理',
           url: '/recent-worked',
-          icon: NotebookPenIcon,
+          icon: <NotebookPenIcon />,
         },
         {
           title: '最近访问',
           url: '/recent-visited',
-          icon: TimerIcon,
+          icon: <TimerIcon />,
         },
         {
           title: '收藏',
           url: '/favorites',
-          icon: StarIcon,
+          icon: <StarIcon />,
         },
       ],
     },
@@ -67,22 +71,25 @@ export function HomeSidebar({
       items: spaces.map((space) => ({
         title: space.name,
         url: `/${space.id}`,
-        icon: AppWindowMac,
+        icon: <AppWindowMac />,
       })),
     },
   ];
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
-      <SidebarHeader className="mt-4 mb-2 items-center justify-center">
-        <Image src="/next.svg" alt="logo" height={32} width={100} />
-      </SidebarHeader>
-      <SidebarContent>
-        {navGroups.map((props) => (
-          <NavGroup key={props.title} {...props} />
-        ))}
-      </SidebarContent>
-      <SidebarRail />
+      <div className="flex flex-1 flex-col">
+        <SidebarHeader className="mt-4 mb-2 items-center justify-center">
+          <Image src="/next.svg" alt="logo" height={32} width={100} />
+        </SidebarHeader>
+        <SidebarContent>
+          {navGroups.map((props) => (
+            <NavGroup key={props.title} {...props} />
+          ))}
+        </SidebarContent>
+        <SidebarRail />
+      </div>
+      <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
     </Sidebar>
   );
 }

@@ -1,3 +1,4 @@
+import { type LinkProps } from 'next/link';
 import { type TreeDataItem } from '@/components/tree-view';
 
 interface User {
@@ -14,16 +15,16 @@ interface Team {
 interface BaseNavItem {
   title: string;
   badge?: string;
-  icon?: React.ElementType;
+  icon?: React.ElementType | React.ReactNode;
 }
 
 type NavLink = BaseNavItem & {
-  url: string;
+  url: LinkProps<any>['href'];
   items?: never;
 };
 
 type NavCollapsible = BaseNavItem & {
-  items: (BaseNavItem & { url: string })[];
+  items: (BaseNavItem & { url: LinkProps<any>['href'] })[];
   url?: never;
 };
 

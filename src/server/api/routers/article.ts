@@ -160,17 +160,19 @@ export const articleRouter = createTRPCRouter({
 
   list: protectedProcedure
     .input(
-      z.object({
-        cursor: z.string().optional(),
-        limit: z.number().min(1).max(100).optional(),
-        parentId: z.string().optional(),
-        search: z.string().optional(),
-        spaceId: z.string().optional(),
-        type: ArticleTypeSchema.optional(),
-      })
+      z
+        .object({
+          cursor: z.string().optional(),
+          limit: z.number().min(1).max(100).optional(),
+          parentId: z.string().optional(),
+          search: z.string().optional(),
+          spaceId: z.string().optional(),
+          type: ArticleTypeSchema.optional(),
+        })
+        .optional()
     )
     .query(async ({ ctx, input }) => {
-      const { cursor, limit = 10, parentId, search } = input;
+      const { cursor, limit = 10, parentId, search, spaceId } = input ?? {};
 
       const articles = await ctx.db.article.findMany({
         cursor: cursor ? { id: cursor } : undefined,
@@ -188,7 +190,7 @@ export const articleRouter = createTRPCRouter({
         },
         take: limit ? limit + 1 : undefined,
         where: {
-          spaceId: input.spaceId,
+          spaceId: input?.spaceId,
           // status: ArticleStatusType.PUBLISHED,
           parentId: parentId,
           ...(search

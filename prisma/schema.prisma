@@ -1,25 +1,26 @@
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres", "driverAdapters"]
 }
 
 generator zod {
-  provider = "zod-prisma-types"
+  provider                         = "zod-prisma-types"
   useMultipleFiles                 = true
   createRelationValuesTypes        = true
-  createInputTypes = false
-  createPartialTypes                 = true
+  createInputTypes                 = true
+  createPartialTypes               = true
   createOptionalDefaultValuesTypes = true
-  writeNullishInModelTypes = true
+  writeNullishInModelTypes         = true
 }
 
 model User {
-  id               String       @id
+  id               String              @id
   name             String
   email            String
   emailVerified    Boolean
@@ -39,10 +40,10 @@ model User {
   invitations      Invitation[]
   twofactors       TwoFactor[]
   articles         Article[]
-  createdSpaces    Space[] @relation("CreatedSpaces")
-  ownedSpaces      Space[] @relation("OwnedSpaces")
-  articleActions ArticleUserAction[]
-  articleVersions ArticleVersion[]
+  createdSpaces    Space[]             @relation("CreatedSpaces")
+  ownedSpaces      Space[]             @relation("OwnedSpaces")
+  articleActions   ArticleUserAction[]
+  articleVersions  ArticleVersion[]
 
   @@unique([email])
   @@map("user")
@@ -105,12 +106,12 @@ model Space {
   createdAt   DateTime     @default(now())
   metadata    String?
   Member      Member[]
-  Invitation  Invitation[]  
+  Invitation  Invitation[]
   Article     Article[]
   createdById String
-  createdBy   User   @relation("CreatedSpaces", fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   User         @relation("CreatedSpaces", fields: [createdById], references: [id], onDelete: Cascade)
   ownerId     String
-  owner       User   @relation("OwnedSpaces", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner       User         @relation("OwnedSpaces", fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@unique([slug])
   @@map("space")
@@ -153,40 +154,39 @@ model TwoFactor {
 }
 
 model Article {
-  id        String   @id @default(nanoid())
-  title     String?
-  content   Json? /// @zod.custom.use(z.any().optional())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  spaceId   String
-  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  id              String           @id @default(nanoid())
+  title           String?
+  content         Json? /// @zod.custom.use(z.any().optional())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  authorId        String
+  author          User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  spaceId         String
+  space           Space            @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   articleVersions ArticleVersion[]
 
   parentId String?
   parent   Article?  @relation("ParentChild", fields: [parentId], references: [id])
-  children         Article[] @relation("ParentChild")
+  children Article[] @relation("ParentChild")
 
-  coverImage  String?
-  icon        String?
-  status      ArticleStatusType @default(DRAFT)
-  type        ArticleType
+  coverImage     String?
+  icon           String?
+  status         ArticleStatusType     @default(DRAFT)
+  type           ArticleType
   permissionType ArticlePermissionType @default(ALL_CAN_VIEW_AND_EDIT)
-  userActions ArticleUserAction[]
+  userActions    ArticleUserAction[]
 
   @@map("article")
 }
 
-
 model ArticleVersion {
-  id         String   @id @default(nanoid())
+  id        String  @id @default(nanoid())
   articleId String
   article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  authorId     String
-  author       User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  title       String?
+  title   String?
   content Json?
 
   createdAt DateTime @default(now())
@@ -208,11 +208,10 @@ enum ArticleType {
 }
 
 enum ArticlePermissionType {
-  /** 所有人都能查看和编辑 */
   ALL_CAN_VIEW_AND_EDIT
-  /** 所有人都能查看，部分人可以编辑 */
+
   ALL_CAN_VIEW_SOME_CAN_EDIT
-  /** 特定人才能查看和编辑 */
+
   SOME_CAN_VIEW_AND_EDIT
 }
 
@@ -223,15 +222,16 @@ enum ArticleAction {
 }
 
 model ArticleUserAction {
-  id         String                @id @default(nanoid())
-  userId     String
-  user       User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  articleId  String
-  article    Article               @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  action ArticleAction
+  id        String        @id @default(nanoid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  articleId String
+  article   Article       @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  action    ArticleAction
 
   createdAt DateTime @default(now())
 
-  @@unique([userId, articleId]) // 每个用户对每篇文章只有一个权限
+  // 每个用户对每篇文章只有一个权限
+  @@unique([userId, articleId])
   @@map("article_user_action")
 }

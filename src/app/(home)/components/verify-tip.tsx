@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import { toast } from 'sonner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { authClient, useSession } from '@/lib/auth-client';
@@ -10,6 +11,56 @@ export function VerifyTip() {
   const timer = useRef<NodeJS.Timeout | null>(null);
   const [seconds, setSeconds] = useState(60);
   const [isPending, startTransition] = useTransition();
+  const email = session.data?.user?.email;
+  const emailVerified = session?.data?.user.emailVerified;
+  const [verified, setVerified] = useState(emailVerified);
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const reconnectTimer = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (session.data?.user.emailVerified) {
+      setVerified(true);
+    }
+  }, [session]);
+
+  const connect = useCallback(() => {
+    if (!email) return;
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+
+    const es = new EventSource(
+      `/api/email/verified?email=${encodeURIComponent(email)}`
+    );
+    eventSourceRef.current = es;
+
+    es.onmessage = (event) => {
+      if (event.data === 'email-verified') {
+        setVerified(true);
+        es.close(); // 关闭连接（可选）
+      }
+    };
+
+    es.onerror = () => {
+      console.warn('SSE disconnected, retrying in 5s...');
+      es.close();
+
+      if (!verified) {
+        reconnectTimer.current = setTimeout(connect, 5000); // 重连
+      }
+    };
+  }, [email, verified]);
+
+  useEffect(() => {
+    connect();
+
+    return () => {
+      eventSourceRef.current?.close();
+      if (reconnectTimer.current) {
+        clearTimeout(reconnectTimer.current);
+      }
+    };
+  }, [connect]);
 
   const startTimer = () => {
     timer.current = setInterval(() => {
@@ -25,9 +76,9 @@ export function VerifyTip() {
     }
   }, [seconds]);
 
-  if (!session?.data?.user?.email) return null;
+  if (!email) return null;
 
-  if (session?.data?.user.emailVerified) return null;
+  if (verified) return null;
 
   const sendVerificationEmail = () => {
     startTransition(async () => {

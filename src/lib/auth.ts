@@ -14,6 +14,7 @@ import {
   organization,
   twoFactor,
 } from 'better-auth/plugins';
+import { notifyEmailVerified } from '@/app/api/email/verified/route';
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
 import { resend } from '@/lib/resend';
@@ -57,7 +58,7 @@ export const auth = betterAuth({
   },
   emailVerification: {
     sendOnSignUp: true,
-    autoSignInAfterVerification: true,
+    // autoSignInAfterVerification: false,
     async sendVerificationEmail({ user, url }) {
       const fromEmail = process.env.BETTER_AUTH_EMAIL;
       if (!fromEmail) {
@@ -69,7 +70,11 @@ export const auth = betterAuth({
         subject: '邮箱验证',
         html: `<a href="${url}">Hi： ${user.name}，点击此链接以验证你的邮箱</a>`,
       });
-      console.log(res, user.email);
+      console.log('url', url);
+      console.log('res', res.data);
+    },
+    afterEmailVerification: async (user) => {
+      notifyEmailVerified(user.email);
     },
   },
   socialProviders: {
