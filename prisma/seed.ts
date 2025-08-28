@@ -1,8 +1,19 @@
-import prisma from '../src/lib/prisma.ts';
+import prisma from '@/lib/prisma.ts';
 
 export default async function main() {
-  const verificationCodes = await prisma.emailVerificationCode.findMany();
-  console.log(verificationCodes);
+  prisma.user.create({
+    data: {
+      name: 'liulidao',
+      email: 'liulidao@example.com',
+    },
+  });
+
+  prisma.article.create({
+    data: {
+      title: 'hello world',
+      content: 'hello world',
+    },
+  });
 }
 
 main();

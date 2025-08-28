@@ -1,6 +1,8 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useTransition } from 'react';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import AutoForm, { AutoFormSubmit } from '@/components/ui/auto-form';
 import { Card } from '@/components/ui/card';
@@ -23,28 +25,61 @@ const resetPasswordSchema = z
   });
 
 export default function ResetPasswordPage() {
-  const token = useSearchParams().get('token');
+  const { token } = useParams<{ token: string }>();
   const [isPending, startTransition] = useTransition();
 
   if (!token) {
-    return <div>无效的token</div>;
+    return (
+      <Card className="p-6">
+        <div className="flex flex-col space-y-2 text-left">
+          <h1 className="flex items-center justify-between text-2xl font-semibold tracking-tight">
+            重置密码
+            <span className="text-muted-foreground text-right text-sm">
+              <Link
+                href="/sign-in"
+                className="hover:text-primary underline underline-offset-4"
+              >
+                返回登录
+              </Link>
+            </span>
+          </h1>
+
+          <p className="text-muted-foreground my-10 text-center text-sm">
+            无效的token
+          </p>
+        </div>
+      </Card>
+    );
   }
 
   const handleSubmit = async ({
     newPassword,
   }: z.infer<typeof resetPasswordSchema>) => {
     startTransition(async () => {
-      authClient.resetPassword({
+      const res = await authClient.resetPassword({
         newPassword,
         token,
       });
+      if (res.error) {
+        toast.error(res.error.message);
+      }
     });
   };
 
   return (
     <Card className="p-6">
       <div className="flex flex-col space-y-2 text-left">
-        <h1 className="text-2xl font-semibold tracking-tight">设置新密码</h1>
+        <h1 className="flex items-center justify-between text-2xl font-semibold tracking-tight">
+          设置新密码
+          <span className="text-muted-foreground text-right text-sm">
+            <Link
+              href="/sign-in"
+              className="hover:text-primary underline underline-offset-4"
+            >
+              返回登录
+            </Link>
+          </span>
+        </h1>
       </div>
       <AutoForm formSchema={resetPasswordSchema} onSubmit={handleSubmit}>
         <AutoFormSubmit loading={isPending} className="w-full!">

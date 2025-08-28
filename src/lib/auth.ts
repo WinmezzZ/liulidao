@@ -14,11 +14,12 @@ import {
   organization,
   twoFactor,
 } from 'better-auth/plugins';
+// import { passkey } from 'better-auth/plugins/passkey';
 import { notifyEmailVerified } from '@/app/api/email/verified/route';
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
 import { resend } from '@/lib/resend';
-import { redis } from '@/server/redis';
+// import { redis } from '@/server/redis';
 import prisma from './prisma';
 
 const betterAuthUrl = process.env.BETTER_AUTH_URL!;
@@ -51,7 +52,7 @@ export const auth = betterAuth({
         subject: '重置密码',
         react: reactResetPasswordEmail({
           username: user.email,
-          resetLink: url,
+          resetLink: `${betterAuthUrl}/reset-password/${token}`,
         }),
       });
     },
@@ -147,6 +148,7 @@ export const auth = betterAuth({
         },
       },
     }),
+    // passkey(),
     openAPI(),
     bearer(),
     multiSession(),
@@ -187,17 +189,17 @@ export const auth = betterAuth({
     }),
   ],
 
-  secondaryStorage: {
-    get: async (key) => {
-      const value = await redis.get(key);
-      return value ? value : null;
-    },
-    set: async (key, value, ttl) => {
-      if (ttl) await redis.set(key, value, 'EX', ttl);
-      else await redis.set(key, value);
-    },
-    delete: async (key) => {
-      await redis.del(key);
-    },
-  },
+  // secondaryStorage: {
+  //   get: async (key) => {
+  //     const value = await redis.get(key);
+  //     return value ? value : null;
+  //   },
+  //   set: async (key, value, ttl) => {
+  //     if (ttl) await redis.set(key, value, 'EX', ttl);
+  //     else await redis.set(key, value);
+  //   },
+  //   delete: async (key) => {
+  //     await redis.del(key);
+  //   },
+  // },
 });

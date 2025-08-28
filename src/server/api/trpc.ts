@@ -8,6 +8,7 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
+import { notFound } from 'next/navigation';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
@@ -32,7 +33,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     headers: opts.headers,
   });
 
-  const userId = session!.user.id;
+  const userId = session?.user.id;
 
   return {
     db,
@@ -128,7 +129,8 @@ export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
     if (!ctx.session?.user) {
-      throw new TRPCError({ code: 'UNAUTHORIZED' });
+      // throw new TRPCError({ code: 'UNAUTHORIZED' });
+      notFound();
     }
     return next({
       ctx: {

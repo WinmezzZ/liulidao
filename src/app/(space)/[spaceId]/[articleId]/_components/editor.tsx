@@ -5,9 +5,12 @@ import { type Value } from 'platejs';
 import { useState } from 'react';
 import { PlateEditor } from '@/components/editor/plate-editor';
 import { Input } from '@/components/ui/input';
+import { type api } from '@/trpc/server';
 import { ArticleAction } from './article-action';
 
-export default function Editor(props: Article) {
+export default function Editor(
+  props: NonNullable<Awaited<ReturnType<typeof api.article.findOne>>>
+) {
   const { title, content } = props;
   const [articleTitle, setArticleTitle] = useState(title || '');
   const [articleContent, setArticleContent] = useState<Value>([]);

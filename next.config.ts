@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
   experimental: {
     useCache: true,
     authInterrupts: true,
-    typedRoutes: ['1', 'true'].includes(process.env.TYPED_ROUTES ?? ''),
     // Forward browser logs to the terminal for easier debugging
     browserDebugInfoInTerminal: true,
 
@@ -29,10 +28,9 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
 
     // Enable persistent caching for the turbopack dev server and build.
-    turbopackPersistentCaching: true,
-
-    nodeMiddleware: true,
+    // turbopackPersistentCaching: true,
   },
+  typedRoutes: true,
   eslint: {
     ignoreDuringBuilds: true,
   },

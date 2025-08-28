@@ -5,12 +5,14 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
+  provider        = "prisma-client"
   previewFeatures = ["fullTextSearchPostgres", "driverAdapters"]
+  output   = "./generated/prisma"
 }
 
 generator zod {
   provider                         = "zod-prisma-types"
+  output   = "./generated/zod"
   useMultipleFiles                 = true
   createRelationValuesTypes        = true
   createInputTypes                 = true
@@ -25,8 +27,8 @@ model User {
   email            String
   emailVerified    Boolean
   image            String?
-  createdAt        DateTime
-  updatedAt        DateTime
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
   twoFactorEnabled Boolean?
   role             String?
   banned           Boolean?
@@ -53,8 +55,8 @@ model Session {
   id             String   @id
   expiresAt      DateTime
   token          String
-  createdAt      DateTime
-  updatedAt      DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   ipAddress      String?
   userAgent      String?
   userId         String
@@ -80,8 +82,8 @@ model Account {
   refreshTokenExpiresAt DateTime?
   scope                 String?
   password              String?
-  createdAt             DateTime
-  updatedAt             DateTime
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
 
   @@map("account")
 }
@@ -91,8 +93,8 @@ model Verification {
   identifier String
   value      String
   expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
 
   @@map("verification")
 }
@@ -124,7 +126,8 @@ model Member {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   role      String
-  createdAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("member")
 }

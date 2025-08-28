@@ -13,9 +13,12 @@ export const setPassword = async (password: string) => {
   return res.status;
 };
 
-export const getSession = async () => {
+export const getSession = async (
+  query?: Parameters<typeof auth.api.getSession>[0]['query']
+) => {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query,
   });
   return session;
 };

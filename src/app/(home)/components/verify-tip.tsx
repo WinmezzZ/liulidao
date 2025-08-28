@@ -1,27 +1,24 @@
 'use client';
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
-import { toast } from 'sonner';
+import { type getSession } from '@/app/actions/account';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { authClient, useSession } from '@/lib/auth-client';
+import { authClient } from '@/lib/auth-client';
 
-export function VerifyTip() {
-  const session = useSession();
+interface VerifyTipProps {
+  session: Awaited<ReturnType<typeof getSession>>;
+}
+
+export function VerifyTip({ session }: VerifyTipProps) {
   const [hasSended, setHasSended] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const [seconds, setSeconds] = useState(60);
   const [isPending, startTransition] = useTransition();
-  const email = session.data?.user?.email;
-  const emailVerified = session?.data?.user.emailVerified;
+  const email = session?.user?.email;
+  const emailVerified = session?.user.emailVerified;
   const [verified, setVerified] = useState(emailVerified);
   const eventSourceRef = useRef<EventSource | null>(null);
-  const reconnectTimer = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (session.data?.user.emailVerified) {
-      setVerified(true);
-    }
-  }, [session]);
+  let reconnectTimer: NodeJS.Timeout | null = null;
 
   const connect = useCallback(() => {
     if (!email) return;
@@ -33,11 +30,11 @@ export function VerifyTip() {
       `/api/email/verified?email=${encodeURIComponent(email)}`
     );
     eventSourceRef.current = es;
-
-    es.onmessage = (event) => {
+    es.onmessage = async (event) => {
       if (event.data === 'email-verified') {
+        console.log('email verified');
         setVerified(true);
-        es.close(); // 关闭连接（可选）
+        es.close(); // 关闭连接
       }
     };
 
@@ -46,7 +43,7 @@ export function VerifyTip() {
       es.close();
 
       if (!verified) {
-        reconnectTimer.current = setTimeout(connect, 5000); // 重连
+        reconnectTimer = setTimeout(connect, 5000); // 重连
       }
     };
   }, [email, verified]);
@@ -56,11 +53,11 @@ export function VerifyTip() {
 
     return () => {
       eventSourceRef.current?.close();
-      if (reconnectTimer.current) {
-        clearTimeout(reconnectTimer.current);
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
       }
     };
-  }, [connect]);
+  }, [connect, reconnectTimer]);
 
   const startTimer = () => {
     timer.current = setInterval(() => {
@@ -73,6 +70,7 @@ export function VerifyTip() {
       clearInterval(timer.current!);
       timer.current = null;
       setHasSended(false);
+      setSeconds(60);
     }
   }, [seconds]);
 
@@ -83,8 +81,7 @@ export function VerifyTip() {
   const sendVerificationEmail = () => {
     startTransition(async () => {
       const res = await authClient.sendVerificationEmail({
-        email: session.data!.user.email,
-        callbackURL: '/',
+        email: session!.user.email,
       });
       if (res.data) {
         setHasSended(true);
@@ -97,9 +94,9 @@ export function VerifyTip() {
     <Alert className="bg-gray-100 py-1">
       <AlertDescription className="flex items-center gap-4">
         {hasSended ? (
-          <p>验证邮件已发送至{session.data!.user.email}，请查收邮箱</p>
+          <span>验证邮件已发送至{session!.user.email}，请查收邮箱</span>
         ) : (
-          <p>你的邮箱还未验证，请先验证邮箱</p>
+          <span>你的邮箱还未验证，请先验证邮</span>
         )}
         <Button
           className="h-6"

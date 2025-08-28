@@ -13,8 +13,6 @@ import {
 import {
   ArticleOptionalDefaultsSchema,
   ArticlePartialSchema,
-  ArticleSchema,
-  ArticleStatusTypeSchema,
   ArticleTypeSchema,
 } from '@prisma-generated/zod';
 import { spaceRouter } from './space';

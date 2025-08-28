@@ -51,6 +51,8 @@ export async function GET(req: NextRequest) {
 
 // 服务端调用此方法通知客户端邮箱验证成功
 export function notifyEmailVerified(email: string) {
+  console.log('client', clients);
+  console.log('eamil', email);
   for (const client of clients) {
     if (client.email === email) {
       client.send('email-verified');
