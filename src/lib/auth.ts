@@ -14,7 +14,7 @@ import {
   organization,
   twoFactor,
 } from 'better-auth/plugins';
-// import { passkey } from 'better-auth/plugins/passkey';
+import { passkey } from 'better-auth/plugins/passkey';
 import { notifyEmailVerified } from '@/app/api/email/verified/route';
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
@@ -26,7 +26,7 @@ const betterAuthUrl = process.env.BETTER_AUTH_URL!;
 const fromEmail = process.env.BETTER_AUTH_EMAIL!;
 
 export const auth = betterAuth({
-  trustedOrigins: [process.env.BASE_URL!],
+  trustedOrigins: [process.env.BASE_URL!, 'http://10.10.204.38:3002'],
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -148,7 +148,7 @@ export const auth = betterAuth({
         },
       },
     }),
-    // passkey(),
+    passkey(),
     openAPI(),
     bearer(),
     multiSession(),

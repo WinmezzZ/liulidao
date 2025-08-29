@@ -11,11 +11,11 @@ import { authClient } from '@/lib/auth-client';
 const resetPasswordSchema = z
   .object({
     newPassword: z
-      .string({ required_error: '请输入邮箱地址' })
+      .string({ error: '请输入邮箱地址' })
       .email('请输入正确的邮箱地址')
       .describe('请输入你的邮箱地址'),
     confirmPassword: z
-      .string({ required_error: '请确认密码' })
+      .string({ error: '请确认密码' })
       .email('请输入正确的邮箱地址')
       .describe('请确认你的邮箱地址'),
   })

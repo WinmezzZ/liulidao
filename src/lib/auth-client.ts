@@ -7,6 +7,7 @@ import {
   oidcClient,
   oneTapClient,
   organizationClient,
+  passkeyClient,
   twoFactorClient,
   usernameClient,
 } from 'better-auth/client/plugins';
@@ -22,6 +23,7 @@ export const authClient = createAuthClient({
     magicLinkClient(),
     emailOTPClient(),
     usernameClient(),
+    passkeyClient(),
     oidcClient(),
     genericOAuthClient(),
     oneTapClient({
@@ -30,10 +32,9 @@ export const authClient = createAuthClient({
   ],
   fetchOptions: {
     async onError(e) {
-      console.log('e', e);
       if (e.error.code in errorCodes) {
         toast.error(getErrorMessage(e.error));
-      } else if ('responseText' in e) {
+      } else if ('responseText' in e && e.responseText) {
         toast.error(e.responseText as string);
       }
     },

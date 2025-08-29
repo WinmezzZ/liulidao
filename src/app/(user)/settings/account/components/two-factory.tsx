@@ -31,6 +31,7 @@ export function TwoFactory() {
         placeholder: '请输入登录密码',
         type: 'password',
       },
+      validator: (value) => !!value,
       onConfirm: async (close, inputText) => {
         const res = await authClient.twoFactor.generateBackupCodes({
           password: inputText,
@@ -52,6 +53,7 @@ export function TwoFactory() {
       if (res.data) {
         toast.success('验证成功');
         setPinCode('');
+        setTotpUri('');
       }
     }
   };
@@ -64,20 +66,15 @@ export function TwoFactory() {
         placeholder: '请输入登录密码',
         type: 'password',
       },
+      validator: (value) => !!value,
       onConfirm: async (close, inputText) => {
         const res = await authClient.twoFactor.enable({
           password: inputText,
         });
         if (res.data) {
-          // const res = await authClient.twoFactor.getTotpUri({ password: inputText });
           setTotpUri(res.data.totpURI);
           setPinCode('');
           close();
-          // if (res.error) {
-          //   toast.error(getErrorMessage(res.error.code));
-          // } else {
-          //   setTotpUri(res.data.totpURI);
-          // }
         }
       },
     });
@@ -103,8 +100,12 @@ export function TwoFactory() {
       </div>
       {totpUri && (
         <div className="mb-4 flex flex-col gap-8">
-          <p>请使用身份验证器应用或浏览器扩展程序进行扫描。</p>
-          <QRCode value={totpUri} />
+          <p className="text-mute mt-4 text-center text-sm">
+            请使用身份验证器应用或浏览器扩展程序进行扫描。
+          </p>
+          <div className="flex justify-center">
+            <QRCode value={totpUri} />
+          </div>
           <div className="grid w-full items-center gap-1.5">
             <div className="items-top flex space-x-2">
               <Checkbox id="trustDevice" />

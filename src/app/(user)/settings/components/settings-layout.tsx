@@ -14,6 +14,10 @@ const sidebarNavItems = [
     href: '/settings/account',
   },
   {
+    title: '登录设备',
+    href: '/settings/device-session',
+  },
+  {
     title: '通用设置',
     href: '/settings/appearance',
   },

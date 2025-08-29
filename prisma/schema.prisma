@@ -7,12 +7,12 @@ datasource db {
 generator client {
   provider        = "prisma-client"
   previewFeatures = ["fullTextSearchPostgres", "driverAdapters"]
-  output   = "./generated/prisma"
+  output          = "./generated/prisma"
 }
 
 generator zod {
   provider                         = "zod-prisma-types"
-  output   = "./generated/zod"
+  output                           = "./generated/zod"
   useMultipleFiles                 = true
   createRelationValuesTypes        = true
   createInputTypes                 = true
@@ -25,7 +25,7 @@ model User {
   id               String              @id
   name             String
   email            String
-  emailVerified    Boolean
+  emailVerified    Boolean  @default(false)
   image            String?
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
@@ -46,6 +46,8 @@ model User {
   ownedSpaces      Space[]             @relation("OwnedSpaces")
   articleActions   ArticleUserAction[]
   articleVersions  ArticleVersion[]
+
+  passkeys Passkey[]
 
   @@unique([email])
   @@map("user")
@@ -82,8 +84,8 @@ model Account {
   refreshTokenExpiresAt DateTime?
   scope                 String?
   password              String?
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   @@map("account")
 }
@@ -237,4 +239,21 @@ model ArticleUserAction {
   // 每个用户对每篇文章只有一个权限
   @@unique([userId, articleId])
   @@map("article_user_action")
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+
+  @@map("passkey")
 }

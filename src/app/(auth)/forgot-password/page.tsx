@@ -10,7 +10,7 @@ import { checkEmailExist } from './action';
 
 const forgetPasswordSchema = z.object({
   email: z
-    .string({ required_error: '请输入邮箱地址' })
+    .string({ error: '请输入邮箱地址' })
     .email('请输入正确的邮箱地址')
     .describe('请输入你的邮箱地址'),
 });

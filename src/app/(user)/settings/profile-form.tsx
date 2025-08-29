@@ -24,16 +24,12 @@ const profileFormSchema = z.object({
   nickname: z
     .string()
     .min(2, {
-      message: '昵称最少2个字符',
+      error: '昵称最少2个字符',
     })
     .max(30, {
-      message: '昵称最多20个字符',
+      error: '昵称最多20个字符',
     }),
-  email: z
-    .string({
-      required_error: '请输入邮箱地址',
-    })
-    .email({ message: '请输入有效的邮箱' }),
+  email: z.email({ error: '请输入有效的邮箱' }),
   bio: z.string().optional(),
   avatar: z.string(),
 });

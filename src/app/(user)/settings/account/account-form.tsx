@@ -9,8 +9,10 @@ import google from '@/assets/svg/logo/google.svg';
 import { useConfirmDialog } from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { env } from '@/env';
 import { authClient, useSession } from '@/lib/auth-client';
 import { getUserAccounts } from './action';
+import { Passkeys } from './components/passkeys';
 import { TwoFactory } from './components/two-factory';
 import { UpdatePassword } from './components/update-password';
 
@@ -162,6 +164,14 @@ export function AccountForm() {
         </CardHeader>
         <CardContent>
           <TwoFactory />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>通行证秘钥（Passkey）</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Passkeys />
         </CardContent>
       </Card>
     </div>

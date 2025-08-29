@@ -4,7 +4,7 @@ export const updatePasswordSchema = z
   .object({
     currentPassword: z
       .string({
-        required_error: '旧密码不能为空',
+        error: '旧密码不能为空',
       })
       .min(6, {
         message: '旧密码最少6个字符',
@@ -12,7 +12,7 @@ export const updatePasswordSchema = z
       .describe('旧密码'),
     newPassword: z
       .string({
-        required_error: '新密码不能为空',
+        error: '新密码不能为空',
       })
       .min(6, {
         message: '新密码最少6个字符',
@@ -20,7 +20,7 @@ export const updatePasswordSchema = z
       .describe('新密码'),
     confirmNewPassword: z
       .string({
-        required_error: '确认密码不能为空',
+        error: '确认密码不能为空',
       })
       .min(6, {
         message: '确认密码最少6个字符',
@@ -33,7 +33,7 @@ export const updatePasswordSchema = z
       return val.newPassword === val.confirmNewPassword;
     },
     {
-      message: '确认密码不一致',
+      error: '确认密码不一致',
       path: ['confirmPassword'],
     }
   );

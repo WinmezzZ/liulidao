@@ -84,12 +84,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               render={({ field }) => (
                 <FormItem className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>密码</FormLabel>
                     <Link
                       href="/forgot-password"
                       className="text-muted-foreground text-sm font-medium hover:opacity-75"
                     >
-                      Forgot password?
+                      忘记密码？
                     </Link>
                   </div>
                   <FormControl>
@@ -109,12 +109,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-background text-muted-foreground px-2">
-                  Or continue with
+                  其他登录方式
                 </span>
               </div>
             </div>
 
-            <FormFooter isLoading={isPending} />
+            <FormFooter />
           </div>
         </form>
       </Form>
