@@ -151,7 +151,9 @@ export const auth = betterAuth({
     passkey(),
     openAPI(),
     bearer(),
-    multiSession(),
+    multiSession({
+      maximumSessions: 5  
+    }),
     oAuthProxy(),
     nextCookies(),
     oneTap({

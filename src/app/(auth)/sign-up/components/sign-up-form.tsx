@@ -211,7 +211,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               </div>
             </div>
 
-            <FormFooter isLoading={isPending} />
+            <FormFooter />
           </div>
         </form>
       </Form>

@@ -39,7 +39,7 @@ export function FormFooter() {
   };
   return (
     <div className="flex flex-col items-center gap-2">
-      <Button
+       <Button
         variant="outline"
         className="w-full"
         type="button"

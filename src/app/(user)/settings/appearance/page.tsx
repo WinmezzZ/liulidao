@@ -1,11 +1,10 @@
 import { Separator } from '@/components/ui/separator';
 
 import { AppearanceForm } from './appearance-form';
-import SettingsLayout from '../components/settings-layout';
 
 export default function SettingsAppearancePage() {
   return (
-    <SettingsLayout className="space-y-6">
+    <div>
       <div>
         <h3 className="text-lg font-medium">Appearance</h3>
         <p className="text-muted-foreground text-sm">
@@ -15,6 +14,6 @@ export default function SettingsAppearancePage() {
       </div>
       <Separator />
       <AppearanceForm />
-    </SettingsLayout>
+    </div>
   );
 }

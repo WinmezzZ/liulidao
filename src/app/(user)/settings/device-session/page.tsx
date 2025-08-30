@@ -1,46 +1,18 @@
-import { type Session } from 'better-auth';
 import { format } from 'date-fns';
-import { Loader } from 'lucide-react';
 import { headers } from 'next/headers';
-import Image from 'next/image';
-import { useEffect, useState, useTransition } from 'react';
 import { UAParser } from 'ua-parser-js';
-import { setPassword } from '@/app/actions/account';
-import { useConfirmDialog } from '@/components/confirm-dialog';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
-import { authClient } from '@/lib/auth-client';
 import { qqwry } from '@/lib/qqwry';
+import { Laptop, Smartphone } from 'lucide-react';
+import RevokeButton from './revoke-button';
+import { getSession } from '@/app/actions/account';
 
 export default async function SessionDevice() {
-  const list = await auth.api.listDeviceSessions({
+  const list = await auth.api.listSessions({
     headers: await headers(),
   });
-
-  console.log(list);
-
-  // const getData = async () => {
-  //   startTransition(async () => {
-  //     const res = await authClient.multiSession.listDeviceSessions();
-  //     if (res.data) {
-  //       setList(res.data.map((item) => item.session));
-  //     }
-  //   });
-  // };
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-  // const confirm = useConfirmDialog();
-
-  // const handleOffline = async (token: string) => {
-  //   const res = await authClient.multiSession.revoke({
-  //     sessionToken: token,
-  //   });
-  //   if (!res.error) {
-  //     getData();
-  //   }
-  // };
+  const currentSession = await getSession()
 
   const getAddressInfo = (ipAddress?: string | null) => {
     if (ipAddress) {
@@ -50,48 +22,61 @@ export default async function SessionDevice() {
     return '本地开发环境';
   };
 
+  const getDeviceInfo = (userAgent: string) => {
+    return UAParser(userAgent);
+  };  
+
   return (
     <div className="space-y-8 pt-4">
+      <div className="space-y-0.5">
+        <h2 className="text-2xl font-bold tracking-tight">登录设备管理</h2>
+        <p className="text-muted-foreground">
+          在这里查看所有正在登录的  设备
+        </p>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>登录设备管理</CardTitle>
+          <CardTitle>WEB 端登录</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="flex flex-col gap-2">
-            {list.map(({ session }) => (
+          <ul className="flex flex-col gap-2 text-sm">
+            {list.map((session) => (
               <li
                 key={session.id}
-                className="flex items-center justify-between"
+                className="flex items-center justify-between border-b border-b-gray-200 pb-4"
               >
-                <div className="flex flex-1 gap-2">
+                <div className="flex flex-1 items-center gap-8">
+                  {session.userAgent &&
+                  getDeviceInfo(session.userAgent).device.type === 'mobile' ? (
+                    <Smartphone />
+                  ) : (
+                    <Laptop />
+                  )}
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm">{session.ipAddress}</span>
-                    <span className="text-sm">
-                      {getAddressInfo(session.ipAddress)}
+                    <div className="flex items-center gap-1">
+                      <span>{session.ipAddress}</span>
+                      <span>
+                        {getAddressInfo(session.ipAddress)}
+                      </span>
+                      {session.id === currentSession?.session.id && <span className="ml-2  text-xs text-green-500">（当前登录设备）</span>}
+                    </div>
+                    {session.userAgent && (
+                      <div className="flex items-center gap-1">
+                        <span>
+                          {getDeviceInfo(session.userAgent)?.os?.name}
+                        </span>
+                        <span>
+                          {getDeviceInfo(session.userAgent)?.browser.name}
+                        </span>
+                      </div>
+                    )}
+                    <span className='text-sm'>
+                      最近登录时间：
+                      {format(session.updatedAt, 'yyyy-MM-dd HH:mm:ss')}
                     </span>
                   </div>
-                  {session.userAgent && (
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm">
-                        {UAParser(session.userAgent)?.os?.name}
-                      </span>
-                      <span className="text-sm">
-                        {UAParser(session.userAgent)?.browser.name}
-                      </span>
-                    </div>
-                  )}
-                  <span>
-                    最近登录时间：
-                    {format(session.updatedAt, 'yyyy-MM-dd HH:mm:ss')}
-                  </span>
                 </div>
-                {/* <Button
-                  className="w-20"
-                  variant="secondary"
-                  // onClick={() => handleOffline(session.token)}
-                >
-                  下线
-                </Button> */}
+                <RevokeButton token={session.token} />
               </li>
             ))}
           </ul>

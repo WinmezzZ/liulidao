@@ -75,7 +75,7 @@ export function Passkeys() {
     <div>
       <Button onClick={handleCreatePasskey}>添加 Passkey</Button>
       {data?.length ? (
-        <ul className="mt-4">
+        <ul className="mt-4 flex flex-col gap-2">
           {data.map((passkey) => (
             <li key={passkey.id} className="flex items-center justify-between">
               <div className="flex items-center gap-1">
