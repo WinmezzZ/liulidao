@@ -14,25 +14,25 @@ importers:
     dependencies:
       '@ai-sdk/openai':
         specifier: ^1.3.17
-        version: 1.3.17(zod@4.1.4)
+        version: 1.3.17(zod@4.1.5)
       '@ai-sdk/provider':
         specifier: ^1.1.3
         version: 1.1.3
       '@ai-sdk/provider-utils':
         specifier: ^2.2.8
-        version: 2.2.8(zod@4.1.4)
+        version: 2.2.8(zod@4.1.5)
       '@ai-sdk/react':
         specifier: ^1.2.9
-        version: 1.2.9(react@19.1.0)(zod@4.1.4)
+        version: 1.2.9(react@19.1.0)(zod@4.1.5)
       '@ariakit/react':
         specifier: ^0.4.17
         version: 0.4.17(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@autoform/react':
         specifier: ^3.0.0
-        version: 3.0.0(react-hook-form@7.56.1(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.4)
+        version: 3.0.0(react-hook-form@7.62.0(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.5)
       '@autoform/zod':
         specifier: ^2.1.0
-        version: 2.1.0(zod@4.1.4)
+        version: 2.1.0(zod@4.1.5)
       '@emoji-mart/data':
         specifier: 1.2.1
         version: 1.2.1
@@ -40,8 +40,8 @@ importers:
         specifier: ^9.7.0
         version: 9.7.0
       '@hookform/resolvers':
-        specifier: ^4.1.3
-        version: 4.1.3(react-hook-form@7.56.1(react@19.1.0))
+        specifier: ^5.2.1
+        version: 5.2.1(react-hook-form@7.62.0(react@19.1.0))
       '@oslojs/crypto':
         specifier: ^1.0.1
         version: 1.0.1
@@ -175,8 +175,8 @@ importers:
         specifier: ^1.1.14
         version: 1.1.14(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-label':
-        specifier: ^2.1.3
-        version: 2.1.4(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^2.1.7
+        version: 2.1.7(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-popover':
         specifier: ^1.1.11
         version: 1.1.11(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -193,8 +193,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-slot':
-        specifier: ^1.2.0
-        version: 1.2.0(@types/react@19.1.2)(react@19.1.0)
+        specifier: ^1.2.3
+        version: 1.2.3(@types/react@19.1.2)(react@19.1.0)
       '@radix-ui/react-switch':
         specifier: ^1.1.3
         version: 1.2.2(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -210,6 +210,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.4
         version: 1.2.4(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-use-controllable-state':
+        specifier: ^1.2.2
+        version: 1.2.2(@types/react@19.1.2)(react@19.1.0)
       '@react-email/components':
         specifier: ^0.0.34
         version: 0.0.34(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -218,7 +221,7 @@ importers:
         version: 1.1.0(@slate-yjs/core@1.0.2(slate@0.117.0)(yjs@13.6.26))(react@19.1.0)(slate-react@0.117.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(slate-dom@0.116.0(slate@0.117.0))(slate@0.117.0))(slate@0.117.0)(yjs@13.6.26)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.0
-        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.4)
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.5)
       '@tabler/icons-react':
         specifier: ^3.31.0
         version: 3.31.0(react@19.1.0)
@@ -263,10 +266,10 @@ importers:
         version: 3.9.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       ai:
         specifier: ^4.3.9
-        version: 4.3.9(react@19.1.0)(zod@4.1.4)
+        version: 4.3.9(react@19.1.0)(zod@4.1.5)
       better-auth:
         specifier: ^1.3.7
-        version: 1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.4)
+        version: 1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -315,6 +318,9 @@ importers:
       lucide-react:
         specifier: ^0.477.0
         version: 0.477.0(react@19.1.0)
+      motion:
+        specifier: ^12.23.12
+        version: 12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       ms:
         specifier: 3.0.0-canary.1
         version: 3.0.0-canary.1
@@ -326,7 +332,7 @@ importers:
         version: 15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-safe-action:
         specifier: ^7.10.4
-        version: 7.10.5(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.4)
+        version: 7.10.5(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.5)
       next-themes:
         specifier: ^0.4.4
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -361,8 +367,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       react-hook-form:
-        specifier: ^7.55.0
-        version: 7.56.1(react@19.1.0)
+        specifier: ^7.62.0
+        version: 7.62.0(react@19.1.0)
       react-image-crop:
         specifier: ^11.0.10
         version: 11.0.10(react@19.1.0)
@@ -439,12 +445,12 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
-        specifier: ^4.1.4
-        version: 4.1.4
+        specifier: ^4.1.5
+        version: 4.1.5
     devDependencies:
       '@better-auth/cli':
         specifier: ^1.3.7
-        version: 1.3.7(@opentelemetry/api@1.9.0)(@types/pg@8.11.13)(@types/react@19.1.2)(kysely@0.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.4)
+        version: 1.3.7(@opentelemetry/api@1.9.0)(@types/pg@8.11.13)(@types/react@19.1.2)(kysely@0.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)
       '@eslint/js':
         specifier: ^9.24.0
         version: 9.25.1
@@ -1112,10 +1118,10 @@ packages:
     peerDependencies:
       react-hook-form: ^7.0.0
 
-  '@hookform/resolvers@4.1.3':
-    resolution: {integrity: sha512-Jsv6UOWYTrEFJ/01ZrnwVXs7KDvP8XIo115i++5PWvNkNvkrsTfGiLS6w+eJ57CYtUtDQalUWovCZDHFJ8u1VQ==}
+  '@hookform/resolvers@5.2.1':
+    resolution: {integrity: sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ==}
     peerDependencies:
-      react-hook-form: ^7.0.0
+      react-hook-form: ^7.55.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2110,8 +2116,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@radix-ui/react-label@2.1.4':
-    resolution: {integrity: sha512-wy3dqizZnZVV4ja0FNnUhIWNwWdoldXrneEyUcVtLYDAt8ovGS4ridtMAOGgXBBIfggL4BOveVWsjXDORdGEQg==}
+  '@radix-ui/react-label@2.1.7':
+    resolution: {integrity: sha512-YT1GqPSL8kJn20djelMX7/cTRp/Y9w5IZHvfxQTVHrOqa2yMl7i/UfMqKRU5V7mEyKTrUVgJXhNQPVCG8PBLoQ==}
     peerDependencies:
       '@types/react': 19.1.2
       '@types/react-dom': 19.1.2
@@ -4234,6 +4240,20 @@ packages:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
 
+  framer-motion@12.23.12:
+    resolution: {integrity: sha512-6e78rdVtnBvlEVgu6eFEAgG9v3wLnYEboM8I5O5EXvfKC8gxGQB8wXJdhkMy10iVcn05jl6CNw7/HTsTCfwcWg==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   fresh@2.0.0:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
@@ -5169,6 +5189,26 @@ packages:
   mlly@1.8.0:
     resolution: {integrity: sha512-l8D9ODSRWLe2KHJSifWGwBqpTZXIXTeo8mlKjY+E2HAakaTeNpqAyBZ8GSqLzHgw4XmHmC8whvpjJNMbFZN7/g==}
 
+  motion-dom@12.23.12:
+    resolution: {integrity: sha512-RcR4fvMCTESQBD/uKQe49D5RUeDOokkGRmz4ceaJKDBgHYtZtntC/s2vLvY38gqGaytinij/yi3hMcWVcEF5Kw==}
+
+  motion-utils@12.23.6:
+    resolution: {integrity: sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==}
+
+  motion@12.23.12:
+    resolution: {integrity: sha512-8jCD8uW5GD1csOoqh1WhH1A6j5APHVE15nuBkFeRiMzYBdRwyAHmSP/oXSuW0WJPZRXTFdBoG4hY9TFWNhhwng==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -5745,8 +5785,8 @@ packages:
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
-  react-hook-form@7.56.1:
-    resolution: {integrity: sha512-qWAVokhSpshhcEuQDSANHx3jiAEFzu2HAaaQIzi/r9FNPm1ioAvuJSD4EuZzWd7Al7nTRKcKPnBKO7sRn+zavQ==}
+  react-hook-form@7.62.0:
+    resolution: {integrity: sha512-7KWFejc98xqG/F4bAxpL41NB3o1nnvQO1RWZT3TqRZYL8RryQETGfEdVnJN2fy1crCiBLLjkRBVK05j24FxJGA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -6675,8 +6715,8 @@ packages:
   zod@3.24.3:
     resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
 
-  zod@4.1.4:
-    resolution: {integrity: sha512-2YqJuWkU6IIK9qcE4k1lLLhyZ6zFw7XVRdQGpV97jEIZwTrscUw+DY31Xczd8nwaoksyJUIxCojZXwckJovWxA==}
+  zod@4.1.5:
+    resolution: {integrity: sha512-rcUUZqlLJgBC33IT3PNMgsCq6TzLQEG/Ei/KTCU0PedSWRMAXoOUN+4t/0H+Q8bdnLPdqUYnvboJT0bn/229qg==}
 
   zustand-x@6.1.0:
     resolution: {integrity: sha512-lW1Fs29bLCrerWDa3lZLPuEn+ZkbSGzXdwdImKLJUtI2OqlDjpcFac5WTzCPs2ul/igwXFnGiKH1mdn+1Pl2mw==}
@@ -6706,46 +6746,46 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/openai@1.3.17(zod@4.1.4)':
+  '@ai-sdk/openai@1.3.17(zod@4.1.5)':
     dependencies:
       '@ai-sdk/provider': 1.1.3
-      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.4)
-      zod: 4.1.4
+      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.5)
+      zod: 4.1.5
 
-  '@ai-sdk/provider-utils@2.2.7(zod@4.1.4)':
+  '@ai-sdk/provider-utils@2.2.7(zod@4.1.5)':
     dependencies:
       '@ai-sdk/provider': 1.1.3
       nanoid: 3.3.11
       secure-json-parse: 2.7.0
-      zod: 4.1.4
+      zod: 4.1.5
 
-  '@ai-sdk/provider-utils@2.2.8(zod@4.1.4)':
+  '@ai-sdk/provider-utils@2.2.8(zod@4.1.5)':
     dependencies:
       '@ai-sdk/provider': 1.1.3
       nanoid: 3.3.11
       secure-json-parse: 2.7.0
-      zod: 4.1.4
+      zod: 4.1.5
 
   '@ai-sdk/provider@1.1.3':
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@1.2.9(react@19.1.0)(zod@4.1.4)':
+  '@ai-sdk/react@1.2.9(react@19.1.0)(zod@4.1.5)':
     dependencies:
-      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.4)
-      '@ai-sdk/ui-utils': 1.2.8(zod@4.1.4)
+      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.5)
+      '@ai-sdk/ui-utils': 1.2.8(zod@4.1.5)
       react: 19.1.0
       swr: 2.3.3(react@19.1.0)
       throttleit: 2.1.0
     optionalDependencies:
-      zod: 4.1.4
+      zod: 4.1.5
 
-  '@ai-sdk/ui-utils@1.2.8(zod@4.1.4)':
+  '@ai-sdk/ui-utils@1.2.8(zod@4.1.5)':
     dependencies:
       '@ai-sdk/provider': 1.1.3
-      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.4)
-      zod: 4.1.4
-      zod-to-json-schema: 3.24.5(zod@4.1.4)
+      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.5)
+      zod: 4.1.5
+      zod-to-json-schema: 3.24.5(zod@4.1.5)
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -6778,14 +6818,14 @@ snapshots:
 
   '@autoform/core@2.1.0': {}
 
-  '@autoform/react@3.0.0(react-hook-form@7.56.1(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.4)':
+  '@autoform/react@3.0.0(react-hook-form@7.62.0(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.5)':
     dependencies:
       '@autoform/core': 2.1.0
       '@autoform/yup': 2.1.0(yup@1.6.1)
-      '@autoform/zod': 2.1.0(zod@4.1.4)
-      '@hookform/resolvers': 3.10.0(react-hook-form@7.56.1(react@19.1.0))
+      '@autoform/zod': 2.1.0(zod@4.1.5)
+      '@hookform/resolvers': 3.10.0(react-hook-form@7.62.0(react@19.1.0))
       react: 19.1.0
-      react-hook-form: 7.56.1(react@19.1.0)
+      react-hook-form: 7.62.0(react@19.1.0)
     transitivePeerDependencies:
       - yup
       - zod
@@ -6795,10 +6835,10 @@ snapshots:
       '@autoform/core': 2.1.0
       yup: 1.6.1
 
-  '@autoform/zod@2.1.0(zod@4.1.4)':
+  '@autoform/zod@2.1.0(zod@4.1.5)':
     dependencies:
       '@autoform/core': 2.1.0
-      zod: 4.1.4
+      zod: 4.1.5
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -7076,7 +7116,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@better-auth/cli@1.3.7(@opentelemetry/api@1.9.0)(@types/pg@8.11.13)(@types/react@19.1.2)(kysely@0.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.4)':
+  '@better-auth/cli@1.3.7(@opentelemetry/api@1.9.0)(@types/pg@8.11.13)(@types/react@19.1.2)(kysely@0.28.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)':
     dependencies:
       '@babel/core': 7.28.3
       '@babel/preset-react': 7.27.1(@babel/core@7.28.3)
@@ -7086,7 +7126,7 @@ snapshots:
       '@prisma/client': 5.22.0(prisma@5.22.0)
       '@types/better-sqlite3': 7.6.13
       '@types/prompts': 2.4.9
-      better-auth: 1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.4)
+      better-auth: 1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)
       better-sqlite3: 11.10.0
       c12: 2.0.4
       chalk: 5.4.1
@@ -7101,7 +7141,7 @@ snapshots:
       semver: 7.7.2
       tinyexec: 0.3.2
       yocto-spinner: 0.1.2
-      zod: 4.1.4
+      zod: 4.1.5
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@cloudflare/workers-types'
@@ -7362,14 +7402,14 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hookform/resolvers@3.10.0(react-hook-form@7.56.1(react@19.1.0))':
+  '@hookform/resolvers@3.10.0(react-hook-form@7.62.0(react@19.1.0))':
     dependencies:
-      react-hook-form: 7.56.1(react@19.1.0)
+      react-hook-form: 7.62.0(react@19.1.0)
 
-  '@hookform/resolvers@4.1.3(react-hook-form@7.56.1(react@19.1.0))':
+  '@hookform/resolvers@5.2.1(react-hook-form@7.62.0(react@19.1.0))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.56.1(react@19.1.0)
+      react-hook-form: 7.62.0(react@19.1.0)
 
   '@humanfs/core@0.19.1': {}
 
@@ -8365,9 +8405,9 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.1.2
 
-  '@radix-ui/react-label@2.1.4(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@radix-ui/react-label@2.1.7(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@radix-ui/react-primitive': 2.1.0(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-primitive': 2.1.3(@types/react-dom@19.1.2(@types/react@19.1.2))(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
     optionalDependencies:
@@ -8962,19 +9002,19 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.4)':
+  '@t3-oss/env-core@0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.5)':
     dependencies:
       arktype: 2.1.20
     optionalDependencies:
       typescript: 5.8.3
-      zod: 4.1.4
+      zod: 4.1.5
 
-  '@t3-oss/env-nextjs@0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.4)':
+  '@t3-oss/env-nextjs@0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.5)':
     dependencies:
-      '@t3-oss/env-core': 0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.4)
+      '@t3-oss/env-core': 0.13.0(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.5)
     optionalDependencies:
       typescript: 5.8.3
-      zod: 4.1.4
+      zod: 4.1.5
     transitivePeerDependencies:
       - arktype
 
@@ -9399,15 +9439,15 @@ snapshots:
       screenfull: 5.2.0
       tslib: 2.8.1
 
-  ai@4.3.9(react@19.1.0)(zod@4.1.4):
+  ai@4.3.9(react@19.1.0)(zod@4.1.5):
     dependencies:
       '@ai-sdk/provider': 1.1.3
-      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.4)
-      '@ai-sdk/react': 1.2.9(react@19.1.0)(zod@4.1.4)
-      '@ai-sdk/ui-utils': 1.2.8(zod@4.1.4)
+      '@ai-sdk/provider-utils': 2.2.7(zod@4.1.5)
+      '@ai-sdk/react': 1.2.9(react@19.1.0)(zod@4.1.5)
+      '@ai-sdk/ui-utils': 1.2.8(zod@4.1.5)
       '@opentelemetry/api': 1.9.0
       jsondiffpatch: 0.6.0
-      zod: 4.1.4
+      zod: 4.1.5
     optionalDependencies:
       react: 19.1.0
 
@@ -9549,7 +9589,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  better-auth@1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.4):
+  better-auth@1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5):
     dependencies:
       '@better-auth/utils': 0.2.6
       '@better-fetch/fetch': 1.1.18
@@ -9562,7 +9602,7 @@ snapshots:
       jose: 5.10.0
       kysely: 0.28.5
       nanostores: 0.11.4
-      zod: 4.1.4
+      zod: 4.1.5
     optionalDependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -10624,6 +10664,15 @@ snapshots:
 
   forwarded@0.2.0:
     optional: true
+
+  framer-motion@12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      motion-dom: 12.23.12
+      motion-utils: 12.23.6
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   fresh@2.0.0:
     optional: true
@@ -11812,6 +11861,20 @@ snapshots:
       pkg-types: 1.3.1
       ufo: 1.6.1
 
+  motion-dom@12.23.12:
+    dependencies:
+      motion-utils: 12.23.6
+
+  motion-utils@12.23.6: {}
+
+  motion@12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      framer-motion: 12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
   ms@2.1.3: {}
 
   ms@3.0.0-canary.1: {}
@@ -11851,14 +11914,14 @@ snapshots:
   negotiator@1.0.0:
     optional: true
 
-  next-safe-action@7.10.5(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.4):
+  next-safe-action@7.10.5(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(yup@1.6.1)(zod@4.1.5):
     dependencies:
       next: 15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
     optionalDependencies:
       yup: 1.6.1
-      zod: 4.1.4
+      zod: 4.1.5
 
   next-themes@0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
@@ -12221,7 +12284,7 @@ snapshots:
       '@prisma/generator-helper': 6.14.0
       '@prisma/internals': 6.14.0(typescript@5.8.3)
       prettier: 3.6.2
-      zod: 4.1.4
+      zod: 4.1.5
     transitivePeerDependencies:
       - magicast
       - prisma
@@ -12237,7 +12300,7 @@ snapshots:
       node-fetch: 3.3.2
       prettier: 3.6.2
       tslib: 2.8.1
-      zod: 4.1.4
+      zod: 4.1.5
     transitivePeerDependencies:
       - magicast
       - prisma
@@ -12367,7 +12430,7 @@ snapshots:
 
   react-fast-compare@3.2.2: {}
 
-  react-hook-form@7.56.1(react@19.1.0):
+  react-hook-form@7.62.0(react@19.1.0):
     dependencies:
       react: 19.1.0
 
@@ -13477,13 +13540,13 @@ snapshots:
       prisma: 6.6.0(typescript@5.8.3)
       zod: 3.24.3
 
-  zod-to-json-schema@3.24.5(zod@4.1.4):
+  zod-to-json-schema@3.24.5(zod@4.1.5):
     dependencies:
-      zod: 4.1.4
+      zod: 4.1.5
 
   zod@3.24.3: {}
 
-  zod@4.1.4: {}
+  zod@4.1.5: {}
 
   zustand-x@6.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(scheduler@0.26.0)(zustand@5.0.6(@types/react@19.1.2)(immer@10.1.1)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))):
     dependencies:

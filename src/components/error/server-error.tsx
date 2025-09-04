@@ -1,7 +1,11 @@
 'use client';
+import { type TRPC_ERROR_CODE_KEY } from '@trpc/server/unstable-core-do-not-import';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import ForbiddenError from './forbidden';
+import NotFoundError from './not-found';
+import UnauthorizedError from './unauthorized';
 
 interface ServerErrorProps extends React.HTMLAttributes<HTMLDivElement> {
   minimal?: boolean;
@@ -9,8 +13,17 @@ interface ServerErrorProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function ServerError(props: ServerErrorProps) {
+  console.log(props);
   const { className, minimal = false, error } = props;
   const router = useRouter();
+  const errorName = props.error.message as TRPC_ERROR_CODE_KEY;
+  if (errorName === 'UNAUTHORIZED') {
+    return <UnauthorizedError />;
+  } else if (errorName === 'FORBIDDEN') {
+    return <ForbiddenError />;
+  } else if (errorName === 'NOT_FOUND') {
+    return <NotFoundError />;
+  }
   return (
     <div className={cn('h-svh w-full', className)}>
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">

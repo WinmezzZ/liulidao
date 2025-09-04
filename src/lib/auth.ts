@@ -18,15 +18,16 @@ import { passkey } from 'better-auth/plugins/passkey';
 import { notifyEmailVerified } from '@/app/api/email/verified/route';
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
+import { env } from '@/env';
 import { resend } from '@/lib/resend';
 // import { redis } from '@/server/redis';
-import prisma from './prisma';
+import prisma, { db } from './prisma';
 
-const betterAuthUrl = process.env.BETTER_AUTH_URL!;
-const fromEmail = process.env.BETTER_AUTH_EMAIL!;
+const betterAuthUrl = `${env.BASE_PROTOCOL}://${env.BASE_HOST}:${env.BASE_PORT}`;
+const fromEmail = env.BETTER_AUTH_EMAIL;
 
 export const auth = betterAuth({
-  trustedOrigins: [process.env.BASE_URL!, 'http://10.10.204.38:3002'],
+  trustedOrigins: [betterAuthUrl],
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
@@ -84,7 +85,7 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
     },
     google: {
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     },
   },
@@ -152,19 +153,23 @@ export const auth = betterAuth({
     openAPI(),
     bearer(),
     multiSession({
-      maximumSessions: 5  
+      maximumSessions: 5,
     }),
     oAuthProxy(),
     nextCookies(),
-    oneTap({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-    }),
+    oneTap(),
     customSession(async (session) => {
+      const user = await db.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+      });
       return {
         ...session,
         user: {
           ...session.user,
-          dd: 'test',
+          font: user?.font,
+          theme: user?.theme,
         },
       };
     }),

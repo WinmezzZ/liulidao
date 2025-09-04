@@ -3,9 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { type HTMLAttributes, useEffect, useTransition } from 'react';
+import { type HTMLAttributes, useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { type z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { signIn } from '@/lib/auth-client';
+import { authClient, signIn } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 import { FormFooter } from '../../components/form-footer';
 import { signInSchema } from '../../schema';
@@ -29,7 +28,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
 
   useEffect(() => {
-    //  authClient.oneTap();
+     authClient.oneTap({
+      additionalOptions: {
+        use_fedcm_for_prompt: true
+      },
+      fetchOptions: {
+        headers: {
+          "Referrer-Policy": "no-referrer-when-downgrade",
+        },
+      }
+     })
   }, []);
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -100,7 +108,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               )}
             />
             <Button type="submit" className="mt-2" loading={isPending}>
-              Login
+              登录
             </Button>
 
             <div className="relative my-2">

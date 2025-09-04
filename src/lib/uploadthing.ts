@@ -6,7 +6,7 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
   editorUploader: f(['image', 'text', 'blob', 'pdf', 'video', 'audio'])
-    .middleware(() => {
+    .middleware(async ({ req }) => {
       return {};
     })
     .onUploadComplete(({ file }) => {

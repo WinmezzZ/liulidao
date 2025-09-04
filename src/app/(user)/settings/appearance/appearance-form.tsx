@@ -1,6 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTheme } from 'next-themes';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
@@ -23,43 +25,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { DEFAULT_FONT, fontNames, type FontType } from '@/lib/fonts';
+import { api } from '@/trpc/client';
+import { setAppearance } from './action';
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(['light', 'dark'], {
-    error: 'Please select a theme.',
-  }),
-  font: z.enum(['inter', 'manrope', 'system'], {
-    invalid_type_error: 'Select a font',
-    error: 'Please select a font.',
-  }),
+  theme: z.enum(['light', 'dark', 'system']),
+  font: z.enum(fontNames).optional(),
 });
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: 'light',
-};
-
 export function AppearanceForm() {
+  const { data: user } = api.user.info.useQuery({});
+  const { setTheme, theme } = useTheme();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
-    defaultValues,
+    defaultValues: {
+      theme: theme as AppearanceFormValues['theme'],
+      font: (user?.font as FontType) || DEFAULT_FONT,
+    },
   });
 
   function onSubmit(data: AppearanceFormValues) {
-    toast('You submitted the following values:', {
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    if (data.theme !== theme) {
+      setTheme(data.theme);
+    }
+    startTransition(() => {
+      setAppearance(data);
     });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-4">
         <FormField
           control={form.control}
           name="font"
@@ -70,19 +71,19 @@ export function AppearanceForm() {
                 <FormControl>
                   <Select {...field}>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Theme" />
+                      <SelectValue placeholder="字体" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="inter">Inter</SelectItem>
-                      <SelectItem value="manrope">Manrope</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
+                      {fontNames.map((font) => (
+                        <SelectItem key={font} value={font}>
+                          {font}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
               </div>
-              <FormDescription>
-                Set the font you want to use in the dashboard.
-              </FormDescription>
+              <FormDescription>设置应用字体</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -93,14 +94,12 @@ export function AppearanceForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel>Theme</FormLabel>
-              <FormDescription>
-                Select the theme for the dashboard.
-              </FormDescription>
+              <FormDescription>设置应用主题</FormDescription>
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="grid max-w-md grid-cols-2 gap-8 pt-2"
+                className="grid max-w-2xl grid-cols-3 gap-4 pt-2"
               >
                 <FormItem>
                   <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
@@ -123,9 +122,9 @@ export function AppearanceForm() {
                         </div>
                       </div>
                     </div>
-                    <span className="block w-full p-2 text-center font-normal">
-                      Light
-                    </span>
+                    <div className="block w-full p-2 text-center font-normal">
+                      亮色
+                    </div>
                   </FormLabel>
                 </FormItem>
                 <FormItem>
@@ -150,7 +149,33 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      Dark
+                      深色
+                    </span>
+                  </FormLabel>
+                </FormItem>
+                <FormItem>
+                  <FormLabel className="[&:has([data-state=checked])>div]:border-primary cursor-pointer">
+                    <FormControl>
+                      <RadioGroupItem value="system" className="sr-only" />
+                    </FormControl>
+                    <div className="border-muted hover:border-accent items-center rounded-md border-2 p-1 transition-colors">
+                      <div className="space-y-2 rounded-sm bg-gradient-to-r from-[#ecedef] to-slate-950 p-2">
+                        <div className="space-y-2 rounded-md bg-gradient-to-r from-white to-slate-800 p-2 shadow-sm">
+                          <div className="h-2 w-[80px] rounded-lg bg-gradient-to-r from-[#ecedef] to-slate-400" />
+                          <div className="h-2 w-[100px] rounded-lg bg-gradient-to-r from-[#ecedef] to-slate-400" />
+                        </div>
+                        <div className="flex items-center space-x-2 rounded-md bg-gradient-to-r from-white to-slate-800 p-2 shadow-sm">
+                          <div className="h-4 w-4 rounded-full bg-gradient-to-r from-[#ecedef] to-slate-400" />
+                          <div className="h-2 w-[100px] rounded-lg bg-gradient-to-r from-[#ecedef] to-slate-400" />
+                        </div>
+                        <div className="flex items-center space-x-2 rounded-md bg-gradient-to-r from-white to-slate-800 p-2 shadow-sm">
+                          <div className="h-4 w-4 rounded-full bg-gradient-to-r from-[#ecedef] to-slate-400" />
+                          <div className="h-2 w-[100px] rounded-lg bg-gradient-to-r from-[#ecedef] to-slate-400" />
+                        </div>
+                      </div>
+                    </div>
+                    <span className="block w-full p-2 text-center font-normal">
+                      跟随系统
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -159,7 +184,9 @@ export function AppearanceForm() {
           )}
         />
 
-        <Button type="submit">Update preferences</Button>
+        <Button type="submit" loading={isPending}>
+          更新偏好
+        </Button>
       </form>
     </Form>
   );

@@ -1,18 +1,18 @@
 import { format } from 'date-fns';
+import { Laptop, Smartphone } from 'lucide-react';
 import { headers } from 'next/headers';
 import { UAParser } from 'ua-parser-js';
+import { getSession } from '@/app/actions/account';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { qqwry } from '@/lib/qqwry';
-import { Laptop, Smartphone } from 'lucide-react';
 import RevokeButton from './revoke-button';
-import { getSession } from '@/app/actions/account';
 
 export default async function SessionDevice() {
   const list = await auth.api.listSessions({
     headers: await headers(),
   });
-  const currentSession = await getSession()
+  const currentSession = await getSession();
 
   const getAddressInfo = (ipAddress?: string | null) => {
     if (ipAddress) {
@@ -24,15 +24,13 @@ export default async function SessionDevice() {
 
   const getDeviceInfo = (userAgent: string) => {
     return UAParser(userAgent);
-  };  
+  };
 
   return (
     <div className="space-y-8 pt-4">
       <div className="space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">登录设备管理</h2>
-        <p className="text-muted-foreground">
-          在这里查看所有正在登录的  设备
-        </p>
+        <p className="text-muted-foreground">在这里查看所有正在登录的 设备</p>
       </div>
       <Card>
         <CardHeader>
@@ -55,10 +53,12 @@ export default async function SessionDevice() {
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-1">
                       <span>{session.ipAddress}</span>
-                      <span>
-                        {getAddressInfo(session.ipAddress)}
-                      </span>
-                      {session.id === currentSession?.session.id && <span className="ml-2  text-xs text-green-500">（当前登录设备）</span>}
+                      <span>{getAddressInfo(session.ipAddress)}</span>
+                      {session.id === currentSession?.session.id && (
+                        <span className="ml-2 text-xs text-green-500">
+                          （当前登录设备）
+                        </span>
+                      )}
                     </div>
                     {session.userAgent && (
                       <div className="flex items-center gap-1">
@@ -70,7 +70,7 @@ export default async function SessionDevice() {
                         </span>
                       </div>
                     )}
-                    <span className='text-sm'>
+                    <span className="text-sm">
                       最近登录时间：
                       {format(session.updatedAt, 'yyyy-MM-dd HH:mm:ss')}
                     </span>

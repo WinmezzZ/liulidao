@@ -21,11 +21,17 @@ generator zod {
   writeNullishInModelTypes         = true
 }
 
+enum Theme {
+  light @map("light")
+  dark @map("dark")
+  system @map("system")
+}
+
 model User {
   id               String              @id
   name             String
   email            String
-  emailVerified    Boolean  @default(false)
+  emailVerified    Boolean             @default(false)
   image            String?
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
@@ -36,6 +42,8 @@ model User {
   banExpires       DateTime?
   username         String?
   displayUsername  String?
+  font             String?
+  theme            Theme?              @default(system)
   sessions         Session[]
   accounts         Account[]
   members          Member[]
@@ -116,6 +124,7 @@ model Space {
   createdBy   User         @relation("CreatedSpaces", fields: [createdById], references: [id], onDelete: Cascade)
   ownerId     String
   owner       User         @relation("OwnedSpaces", fields: [ownerId], references: [id], onDelete: Cascade)
+
 
   @@unique([slug])
   @@map("space")

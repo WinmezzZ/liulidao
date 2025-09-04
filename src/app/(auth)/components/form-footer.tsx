@@ -21,6 +21,9 @@ export function FormFooter() {
     }
     await authClient.signIn.social({
       provider,
+      fetchOptions: {
+        timeout: 20000,
+      },
     });
     if (provider === 'github') {
       setGithubLoading(false);
@@ -39,7 +42,7 @@ export function FormFooter() {
   };
   return (
     <div className="flex flex-col items-center gap-2">
-       <Button
+      <Button
         variant="outline"
         className="w-full"
         type="button"

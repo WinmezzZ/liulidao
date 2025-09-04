@@ -1,5 +1,6 @@
 import {
   adminClient,
+  customSessionClient,
   emailOTPClient,
   genericOAuthClient,
   magicLinkClient,
@@ -13,6 +14,9 @@ import {
 } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 import { toast } from 'sonner';
+import { env } from '@/env';
+import { type auth } from './auth';
+// import { env } from '@/env';
 
 export const authClient = createAuthClient({
   plugins: [
@@ -27,8 +31,9 @@ export const authClient = createAuthClient({
     oidcClient(),
     genericOAuthClient(),
     oneTapClient({
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      clientId: env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
     }),
+    customSessionClient<typeof auth>(),
   ],
   fetchOptions: {
     async onError(e) {
