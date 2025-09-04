@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { ThemeProvider } from 'next-themes';
-import { boolean } from 'zod';
 import { ConfirmDialogProvider } from '@/components/confirm-dialog';
+import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { META_THEME_COLORS } from '@/constants/site';
 import { DEFAULT_FONT, fonts, type FontType } from '@/lib/fonts';
@@ -54,8 +53,9 @@ export default async function RootLayout({
           <ConfirmDialogProvider>
             <ThemeProvider
               attribute="class"
-              forcedTheme={userTheme || undefined}
               defaultTheme={userTheme || DEFAULT_THEME}
+              enableSystem={!!userTheme}
+              disableTransitionOnChange
             >
               <Toaster position="top-center" richColors />
               {children}
