@@ -1,6 +1,5 @@
 'use client';
 
-import { type User } from '@prisma/client';
 import {
   BadgeCheck,
   Bell,
@@ -27,6 +26,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { signOut } from '@/lib/auth-client';
+import { type User } from '@prisma-generated/prisma';
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
@@ -81,37 +81,23 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href="/settings/account">
                   <BadgeCheck />
-                  Account
+                  设置
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/settings">
+                <Link href={`/user/${user.name}`}>
                   <CreditCard />
-                  Billing
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/settings/notifications">
-                  <Bell />
-                  Notifications
+                  我的首页
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
             <Link href="/sign-in" onClick={handleLogout}>
               <DropdownMenuItem>
                 <LogOut />
-                Log out
+                退出登录
               </DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

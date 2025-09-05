@@ -270,6 +270,9 @@ importers:
       better-auth:
         specifier: ^1.3.7
         version: 1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)
+      better-auth-localization:
+        specifier: ^2.1.5
+        version: 2.1.5(better-auth@1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -300,6 +303,9 @@ importers:
       ioredis:
         specifier: ^5.6.0
         version: 5.6.1
+      jdenticon:
+        specifier: ^3.3.0
+        version: 3.3.0
       jiti:
         specifier: ^1.21.7
         version: 1.21.7
@@ -3319,6 +3325,11 @@ packages:
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+
+  better-auth-localization@2.1.5:
+    resolution: {integrity: sha512-TBSvnrwW3e4MtvBmOXM1f0QORwApABftgENF0O2OhduJQM2UE9XSH6eg+EZcb1ehJROYMg6tEeOtShyvJi9XVw==}
+    peerDependencies:
+      better-auth: ^1.3.4
 
   better-auth@1.3.7:
     resolution: {integrity: sha512-/1fEyx2SGgJQM5ujozDCh9eJksnVkNU/J7Fk/tG5Y390l8nKbrPvqiFlCjlMM+scR+UABJbQzA6An7HT50LHyQ==}
@@ -9588,6 +9599,10 @@ snapshots:
   base64-arraybuffer@1.0.2: {}
 
   base64-js@1.5.1: {}
+
+  better-auth-localization@2.1.5(better-auth@1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)):
+    dependencies:
+      better-auth: 1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5)
 
   better-auth@1.3.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(zod@4.1.5):
     dependencies:

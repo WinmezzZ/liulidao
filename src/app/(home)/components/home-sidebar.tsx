@@ -1,6 +1,5 @@
 'use server';
 
-import { type Space } from '@prisma/client';
 import {
   AppWindowMac,
   CompassIcon,
@@ -10,7 +9,7 @@ import {
   TrendingUpIcon,
 } from 'lucide-react';
 import Image from 'next/image';
-import { NavUser } from '@/app/(space)/[spaceId]/components/nav-user';
+import { NavUser } from '@/components/nav-user';
 import { SidebarFooter } from '@/components/ui/home-sidebar';
 import {
   Sidebar,
@@ -19,6 +18,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { api } from '@/trpc/server';
+import { type Space } from '@prisma-generated/prisma';
 import { NavGroup } from '../../(space)/[spaceId]/components/nav-group';
 
 export async function HomeSidebar({

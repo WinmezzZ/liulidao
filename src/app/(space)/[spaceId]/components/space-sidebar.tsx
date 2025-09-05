@@ -1,3 +1,4 @@
+import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
@@ -7,7 +8,6 @@ import {
 } from '@/components/ui/sidebar';
 import { api } from '@/trpc/server';
 import { NavGroup } from './nav-group';
-import { NavUser } from './nav-user';
 import { sidebarData } from './space-data';
 import { SpacePageTree } from './space-page-tree';
 import { SpaceSwitcher } from './space-switcher';

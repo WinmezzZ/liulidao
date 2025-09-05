@@ -37,6 +37,8 @@ model User {
   updatedAt        DateTime            @updatedAt
   twoFactorEnabled Boolean?
   role             String?
+  bio              String?
+  location         String?
   banned           Boolean?
   banReason        String?
   banExpires       DateTime?

@@ -3,18 +3,23 @@ import { z } from 'zod';
 import {
   createRateLimitMiddleware,
   createTRPCRouter,
-  protectedProcedure,
+  publicProcedure,
 } from '@/server/api/trpc';
 
 export const userRouter = createTRPCRouter({
-  info: protectedProcedure
+  info: publicProcedure
     .use(createRateLimitMiddleware)
-    .input(z.object({ id: z.string().optional() }).optional())
+    .input(
+      z
+        .object({ id: z.string().optional(), username: z.string().optional() })
+        .optional()
+    )
     .query(async ({ ctx, input }) => {
-      const currentUser = ctx.session.user.id;
+      const currentUser = ctx.session?.user.id;
       const user = await ctx.db.user.findFirst({
         where: {
-          id: input ? input.id : currentUser,
+          id: input?.id ? input.id : input?.username ? undefined : currentUser,
+          name: input?.username,
         },
       });
 

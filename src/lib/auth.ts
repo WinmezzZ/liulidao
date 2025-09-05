@@ -15,6 +15,7 @@ import {
   twoFactor,
 } from 'better-auth/plugins';
 import { passkey } from 'better-auth/plugins/passkey';
+import { localization } from 'better-auth-localization';
 import { notifyEmailVerified } from '@/app/api/email/verified/route';
 import { reactInvitationEmail } from '@/emails/invitation';
 import { reactResetPasswordEmail } from '@/emails/reset-password';
@@ -193,6 +194,9 @@ export const auth = betterAuth({
           html: `你的 登录url 是 ${url}`,
         });
       },
+    }),
+    localization({
+      defaultLocale: 'zh-Hans',
     }),
   ],
 
