@@ -18,7 +18,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { api } from '@/trpc/server';
-import { type Space } from '@prisma-generated/prisma';
+import { type Space } from '@prisma-generated/prisma/client';
 import { NavGroup } from '../../(space)/[spaceId]/components/nav-group';
 
 export async function HomeSidebar({

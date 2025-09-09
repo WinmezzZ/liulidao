@@ -13,7 +13,6 @@ interface ServerErrorProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function ServerError(props: ServerErrorProps) {
-  console.log(props);
   const { className, minimal = false, error } = props;
   const router = useRouter();
   const errorName = props.error.message as TRPC_ERROR_CODE_KEY;

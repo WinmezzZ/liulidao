@@ -8,7 +8,7 @@
  */
 
 import { initTRPC, TRPCError } from '@trpc/server';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 

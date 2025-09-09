@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { getSession } from '@/app/actions/account';
 import { db } from '@/lib/prisma';
-import { type User } from '@prisma-generated/prisma';
+import { type User } from '@prisma-generated/prisma/client';
 
 export async function setAppearance(
   data: Partial<Pick<User, 'theme' | 'font'>>

@@ -4,6 +4,7 @@ import { ConfirmDialogProvider } from '@/components/confirm-dialog';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { META_THEME_COLORS } from '@/constants/site';
+import { ImageCropperProvider } from '@/hooks/use-image-cropper';
 import { DEFAULT_FONT, fonts, type FontType } from '@/lib/fonts';
 import { DEFAULT_THEME } from '@/lib/theme';
 import { TRPCReactProvider } from '@/trpc/client';
@@ -27,7 +28,6 @@ export default async function RootLayout({
   const userFont = (session?.user.font || DEFAULT_FONT) as FontType;
   const userTheme = session?.user.theme;
   const font = fonts[userFont];
-  console.log('userTheme', userTheme);
 
   return (
     <html lang="en" suppressHydrationWarning className={font.className}>
@@ -57,8 +57,10 @@ export default async function RootLayout({
               enableSystem={!!userTheme}
               disableTransitionOnChange
             >
-              <Toaster position="top-center" richColors />
-              {children}
+              <ImageCropperProvider>
+                <Toaster position="top-center" richColors />
+                {children}
+              </ImageCropperProvider>
             </ThemeProvider>
           </ConfirmDialogProvider>
         </TRPCReactProvider>

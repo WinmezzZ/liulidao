@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { UpdateUserSchema } from '@/schema/user';
 import {
   createRateLimitMiddleware,
   createTRPCRouter,
@@ -21,6 +22,19 @@ export const userRouter = createTRPCRouter({
           id: input?.id ? input.id : input?.username ? undefined : currentUser,
           name: input?.username,
         },
+      });
+
+      return user;
+    }),
+  update: publicProcedure
+    .use(createRateLimitMiddleware)
+    .input(UpdateUserSchema)
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.update({
+        where: {
+          id: ctx.userId,
+        },
+        data: input,
       });
 
       return user;

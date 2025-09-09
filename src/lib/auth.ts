@@ -169,8 +169,12 @@ export const auth = betterAuth({
         ...session,
         user: {
           ...session.user,
-          font: user?.font,
-          theme: user?.theme,
+          font: user?.font || undefined,
+          theme: user?.theme || undefined,
+          location: user?.location || undefined,
+          bio: user?.bio || undefined,
+          image: user?.image || undefined,
+          nickname: user?.nickname || undefined,
         },
       };
     }),

@@ -1,5 +1,10 @@
 import { createRouteHandler } from 'uploadthing/next';
+import { ourFileRouter } from './core';
 
-import { ourFileRouter } from '@/lib/uploadthing';
+export const runtime = 'nodejs';
 
-export const { GET, POST } = createRouteHandler({ router: ourFileRouter });
+console.log('UPLOADTHING_TOKEN', process.env.UPLOADTHING_TOKEN);
+
+export const { GET, POST } = createRouteHandler({
+  router: ourFileRouter,
+});

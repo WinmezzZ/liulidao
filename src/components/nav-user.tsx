@@ -26,7 +26,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { signOut } from '@/lib/auth-client';
-import { type User } from '@prisma-generated/prisma';
+import { type User } from '@prisma-generated/prisma/client';
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();

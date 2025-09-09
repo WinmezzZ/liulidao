@@ -190,7 +190,7 @@
     "globals": "^16.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "prisma": "^6.4.1",
+    "prisma": "^6.15.0",
     "prisma-zod-generator": "^1.12.4",
     "tailwindcss": "^4",
     "tsx": "^4.20.3",

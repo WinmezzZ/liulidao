@@ -1,12 +1,13 @@
 import { eachDayOfInterval, endOfYear, formatISO, startOfYear } from 'date-fns';
 import { toSvg } from 'jdenticon';
-import { Calendar, Mail, MapPin } from 'lucide-react';
+import { Calendar, Edit, Mail, MapPin } from 'lucide-react';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import CoverUpload from '@/components/cover-image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { api } from '@/trpc/server';
-import { EditProfileButton } from './components/edit-profile-button';
 import { ProfileTabContent } from './components/profile-tab-content';
 import { ProfileTabs } from './components/profile-tabs';
 import {
@@ -81,7 +82,12 @@ export default async function Page(props: PageProps<'/user/[username]'>) {
               {/* User Info and Actions */}
               <div className="flex-1 space-y-4">
                 <div className="flex justify-end">
-                  <EditProfileButton />
+                  <Link href="/settings">
+                    <Button className="bg-primary hover:bg-primary/90">
+                      <Edit className="mr-2 h-4 w-4" />
+                      编辑个人资料
+                    </Button>
+                  </Link>
                 </div>
 
                 <p className="leading-relaxed text-pretty">

@@ -49,3 +49,15 @@ export const env = createEnv({
   },
   extends: [vercel()],
 });
+
+type DeepNullToUndefined<T> = {
+  [K in keyof T]: T[K] extends null
+    ? undefined
+    : T[K] extends object
+      ? DeepNullToUndefined<T[K]>
+      : T[K];
+};
+
+declare module '@prisma/client' {
+  export type PrismaPromise<T> = Promise<DeepNullToUndefined<T>>;
+}

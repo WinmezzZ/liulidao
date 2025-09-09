@@ -56,6 +56,8 @@ export type FileUploadActions = {
   ) => InputHTMLAttributes<HTMLInputElement> & {
     ref: React.Ref<HTMLInputElement>;
   };
+  generateUniqueId: (file: File | FileMetadata) => string;
+  createPreview: (file: File | FileMetadata) => string | undefined;
 };
 
 export const useFileUpload = (
@@ -112,7 +114,7 @@ export const useFileUpload = (
         });
 
         if (!isAccepted) {
-          return `File "${file instanceof File ? file.name : file.name}" is not an accepted file type.`;
+          return `"${file instanceof File ? file.name : file.name}" 不是接受的文件类型。`;
         }
       }
 
@@ -213,8 +215,8 @@ export const useFileUpload = (
         if (file.size > maxSize) {
           errors.push(
             multiple
-              ? `Some files exceed the maximum size of ${formatBytes(maxSize)}.`
-              : `File exceeds the maximum size of ${formatBytes(maxSize)}.`
+              ? `部分文件超过最大限制 ${formatBytes(maxSize)}.`
+              : `文件超过最大限制 ${formatBytes(maxSize)}.`
           );
           return;
         }
@@ -395,6 +397,8 @@ export const useFileUpload = (
       handleFileChange,
       openFileDialog,
       getInputProps,
+      generateUniqueId,
+      createPreview,
     },
   ];
 };

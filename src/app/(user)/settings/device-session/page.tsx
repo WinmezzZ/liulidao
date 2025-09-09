@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { qqwry } from '@/lib/qqwry';
 import RevokeButton from './revoke-button';
+import SettingsWrapper from '../components/settings-wrapper';
 
 export default async function SessionDevice() {
   const list = await auth.api.listSessions({
@@ -27,11 +28,10 @@ export default async function SessionDevice() {
   };
 
   return (
-    <div className="space-y-8 pt-4">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">登录设备管理</h2>
-        <p className="text-muted-foreground">在这里查看所有正在登录的 设备</p>
-      </div>
+    <SettingsWrapper
+      title="登录设备管理"
+      description="在这里查看所有正在登录的 设备"
+    >
       <Card>
         <CardHeader>
           <CardTitle>WEB 端登录</CardTitle>
@@ -82,6 +82,6 @@ export default async function SessionDevice() {
           </ul>
         </CardContent>
       </Card>
-    </div>
+    </SettingsWrapper>
   );
 }

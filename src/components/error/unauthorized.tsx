@@ -1,10 +1,22 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
 export default function UnauthorizedError() {
   const router = useRouter();
+  const pathname = usePathname();
+  const query = useSearchParams();
+
+  const redirectUrl = `${pathname}${query.toString()}`;
+
+  useEffect(() => {
+    router.push(`/sign-in?redirectUrl=${redirectUrl}`);
+  }, [redirectUrl, router]);
+
+  return <></>;
+
   return (
     <div className="h-svh">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">

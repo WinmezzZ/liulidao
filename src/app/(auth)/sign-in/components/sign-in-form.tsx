@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { type HTMLAttributes, useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
@@ -26,18 +26,19 @@ type UserAuthFormProps = HTMLAttributes<HTMLDivElement>;
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const _redirectUrl = useSearchParams().get('redirectUrl');
+  const redirectUrl = _redirectUrl
+    ? (decodeURIComponent(
+        _redirectUrl
+      ) as __next_route_internal_types__.RouteImpl<string>)
+    : '';
 
   useEffect(() => {
-     authClient.oneTap({
+    authClient.oneTap({
       additionalOptions: {
-        use_fedcm_for_prompt: true
+        use_fedcm_for_prompt: true,
       },
-      fetchOptions: {
-        headers: {
-          "Referrer-Policy": "no-referrer-when-downgrade",
-        },
-      }
-     })
+    });
   }, []);
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -55,9 +56,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         return;
       }
       if (res.data && 'twoFactorRedirect' in res.data) {
-        router.push('/two-factor');
+        router.push(
+          `/two-factor${redirectUrl ? `?redirectUrl=${redirectUrl}` : ''}`
+        );
       } else {
-        router.push('/');
+        router.push(redirectUrl || '/');
       }
     });
   };

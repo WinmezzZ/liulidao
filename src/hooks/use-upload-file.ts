@@ -1,20 +1,26 @@
 import { generateReactHelpers } from '@uploadthing/react';
-import * as React from 'react';
+import React from 'react';
 import { toast } from 'sonner';
 import type {
   ClientUploadedFileData,
   UploadFilesOptions,
 } from 'uploadthing/types';
 import { z } from 'zod';
-import type { OurFileRouter } from '@/lib/uploadthing';
+import { type OurFileRouter } from '@/app/api/uploadthing/core';
 
-export type UploadedFile<T = unknown> = ClientUploadedFileData<T>;
+export const { uploadFiles, useUploadThing } =
+  generateReactHelpers<OurFileRouter>();
+
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {
+  //
+}
 
 interface UseUploadFileProps
   extends Pick<
-    UploadFilesOptions<OurFileRouter['editorUploader']>,
+    UploadFilesOptions<OurFileRouter['imageUploader']>,
     'headers' | 'onUploadBegin' | 'onUploadProgress' | 'skipPolling'
   > {
+  defaultUploadedFiles?: UploadedFile[];
   onUploadComplete?: (file: UploadedFile) => void;
   onUploadError?: (error: unknown) => void;
 }
@@ -34,19 +40,18 @@ export function useUploadFile({
     setUploadingFile(file);
 
     try {
-      const res = await uploadFiles('editorUploader', {
+      const res = await uploadFiles('imageUploader', {
         ...props,
         files: [file],
         onUploadProgress: ({ progress }) => {
           setProgress(Math.min(progress, 100));
         },
       });
-
       setUploadedFile(res[0]);
 
       onUploadComplete?.(res[0]);
 
-      return uploadedFile;
+      return res[0];
     } catch (error) {
       const errorMessage = getErrorMessage(error);
 
@@ -102,9 +107,6 @@ export function useUploadFile({
   };
 }
 
-export const { uploadFiles, useUploadThing } =
-  generateReactHelpers<OurFileRouter>();
-
 export function getErrorMessage(err: unknown) {
   const unknownError = 'Something went wrong, please try again later.';
 
@@ -116,7 +118,11 @@ export function getErrorMessage(err: unknown) {
     return errors.join('\n');
   } else if (err instanceof Error) {
     return err.message;
-  } else {
+  }
+  // else if (isRedirectError(err)) {
+  //   throw err;
+  // }
+  else {
     return unknownError;
   }
 }

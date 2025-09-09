@@ -42,8 +42,7 @@ model User {
   banned           Boolean?
   banReason        String?
   banExpires       DateTime?
-  username         String?
-  displayUsername  String?
+  nickname         String?
   font             String?
   theme            Theme?              @default(system)
   sessions         Session[]
