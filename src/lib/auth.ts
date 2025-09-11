@@ -40,6 +40,11 @@ export const auth = betterAuth({
       allowUnlinkingAll: true,
     },
   },
+  user: {
+    deleteUser: {
+      enabled: true,
+    },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,
@@ -175,6 +180,7 @@ export const auth = betterAuth({
           bio: user?.bio || undefined,
           image: user?.image || undefined,
           nickname: user?.nickname || undefined,
+          twoFactorEnabled: user?.twoFactorEnabled || undefined,
         },
       };
     }),

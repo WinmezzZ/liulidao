@@ -1,7 +1,7 @@
 'use client';
 import { type Passkey } from 'better-auth/plugins/passkey';
 import { format } from 'date-fns';
-import { Edit, Loader } from 'lucide-react';
+import { Edit, Loader, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,6 @@ export function Passkeys() {
         const res = await authClient.passkey.addPasskey({
           name: inputText,
         });
-        console.log('res', res);
         if (!res?.error) {
           refetch();
           close();
@@ -95,13 +94,14 @@ export function Passkeys() {
                 创建时间：{format(passkey.createdAt, 'PPP')}
               </span>
               <Button
-                className="w-20"
-                variant="destructive"
+                variant="secondary"
+                size="icon"
+                className="size-8"
                 color="red-500"
                 onClick={() => handleDelete(passkey.id)}
                 loading={isPending}
               >
-                删除
+                <Trash />
               </Button>
             </li>
           ))}

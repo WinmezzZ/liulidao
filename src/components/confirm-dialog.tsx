@@ -35,6 +35,8 @@ type ConfirmDialogOptions = {
   cancelText?: string;
   input?: boolean;
   inputProps?: ComponentProps<'input'>;
+  confirmButtonProps?: ComponentProps<typeof Button>;
+  cancelButtonProps?: ComponentProps<typeof Button>;
   validator?: (
     value: string
   ) => string | boolean | Promise<string> | Promise<boolean> | undefined;
@@ -64,9 +66,9 @@ export function ConfirmDialogProvider({
     setOpen(true);
   };
 
-  const handleValidate = async () => {
+  const handleValidate = async (value: string = inputValue) => {
     if (options.validator) {
-      const errorText = await options.validator(inputValue);
+      const errorText = await options.validator(value);
       const hasError = typeof errorText === 'string' || errorText === false;
       if (hasError) {
         setErrorText(
@@ -86,7 +88,7 @@ export function ConfirmDialogProvider({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    handleValidate();
+    handleValidate(e.target.value);
   };
 
   const handleConfirm = async () => {
@@ -94,13 +96,16 @@ export function ConfirmDialogProvider({
       const valid = await handleValidate();
       if (!valid) return;
       setSubmitLoading(true);
-      const confirmRes = await options.onConfirm(
-        () => setOpen(false),
-        inputValue
-      );
-      setSubmitLoading(false);
-      if (confirmRes === true) {
-        setOpen(false);
+      try {
+        const confirmRes = await options.onConfirm(
+          () => setOpen(false),
+          inputValue
+        );
+        if (confirmRes === true) {
+          setOpen(false);
+        }
+      } finally {
+        setSubmitLoading(false);
       }
     }
   };
@@ -137,7 +142,7 @@ export function ConfirmDialogProvider({
                   autoFocus
                   {...options.inputProps}
                   value={inputValue}
-                  onChange={handleInputChange}
+                  onInput={handleInputChange}
                   onKeyDown={async (e) => {
                     if (e.key === 'Enter') {
                       await handleConfirm();
@@ -146,15 +151,23 @@ export function ConfirmDialogProvider({
                 />
               </div>
               {options.validator && errorText && (
-                <p className="text-12 text-red-500">{errorText}</p>
+                <p className="text-sm text-red-500">{errorText}</p>
               )}
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={handleCancel}>
+            <Button
+              variant="outline"
+              onClick={handleCancel}
+              {...options.cancelButtonProps}
+            >
               {options.cancelText || '取消'}
             </Button>
-            <Button onClick={handleConfirm} loading={submitLoading}>
+            <Button
+              onClick={handleConfirm}
+              loading={submitLoading}
+              {...options.confirmButtonProps}
+            >
               {options.confirmText || '确定'}
             </Button>
           </DialogFooter>

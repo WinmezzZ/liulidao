@@ -118,14 +118,14 @@ model Space {
   logo        String?
   createdAt   DateTime     @default(now())
   metadata    String?
-  Member      Member[]
-  Invitation  Invitation[]
   Article     Article[]
   createdById String
   createdBy   User         @relation("CreatedSpaces", fields: [createdById], references: [id], onDelete: Cascade)
   ownerId     String
   owner       User         @relation("OwnedSpaces", fields: [ownerId], references: [id], onDelete: Cascade)
 
+  members     Member[]
+  invitations Invitation[]
 
   @@unique([slug])
   @@map("space")
