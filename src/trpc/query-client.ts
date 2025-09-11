@@ -10,7 +10,7 @@ export const createQueryClient = () =>
   new QueryClient({
     mutationCache: new MutationCache({
       onError: (error) => {
-        console.log('Something went wrong:', error);
+        console.log('TRPC Error', error);
         toast.error(error.message);
       },
     }),

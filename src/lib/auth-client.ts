@@ -13,7 +13,6 @@ import {
   twoFactorClient,
   usernameClient,
 } from 'better-auth/client/plugins';
-import { ERROR_CODES } from 'better-auth/plugins';
 import { createAuthClient } from 'better-auth/react';
 import { toast } from 'sonner';
 import { env } from '@/env';
@@ -39,8 +38,11 @@ export const authClient = createAuthClient({
   ],
   fetchOptions: {
     async onError(e) {
-      if (e.error.code in ERROR_CODES) {
-        toast.error(e.error.message);
+      console.log('Better Auth Error:', e);
+      if (e.error.message) {
+        toast.error(e.error.message, {
+          duration: 100000,
+        });
       } else if ('responseText' in e && e.responseText) {
         toast.error(e.responseText as string);
       }

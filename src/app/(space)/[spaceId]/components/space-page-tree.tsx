@@ -1,10 +1,10 @@
 'use client';
 
-import { ArticleType } from '@prisma/client';
 import { type TreeDataItem, TreeView } from '@/components/tree-view';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSpaceId } from '@/hooks/use-space';
 import { api } from '@/trpc/client';
+import { ArticleType } from '@prisma-generated/prisma/client';
 import { CreateArticleIcon } from './create-article-icon';
 
 export function SpacePageTree() {

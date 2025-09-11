@@ -1,5 +1,4 @@
 'use client';
-import { type Space } from '@prisma/client';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
@@ -19,6 +18,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { type Space } from '@prisma-generated/prisma/client';
 
 export function SpaceSwitcher({ spaces }: { spaces: Space[] }) {
   const { isMobile } = useSidebar();

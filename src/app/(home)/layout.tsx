@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import NavHeader from '@/components/nav-header';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { api } from '@/trpc/server';
 import { HomeSidebar } from './components/home-sidebar';
 import { VerifyTip } from './components/verify-tip';
@@ -18,15 +19,17 @@ export default async function Layout({
     cookieStore.get('home_sidebar_state')?.value === 'true' || true;
 
   return (
-    <>
+    <div>
       <SidebarProvider defaultOpen={defaultOpen}>
-        <HomeSidebar spaceId={spaceId} spaces={spaces} />
-        <main className="flex flex-1 flex-col overflow-hidden">
-          <VerifyTip session={session} />
-          <SidebarTrigger />
-          {children}
-        </main>
+        <NavHeader />
+        <div className="flex">
+          <HomeSidebar spaceId={spaceId} spaces={spaces} />
+          <main className="flex flex-1 flex-col overflow-hidden">
+            <VerifyTip session={session} />
+            {children}
+          </main>
+        </div>
       </SidebarProvider>
-    </>
+    </div>
   );
 }

@@ -1,10 +1,13 @@
 'use client';
 
-import { ArticleStatusType, ArticleType } from '@prisma/client';
 import { useParams } from 'next/navigation';
 import { type Value } from 'platejs';
 import { Button } from '@/components/ui/button';
 import { api, useTRPC } from '@/trpc/client';
+import {
+  ArticleStatusType,
+  ArticleType,
+} from '@prisma-generated/prisma/client';
 import { useSpace } from '../../lib/useSpace';
 
 interface ArticleActionProps {

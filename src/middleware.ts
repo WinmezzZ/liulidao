@@ -25,7 +25,7 @@ export const config = {
      * - static (static files)
      * - .* (all path includes dot)
      */
-    '/((?!api|_next/static|_next/image  |.*\\..*).*)',
+    '/((?!api|_next/static|_next/image|sign-in|sign-up|unauthorised|server-error|bad-request|not-found|forbidden|two-factor|reset-password|forgot-password|.*\\..*).*)',
     // '/((?!_next/static|_next/image|static|.*\\.).*)',
   ],
   runtime: 'nodejs',

@@ -9,15 +9,12 @@ import {
   TrendingUpIcon,
 } from 'lucide-react';
 import Image from 'next/image';
-import { NavUser } from '@/components/nav-user';
-import { SidebarFooter } from '@/components/ui/home-sidebar';
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { api } from '@/trpc/server';
 import { type Space } from '@prisma-generated/prisma/client';
 import { NavGroup } from '../../(space)/[spaceId]/components/nav-group';
 
@@ -29,7 +26,6 @@ export async function HomeSidebar({
   spaceId: string;
   spaces: Space[];
 }) {
-  const user = await api.user.info();
   const navGroups = [
     {
       title: '发现',
@@ -89,7 +85,6 @@ export async function HomeSidebar({
         </SidebarContent>
         <SidebarRail />
       </div>
-      <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
     </Sidebar>
   );
 }

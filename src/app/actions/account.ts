@@ -30,3 +30,9 @@ export const getUserId = async () => {
   if (!session) return null;
   return session.user.id;
 };
+
+export const signOut = async () => {
+  await auth.api.signOut({
+    headers: await headers(),
+  });
+};

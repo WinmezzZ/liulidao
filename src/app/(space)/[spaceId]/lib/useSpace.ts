@@ -1,7 +1,11 @@
 'use client';
 
-import { type Article, type Space, type User } from '@prisma/client';
 import { createContext, useContext } from 'react';
+import {
+  type Article,
+  type Space,
+  type User,
+} from '@prisma-generated/prisma/client';
 
 export interface SpaceData {
   space?: Space | null;

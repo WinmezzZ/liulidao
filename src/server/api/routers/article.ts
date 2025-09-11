@@ -1,4 +1,3 @@
-import { ArticleStatusType } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { unstable_cache } from 'next/cache';
 import { NodeApi } from 'platejs';
@@ -10,6 +9,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
 } from '@/server/api/trpc';
+import { ArticleStatusType } from '@prisma-generated/prisma/client';
 import {
   ArticleOptionalDefaultsSchema,
   ArticlePartialSchema,

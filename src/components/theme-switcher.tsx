@@ -1,71 +1,29 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useCallback, useEffect, useState } from 'react';
 import { setAppearance } from '@/app/(user)/settings/appearance/action';
-import { themes } from '@/lib/theme';
-import { cn } from '@/lib/utils';
+import { type Session } from '@/lib/auth-types';
+import { Button } from './ui/button';
 
-export type ThemeSwitcherProps = {
-  value?: 'light' | 'dark' | 'system';
-  onChange?: (theme: 'light' | 'dark' | 'system') => void;
-  defaultValue?: 'light' | 'dark' | 'system';
-  className?: string;
-};
-
-export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
+export const ThemeSwitcher = ({ session }: { session: Session }) => {
+  const defaultTheme = session?.user.theme;
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleThemeClick = useCallback(
-    (themeKey: 'light' | 'dark' | 'system') => {
-      setTheme(themeKey);
-      setAppearance({ theme: themeKey });
-    },
-    [setTheme]
-  );
+  const handleToggleTheme = () => {
+    const _theme = theme === 'light' ? 'dark' : 'light';
+    setTheme(_theme);
+    setAppearance({ theme: _theme });
+  };
 
   return (
-    <div
-      className={cn(
-        'bg-background ring-border relative isolate flex h-8 w-fit rounded-full p-1 ring-1',
-        className
-      )}
+    <Button
+      variant="secondary"
+      size="icon"
+      className="rounded-full"
+      onClick={handleToggleTheme}
     >
-      {themes.map(({ key, icon: Icon, label }) => {
-        const isActive = theme === key;
-
-        return (
-          <button
-            aria-label={label}
-            className="relative h-6 w-6 rounded-full"
-            key={key}
-            onClick={() => handleThemeClick(key as 'light' | 'dark' | 'system')}
-            type="button"
-          >
-            {mounted && isActive && (
-              <motion.div
-                className="bg-secondary absolute inset-0 rounded-full"
-                layoutId="activeTheme"
-                transition={{ type: 'spring', duration: 0.5 }}
-              />
-            )}
-            <Icon
-              className={cn(
-                'relative z-10 m-auto h-4 w-4',
-                mounted && isActive
-                  ? 'text-foreground'
-                  : 'text-muted-foreground'
-              )}
-            />
-          </button>
-        );
-      })}
-    </div>
+      {defaultTheme === 'light' ? <Moon /> : <Sun />}
+    </Button>
   );
 };

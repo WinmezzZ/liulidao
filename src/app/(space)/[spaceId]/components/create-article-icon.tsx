@@ -1,6 +1,5 @@
 'use client';
 
-import { ArticleStatusType, ArticleType } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,6 +9,10 @@ import {
 } from '@/components/ui/tooltip';
 import { useSpaceId } from '@/hooks/use-space';
 import { api } from '@/trpc/client';
+import {
+  ArticleStatusType,
+  ArticleType,
+} from '@prisma-generated/prisma/client';
 
 interface CreateArticleIconProps {
   parentId: string | null;

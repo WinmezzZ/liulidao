@@ -6,7 +6,8 @@ import { db } from '@/lib/prisma';
 import { type User } from '@prisma-generated/prisma/client';
 
 export async function setAppearance(
-  data: Partial<Pick<User, 'theme' | 'font'>>
+  data: Partial<Pick<User, 'theme' | 'font'>>,
+  redirectPath?: string
 ) {
   const session = await getSession();
   if (!session) {
@@ -18,5 +19,5 @@ export async function setAppearance(
     },
     data,
   });
-  revalidatePath('/settings/appearance');
+  revalidatePath(redirectPath || '/settings/appearance');
 }

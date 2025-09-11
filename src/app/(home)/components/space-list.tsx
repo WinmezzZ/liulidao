@@ -1,5 +1,4 @@
 'use client';
-import { type Space } from '@prisma/client';
 
 import Link from 'next/link';
 import {
@@ -7,6 +6,7 @@ import {
   SidebarMenuButtonServer,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { type Space } from '@prisma-generated/prisma/client';
 
 interface SpaceListProps {
   spaces: Space[];

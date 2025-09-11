@@ -1,8 +1,6 @@
-import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
@@ -16,9 +14,7 @@ export async function SpaceSidebar({
   spaceId,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { spaceId: string }) {
-  console.log('SpaceSidebar');
   const spaces = await api.space.list();
-  const user = await api.user.info();
 
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
@@ -33,7 +29,6 @@ export async function SpaceSidebar({
       <SidebarContent>
         <SpacePageTree />
       </SidebarContent>
-      <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

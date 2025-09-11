@@ -1,4 +1,3 @@
-import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from './components/sidebar-nav';
 
@@ -28,7 +27,6 @@ const sidebarNavItems = [
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <>
-      <ThemeSwitcher />
       <div className="hidden space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">设置</h2>

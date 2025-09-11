@@ -1,11 +1,11 @@
 'use client';
 
-import { ArticleType } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useUserId } from '@/hooks/use-user-id';
 import { api } from '@/trpc/client';
+import { ArticleType } from '@prisma-generated/prisma/client';
 
 export default function CreateArticle() {
   const router = useRouter();

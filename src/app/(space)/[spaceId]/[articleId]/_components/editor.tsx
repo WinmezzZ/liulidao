@@ -1,6 +1,5 @@
 'use client';
 
-import { type Article } from '@prisma/client';
 import { type Value } from 'platejs';
 import { useState } from 'react';
 import { PlateEditor } from '@/components/editor/plate-editor';
